@@ -1,11 +1,10 @@
 import { ActionSheetIOS, Alert, Platform, View } from "react-native"
 import { styles, theme } from "../styles.js"
-import Toolbar from "../components/Toolbar.js"
 import { FAB } from "@rneui/themed"
 import { BottomSheet, ListItem } from "@rneui/themed"
 import { useState } from "react"
 
-export default function HomeScreen() {
+export default function HomeScreen({ navigation }) {
 	const [isVisible, setIsVisible] = useState(false)
 	const fabActions = ["Scan QR code", "Enter Manually", "Cancel"]
 
@@ -39,18 +38,15 @@ export default function HomeScreen() {
 		setIsVisible(false)
 		switch (idx) {
 			case 0:
-				Alert.alert("Scan QR code")
 				break
 			case 1:
-				Alert.alert("Manual")
+				navigation.navigate("NewScreen")
 				break
 		}
 	}
 
 	return (
 		<View style={styles.container}>
-			<Toolbar title="Tokky" />
-
 			<BottomSheet
 				modalProps={{}}
 				isVisible={isVisible}
