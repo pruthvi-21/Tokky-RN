@@ -1,10 +1,11 @@
 import { Button, GestureResponderEvent, KeyboardAvoidingView, ScrollView, View } from "react-native"
-import { styles, theme } from "../styles"
 import { FormField } from "../components/FormField"
 import { isAndroid, isIOS } from "../Utils"
 import { useState } from "react"
+import useTheme from "../Theming"
 
 export default function ManualTokenFormScreen() {
+	const {theme, styles} = useTheme()
 	const [issuer, setIssuer] = useState<string|null>(null)
 	const [label, setLabel] = useState<string|null>(null)
 	const [secretKey, setSecretKey] = useState<string|null>(null)

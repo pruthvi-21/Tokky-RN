@@ -1,11 +1,12 @@
 import { ActionSheetIOS, Alert, Platform, View } from "react-native"
-import { styles, theme } from "../styles"
 import { FAB } from "@rneui/themed"
 import { BottomSheet, ListItem } from "@rneui/themed"
 import { useState } from "react"
 import { isAndroid, isIOS } from "../Utils"
+import useTheme from "../Theming"
 
 export default function HomeScreen({ navigation }) {
+	const {theme, styles} = useTheme()
 	const [isVisible, setIsVisible] = useState(false)
 	const fabActions = ["Scan QR code", "Enter Manually", "Cancel"]
 
@@ -25,7 +26,6 @@ export default function HomeScreen({ navigation }) {
 			ActionSheetIOS.showActionSheetWithOptions({
 				options: [...fabActions],
 				cancelButtonIndex: 2,
-				userInterfaceStyle: "dark",
 			},
 			setResult
 		))

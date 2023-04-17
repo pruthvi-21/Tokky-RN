@@ -1,23 +1,6 @@
 import React from "react"
 import { View, Text, TextInput, ViewProps } from "react-native"
-import { theme } from "../styles"
-
-const styles = {
-	labelTextStyle: {
-		color: theme.text_color_primary,
-		paddingHorizontal: 10,
-	},
-	textInput: {
-		backgroundColor: theme.bg_variant,
-		color: theme.text_color_primary,
-		borderColor: theme.bg_variant2,
-		borderWidth: 2,
-		padding: 11,
-		borderRadius: 11,
-		fontSize: 16,
-		marginVertical: 10,
-	},
-}
+import useTheme from "../Theming";
 
 interface Props extends ViewProps {
 	label: string;
@@ -26,11 +9,12 @@ interface Props extends ViewProps {
 }
 
 export const FormField = (props: Props) => {
+	const {theme, styles} = useTheme()
 	return (
 		<View style={[props.style]}>
-			<Text style={styles.labelTextStyle}>{props.label}</Text>
+			<Text style={[formStyles.labelTextStyle, styles.textPrimary]}>{props.label}</Text>
 			<TextInput
-				style={styles.textInput}
+				style={[formStyles.textInput, styles.textPrimary, styles.borderColor, styles.bgVariant]}
 				placeholder={props.placeholder}
 				placeholderTextColor={theme.text_color_hint}
 				selectionColor={theme.primary_color}
@@ -38,4 +22,17 @@ export const FormField = (props: Props) => {
 			/>
 		</View>
 	)
+}
+
+const formStyles = {
+	labelTextStyle: {
+		paddingHorizontal: 10,
+	},
+	textInput: {
+		borderWidth: 2,
+		padding: 11,
+		borderRadius: 11,
+		fontSize: 16,
+		marginVertical: 10,
+	},
 }
