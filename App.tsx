@@ -1,12 +1,12 @@
 import { StatusBar } from "expo-status-bar"
-import { styles, theme } from "./styles.js"
-import { SafeArea } from "./components/Screen.js"
-import HomeScreen from "./pages/HomeScreen.js"
+import { styles, theme } from "./src/styles"
+import { SafeArea } from "./src/components/Screen"
+import HomeScreen from "./src/pages/HomeScreen"
 import { NavigationContainer } from "@react-navigation/native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
-import ManualTokenFormScreen from "./pages/ManualTokenFormScreen.js"
+import ManualTokenFormScreen from "./src/pages/ManualTokenFormScreen"
 import { Button } from "react-native"
-import { isIOS } from "./Utils.js"
+import { isIOS } from "./src/Utils"
 
 export default function App() {
 	const Stack = createNativeStackNavigator()

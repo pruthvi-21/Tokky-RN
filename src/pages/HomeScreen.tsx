@@ -1,8 +1,9 @@
 import { ActionSheetIOS, Alert, Platform, View } from "react-native"
-import { styles, theme } from "../styles.js"
+import { styles, theme } from "../styles"
 import { FAB } from "@rneui/themed"
 import { BottomSheet, ListItem } from "@rneui/themed"
 import { useState } from "react"
+import { isAndroid, isIOS } from "../Utils"
 
 export default function HomeScreen({ navigation }) {
 	const [isVisible, setIsVisible] = useState(false)
@@ -20,21 +21,19 @@ export default function HomeScreen({ navigation }) {
 	]
 
 	const handleFabClick = () => {
-		if (Platform.OS == "ios") {
-			ActionSheetIOS.showActionSheetWithOptions(
-				{
-					options: [...fabActions],
-					cancelButtonIndex: 2,
-					userInterfaceStyle: "dark",
-				},
-				setResult
-			)
-		} else if (Platform.OS == "android") {
-			setIsVisible(true)
-		}
+		isIOS() && (
+			ActionSheetIOS.showActionSheetWithOptions({
+				options: [...fabActions],
+				cancelButtonIndex: 2,
+				userInterfaceStyle: "dark",
+			},
+			setResult
+		))
+
+		isAndroid() && setIsVisible(true)
 	}
 
-	const setResult = (idx) => {
+	const setResult = (idx: number) => {
 		setIsVisible(false)
 		switch (idx) {
 			case 0:

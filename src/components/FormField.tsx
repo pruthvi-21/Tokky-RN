@@ -1,6 +1,6 @@
 import React from "react"
-import { View, Text, TextInput } from "react-native"
-import { theme } from "../styles.js"
+import { View, Text, TextInput, ViewProps } from "react-native"
+import { theme } from "../styles"
 
 const styles = {
 	labelTextStyle: {
@@ -19,7 +19,13 @@ const styles = {
 	},
 }
 
-export const FormField = (props) => {
+interface Props extends ViewProps {
+	label: string;
+	placeholder?: string;
+	onTextChange: (text: string) => void
+}
+
+export const FormField = (props: Props) => {
 	return (
 		<View style={[props.style]}>
 			<Text style={styles.labelTextStyle}>{props.label}</Text>

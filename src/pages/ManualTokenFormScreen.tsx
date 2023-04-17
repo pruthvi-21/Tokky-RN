@@ -1,15 +1,15 @@
-import { Button, KeyboardAvoidingView, ScrollView, View } from "react-native"
-import { styles, theme } from "../styles.js"
-import { FormField } from "../components/FormField.js"
-import { isAndroid, isIOS } from "../Utils.js"
+import { Button, GestureResponderEvent, KeyboardAvoidingView, ScrollView, View } from "react-native"
+import { styles, theme } from "../styles"
+import { FormField } from "../components/FormField"
+import { isAndroid, isIOS } from "../Utils"
 import { useState } from "react"
 
-export default function ManualTokenFormScreen({ navigation }) {
-	const [issuer, setIssuer] = useState(null)
-	const [label, setLabel] = useState(null)
-	const [secretKey, setSecretKey] = useState(null)
+export default function ManualTokenFormScreen() {
+	const [issuer, setIssuer] = useState<string|null>(null)
+	const [label, setLabel] = useState<string|null>(null)
+	const [secretKey, setSecretKey] = useState<string|null>(null)
 
-	const saveDetails = (event) => {}
+	const saveDetails = (event: GestureResponderEvent) => {}
 
 	return (
 		<View
