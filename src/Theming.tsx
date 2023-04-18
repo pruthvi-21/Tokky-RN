@@ -14,6 +14,7 @@ const lightTheme = {
 	text_color_primary: "#000000",
 	text_color_secondary: "#242424",
 	text_color_hint: "#8c8c8c",
+    divider_color: ""
 }
 
 const darkTheme = {
@@ -23,8 +24,9 @@ const darkTheme = {
 	bg_variant: "#191919",
 	bg_variant2: "#333333",
 	text_color_primary: "#ffffff",
-	text_color_secondary: "#ebebeb",
+	text_color_secondary: "#A6a6a6",
 	text_color_hint: "#939393",
+	divider_color: "#2a2a2c",
 }
 
 
@@ -53,6 +55,9 @@ export default function useTheme() {
         },
         textPrimary:{
             color: theme.text_color_primary
+        },
+        textSecondary:{
+            color: theme.text_color_secondary
         },
         bgSurface:{
             backgroundColor: theme.bg

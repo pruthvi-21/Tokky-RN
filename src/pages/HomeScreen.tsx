@@ -1,12 +1,13 @@
-import { ActionSheetIOS, Alert, Platform, View } from "react-native"
+import { ActionSheetIOS, ScrollView, View } from "react-native"
 import { FAB } from "@rneui/themed"
 import { BottomSheet, ListItem } from "@rneui/themed"
 import { useState } from "react"
 import { isAndroid, isIOS } from "../Utils"
 import useTheme from "../Theming"
+import TokenCard from "../components/TokenCard"
 
 export default function HomeScreen({ navigation }) {
-	const {theme, styles} = useTheme()
+	const { theme, styles } = useTheme()
 	const [isVisible, setIsVisible] = useState(false)
 	const fabActions = ["Scan QR code", "Enter Manually", "Cancel"]
 
@@ -22,13 +23,14 @@ export default function HomeScreen({ navigation }) {
 	]
 
 	const handleFabClick = () => {
-		isIOS() && (
-			ActionSheetIOS.showActionSheetWithOptions({
-				options: [...fabActions],
-				cancelButtonIndex: 2,
-			},
-			setResult
-		))
+		isIOS() &&
+			ActionSheetIOS.showActionSheetWithOptions(
+				{
+					options: [...fabActions],
+					cancelButtonIndex: 2,
+				},
+				setResult
+			)
 
 		isAndroid() && setIsVisible(true)
 	}
@@ -46,23 +48,29 @@ export default function HomeScreen({ navigation }) {
 
 	return (
 		<View style={styles.container}>
-			<BottomSheet
-				modalProps={{}}
-				isVisible={isVisible}
-				onBackdropPress={() => setIsVisible(false)}
-			>
-				{androidList.map((item, i) => (
-					<ListItem
-						key={i}
-						containerStyle={item.containerStyle}
-						onPress={item.onPress}
-					>
-						<ListItem.Title style={item.titleStyle}>
-							{item.title}
-						</ListItem.Title>
-					</ListItem>
-				))}
-			</BottomSheet>
+			{isAndroid() && (
+				<BottomSheet
+					modalProps={{}}
+					isVisible={isVisible}
+					onBackdropPress={() => setIsVisible(false)}
+				>
+					{androidList.map((item, i) => (
+						<ListItem
+							key={i}
+							containerStyle={item.containerStyle}
+							onPress={item.onPress}
+						>
+							<ListItem.Title style={item.titleStyle}>
+								{item.title}
+							</ListItem.Title>
+						</ListItem>
+					))}
+				</BottomSheet>
+			)}
+
+			<ScrollView>
+				<TokenCard />
+			</ScrollView>
 
 			<FAB
 				onPress={handleFabClick}
