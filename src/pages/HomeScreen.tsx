@@ -28,6 +28,7 @@ export default function HomeScreen({ navigation }) {
 				{
 					options: [...fabActions],
 					cancelButtonIndex: 2,
+					tintColor: theme.primary_color,
 				},
 				setResult
 			)
