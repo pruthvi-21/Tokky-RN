@@ -4,17 +4,11 @@ import HomeScreen from "./src/pages/HomeScreen"
 import ManualTokenFormScreen from "./src/pages/ManualTokenFormScreen"
 import { NavigationContainer } from "@react-navigation/native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
-import { Button } from "react-native"
-import { isIOS } from "./src/Utils"
 import useTheme from "./src/Theming"
 
 export default function App() {
 	const Stack = createNativeStackNavigator()
-	const {theme, styles} = useTheme()
-
-	const ButtonX = () => {
-		return <Button title="Add" color={theme.primary_color} />
-	}
+	const { theme, styles } = useTheme()
 
 	return (
 		<SafeArea style={styles.safe_area_container}>
@@ -29,7 +23,8 @@ export default function App() {
 							headerStyle: styles.screenHeaderStyle,
 							headerTitleStyle: styles.screenHeaderTitleStyle,
 							headerTintColor: theme.primary_color,
-						}}						
+							headerLargeTitle: true,
+						}}
 					/>
 					<Stack.Screen
 						name="NewScreen"
@@ -39,8 +34,6 @@ export default function App() {
 							headerStyle: styles.screenHeaderStyle,
 							headerTitleStyle: styles.screenHeaderTitleStyle,
 							headerTintColor: theme.primary_color,
-							headerRight: isIOS() ? ButtonX : undefined,
-							headerBackTitle: "Back",
 						}}
 					/>
 				</Stack.Navigator>

@@ -68,7 +68,7 @@ export default function HomeScreen({ navigation }) {
 				</BottomSheet>
 			)}
 
-			<ScrollView>
+			<ScrollView contentInsetAdjustmentBehavior="automatic">
 				<TokenCard />
 			</ScrollView>
 
