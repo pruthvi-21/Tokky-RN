@@ -10,8 +10,11 @@ import { FormField } from "../components/FormField"
 import { isAndroid, isIOS } from "../Utils"
 import { useState } from "react"
 import useTheme from "../Theming"
+import { TokenRepo } from "../database/TokenRepo"
+import TokenModel from "../models/TokenModel"
 
 export default function ManualTokenFormScreen({ navigation }) {
+	const repo = TokenRepo.getInstance()
 	const { theme, styles } = useTheme()
 
 	const [issuer, setIssuer] = useState<string | null>(null)
@@ -28,7 +31,7 @@ export default function ManualTokenFormScreen({ navigation }) {
 			Alert.alert("Error", "Secret Key can't be empty")
 			return
 		}
-		//Save details
+		repo.add(TokenModel.buildToken(issuer, "label", secretKey))
 	}
 
 	const SaveBtn = () => (

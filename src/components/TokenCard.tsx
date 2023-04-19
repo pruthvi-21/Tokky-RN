@@ -4,6 +4,8 @@ import useTheme from "../Theming"
 import Accordion from "react-native-collapsible/Accordion"
 import * as Animatable from "react-native-animatable"
 import { Path, Svg } from "react-native-svg"
+import { TokenRepo } from "../database/TokenRepo"
+import TokenModel from "../models/TokenModel"
 
 const cardStyles = {
 	preview: {
@@ -30,18 +32,11 @@ const cardStyles = {
 }
 
 export default function TokenCard() {
+	const repo = TokenRepo.getInstance()
 	const { theme, styles } = useTheme()
 	const [activeSections, setActiveSections] = useState<number[]>([])
 
-	type SampleType = {
-		title: string
-		summary: string
-	}
-	const content: SampleType[] = [
-		{ title: "Amazon", summary: "pruthvi-21" },
-		{ title: "Google", summary: "pruthvi.21@gmail.com" },
-		{ title: "Instagram", summary: "pruthvi.21" },
-	]
+	const content = repo.tokensList
 
 	const Arrow = () => {
 		return (
@@ -55,7 +50,7 @@ export default function TokenCard() {
 	}
 
 	const renderHeader = (
-		content: SampleType,
+		content: TokenModel,
 		index: number,
 		isActive: boolean
 	) => {
@@ -80,12 +75,12 @@ export default function TokenCard() {
 					<View style={cardStyles.preview} />
 					<View style={{ flex: 1 }}>
 						<Text style={[styles.textPrimary, cardStyles.title]}>
-							{content.title}
+							{content.issuer}
 						</Text>
 						<Text
 							style={[styles.textSecondary, cardStyles.summary]}
 						>
-							{content.summary}
+							{content.label}
 						</Text>
 					</View>
 					<View
@@ -99,7 +94,7 @@ export default function TokenCard() {
 	}
 
 	const renderContent = (
-		content: SampleType,
+		content: TokenModel,
 		index: number,
 		isActive: boolean
 	) => {
@@ -133,7 +128,7 @@ export default function TokenCard() {
 		>
 			<Accordion
 				activeSections={activeSections}
-				sections={content}
+				sections={content!}
 				touchableComponent={TouchableOpacity}
 				touchableProps={{ activeOpacity: 1 }}
 				expandMultiple={false}
