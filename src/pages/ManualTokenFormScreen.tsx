@@ -8,12 +8,20 @@ import {
 } from "react-native"
 import { FormField } from "../components/FormField"
 import { isAndroid, isIOS } from "../Utils"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import useTheme from "../Theming"
 import { TokenRepo } from "../database/TokenRepo"
 import TokenModel from "../models/TokenModel"
+import { RootStackParamList } from "../../App"
+import { StackNavigationProp } from "@react-navigation/stack"
 
-export default function ManualTokenFormScreen({ navigation }) {
+type AddTokenScreenProps = {
+	navigation: StackNavigationProp<RootStackParamList, "AddTokenScreen">
+}
+
+export default function ManualTokenFormScreen({
+	navigation,
+}: AddTokenScreenProps) {
 	const repo = TokenRepo.getInstance()
 	const { theme, styles } = useTheme()
 
@@ -38,7 +46,9 @@ export default function ManualTokenFormScreen({ navigation }) {
 		<Button title="Add" color={theme.primary_color} onPress={saveDetails} />
 	)
 
-	isIOS() && navigation.setOptions({ headerRight: () => <SaveBtn /> })
+	useEffect(() => {
+		isIOS() && navigation.setOptions({ headerRight: () => <SaveBtn /> })
+	}, [])
 
 	return (
 		<View style={[styles.container, { paddingHorizontal: 16 }]}>
