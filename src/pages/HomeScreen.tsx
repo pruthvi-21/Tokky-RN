@@ -1,12 +1,18 @@
-import { ActionSheetIOS, ScrollView, View } from "react-native"
+import {
+	ActionSheetIOS,
+	ScrollView,
+	TouchableOpacity,
+	View,
+} from "react-native"
 import { FAB } from "@rneui/themed"
 import { BottomSheet, ListItem } from "@rneui/themed"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { isAndroid, isIOS } from "../Utils"
 import useTheme from "../Theming"
 import TokenCard from "../components/TokenCard"
 import { StackNavigationProp } from "@react-navigation/stack"
 import { RootStackParamList } from "../../App"
+import { Path, Svg } from "react-native-svg"
 
 type HomeScreenProps = {
 	navigation: StackNavigationProp<RootStackParamList, "HomeScreen">
@@ -16,6 +22,26 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
 	const { theme, styles } = useTheme()
 	const [isVisible, setIsVisible] = useState(false)
 	const fabActions = ["Scan QR code", "Enter Manually", "Cancel"]
+
+	useEffect(() => {
+		isIOS() &&
+			navigation.setOptions({
+				headerRight: () => (
+					<TouchableOpacity
+						activeOpacity={0.5}
+						onPress={handleFabClick}
+					>
+						<Svg viewBox="0 0 24 24" width={36} height={36}>
+							<Path
+								d="M6,12H12M12,12H18M12,12V18M12,12V6"
+								stroke={theme.primary_color}
+								strokeWidth={1.5}
+							/>
+						</Svg>
+					</TouchableOpacity>
+				),
+			})
+	}, [])
 
 	const androidList = [
 		{ title: fabActions[0], onPress: () => setResult(0) },
@@ -79,12 +105,14 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
 				<TokenCard />
 			</ScrollView>
 
-			<FAB
-				onPress={handleFabClick}
-				placement="right"
-				icon={{ name: "add", color: "white" }}
-				color={theme.primary_color}
-			/>
+			{isAndroid() && (
+				<FAB
+					onPress={handleFabClick}
+					placement="right"
+					icon={{ name: "add", color: "white" }}
+					color={theme.primary_color}
+				/>
+			)}
 		</View>
 	)
 }
