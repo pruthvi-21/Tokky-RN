@@ -13,12 +13,22 @@ import useTheme from "../Theming"
 
 export default function ManualTokenFormScreen({ navigation }) {
 	const { theme, styles } = useTheme()
+
 	const [issuer, setIssuer] = useState<string | null>(null)
 	const [label, setLabel] = useState<string | null>(null)
 	const [secretKey, setSecretKey] = useState<string | null>(null)
 
 	const saveDetails = (event: GestureResponderEvent) => {
-		Alert.alert(`${issuer} ${label} ${secretKey}`)
+		if (issuer == null || issuer?.length == 0) {
+			Alert.alert("Error", "Please enter a issuer name")
+			return
+		}
+
+		if (secretKey == null || secretKey?.length == 0) {
+			Alert.alert("Error", "Secret Key can't be empty")
+			return
+		}
+		//Save details
 	}
 
 	const SaveBtn = () => (
@@ -35,7 +45,7 @@ export default function ManualTokenFormScreen({ navigation }) {
 					behavior={isIOS() ? "padding" : undefined}
 				>
 					<FormField
-						style={{ marginTop: 30 }}
+						parentStyle={{ marginTop: 30 }}
 						label="Issuer"
 						placeholder="Company name"
 						onTextChange={setIssuer}
