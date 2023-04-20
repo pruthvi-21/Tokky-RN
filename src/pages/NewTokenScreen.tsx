@@ -12,8 +12,14 @@ import { useState } from "react"
 import useTheme from "../Theming"
 import { TokenRepo } from "../database/TokenRepo"
 import TokenModel from "../models/TokenModel"
+import { RootStackParamList } from "../../App"
+import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 
-export default function NewTokenScreen({ navigation }) {
+type AddTokenScreenProps = {
+	navigation: NativeStackNavigationProp<RootStackParamList, "NewTokenScreen">
+}
+
+export default function NewTokenScreen({ navigation }: AddTokenScreenProps) {
 	const repo = TokenRepo.getInstance()
 	const { theme, styles } = useTheme()
 

@@ -11,8 +11,14 @@ import { isAndroid, isIOS } from "../Utils"
 import useTheme from "../Theming"
 import TokenCard from "../components/TokenCard"
 import { Path, Svg } from "react-native-svg"
+import { NativeStackNavigationProp } from "@react-navigation/native-stack"
+import { RootStackParamList } from "../../App"
 
-export default function HomeScreen({ navigation }) {
+type HomeScreenProps = {
+	navigation: NativeStackNavigationProp<RootStackParamList, "NewTokenScreen">
+}
+
+export default function HomeScreen({ navigation }: HomeScreenProps) {
 	const { theme, styles } = useTheme()
 	const [isVisible, setIsVisible] = useState(false)
 	const fabActions = ["Scan QR code", "Enter Manually", "Cancel"]
