@@ -13,7 +13,7 @@ import useTheme from "../Theming"
 import { TokenRepo } from "../database/TokenRepo"
 import TokenModel from "../models/TokenModel"
 
-export default function ManualTokenFormScreen({ navigation }) {
+export default function NewTokenScreen({ navigation }) {
 	const repo = TokenRepo.getInstance()
 	const { theme, styles } = useTheme()
 

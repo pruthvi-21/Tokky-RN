@@ -68,7 +68,7 @@ export default function HomeScreen({ navigation }) {
 			case 0:
 				break
 			case 1:
-				navigation.navigate("NewScreen")
+				navigation.navigate("NewTokenScreen")
 				break
 		}
 	}

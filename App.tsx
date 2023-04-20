@@ -1,7 +1,7 @@
 import { StatusBar } from "expo-status-bar"
 import { SafeArea } from "./src/components/Screen"
 import HomeScreen from "./src/pages/HomeScreen"
-import ManualTokenFormScreen from "./src/pages/ManualTokenFormScreen"
+import NewTokenScreen from "./src/pages/NewTokenScreen"
 import { NavigationContainer } from "@react-navigation/native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import useTheme from "./src/Theming"
@@ -27,8 +27,8 @@ export default function App() {
 						}}
 					/>
 					<Stack.Screen
-						name="NewScreen"
-						component={ManualTokenFormScreen}
+						name="NewTokenScreen"
+						component={NewTokenScreen}
 						options={{
 							headerTitle: "New Token",
 							headerStyle: styles.screenHeaderStyle,
