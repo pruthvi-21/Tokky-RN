@@ -8,7 +8,7 @@ import {
 } from "react-native"
 import { FormField } from "../components/FormField"
 import { isAndroid, isIOS } from "../Utils"
-import { useEffect, useLayoutEffect, useState } from "react"
+import { useLayoutEffect, useState } from "react"
 import useTheme from "../Theming"
 import { TokenRepo } from "../database/TokenRepo"
 import TokenModel from "../models/TokenModel"
@@ -23,21 +23,22 @@ export default function NewTokenScreen({ navigation }: AddTokenScreenProps) {
 	const repo = TokenRepo.getInstance()
 	const { theme, styles } = useTheme()
 
-	const [issuer, setIssuer] = useState<string | null>(null)
-	const [label, setLabel] = useState<string | null>(null)
-	const [secretKey, setSecretKey] = useState<string | null>(null)
+	const [issuer, setIssuer] = useState<string>("")
+	const [label, setLabel] = useState<string>("")
+	const [secretKey, setSecretKey] = useState<string>("")
 
 	const saveDetails = (event: GestureResponderEvent) => {
-		if (issuer == null || issuer?.length == 0) {
+		if (issuer?.length == 0) {
 			Alert.alert("Error", "Please enter a issuer name")
 			return
 		}
 
-		if (secretKey == null || secretKey?.length == 0) {
+		if (secretKey?.length == 0) {
 			Alert.alert("Error", "Secret Key can't be empty")
 			return
 		}
-		repo.add(TokenModel.buildToken(issuer, "label", secretKey))
+		repo.add(TokenModel.buildToken(issuer, label, secretKey))
+		navigation.goBack()
 	}
 
 	const SaveBtn = () => (
@@ -47,6 +48,16 @@ export default function NewTokenScreen({ navigation }: AddTokenScreenProps) {
 	useLayoutEffect(() => {
 		isIOS() && navigation.setOptions({ headerRight: () => <SaveBtn /> })
 	}, [navigation, issuer, label, secretKey])
+
+	const handleIssuerChange = (text: string) => {
+		setIssuer(text)
+	}
+	const handleLabelChange = (text: string) => {
+		setLabel(text)
+	}
+	const handleSecretKeyChange = (text: string) => {
+		setSecretKey(text)
+	}
 
 	return (
 		<View style={[styles.container, { paddingHorizontal: 16 }]}>
@@ -59,17 +70,17 @@ export default function NewTokenScreen({ navigation }: AddTokenScreenProps) {
 						parentStyle={{ marginTop: 30 }}
 						label="Issuer"
 						placeholder="Company name"
-						onTextChange={setIssuer}
+						onChangeText={handleIssuerChange}
 					/>
 					<FormField
 						label="Label"
 						placeholder="Username or email (Optional)"
-						onTextChange={setLabel}
+						onChangeText={handleLabelChange}
 					/>
 					<FormField
 						label="Secret Key"
 						placeholder="Secret Key"
-						onTextChange={setSecretKey}
+						onChangeText={handleSecretKeyChange}
 					/>
 				</KeyboardAvoidingView>
 			</ScrollView>
