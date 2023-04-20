@@ -6,13 +6,8 @@ import { NavigationContainer } from "@react-navigation/native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import useTheme from "./src/Theming"
 
-export type RootStackParamList = {
-	HomeScreen: undefined
-	AddTokenScreen: undefined
-}
-
 export default function App() {
-	const Stack = createNativeStackNavigator<RootStackParamList>()
+	const Stack = createNativeStackNavigator()
 	const { theme, styles } = useTheme()
 
 	return (
@@ -32,7 +27,7 @@ export default function App() {
 						}}
 					/>
 					<Stack.Screen
-						name="AddTokenScreen"
+						name="NewScreen"
 						component={ManualTokenFormScreen}
 						options={{
 							headerTitle: "New Token",

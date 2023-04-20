@@ -10,15 +10,9 @@ import { useEffect, useState } from "react"
 import { isAndroid, isIOS } from "../Utils"
 import useTheme from "../Theming"
 import TokenCard from "../components/TokenCard"
-import { StackNavigationProp } from "@react-navigation/stack"
-import { RootStackParamList } from "../../App"
 import { Path, Svg } from "react-native-svg"
 
-type HomeScreenProps = {
-	navigation: StackNavigationProp<RootStackParamList, "HomeScreen">
-}
-
-export default function HomeScreen({ navigation }: HomeScreenProps) {
+export default function HomeScreen({ navigation }) {
 	const { theme, styles } = useTheme()
 	const [isVisible, setIsVisible] = useState(false)
 	const fabActions = ["Scan QR code", "Enter Manually", "Cancel"]
@@ -74,7 +68,7 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
 			case 0:
 				break
 			case 1:
-				navigation.navigate("AddTokenScreen")
+				navigation.navigate("NewScreen")
 				break
 		}
 	}
