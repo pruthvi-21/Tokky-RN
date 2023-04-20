@@ -8,7 +8,7 @@ import {
 } from "react-native"
 import { FormField } from "../components/FormField"
 import { isAndroid, isIOS } from "../Utils"
-import { useState } from "react"
+import { useEffect, useLayoutEffect, useState } from "react"
 import useTheme from "../Theming"
 import { TokenRepo } from "../database/TokenRepo"
 import TokenModel from "../models/TokenModel"
@@ -44,7 +44,9 @@ export default function NewTokenScreen({ navigation }: AddTokenScreenProps) {
 		<Button title="Add" color={theme.primary_color} onPress={saveDetails} />
 	)
 
-	isIOS() && navigation.setOptions({ headerRight: () => <SaveBtn /> })
+	useLayoutEffect(() => {
+		isIOS() && navigation.setOptions({ headerRight: () => <SaveBtn /> })
+	}, [navigation, issuer, label, secretKey])
 
 	return (
 		<View style={[styles.container, { paddingHorizontal: 16 }]}>
