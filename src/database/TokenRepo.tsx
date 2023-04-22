@@ -38,6 +38,12 @@ export class TokenRepo {
 		this.tokensList.push(token)
 	}
 
+	remove(token: TokenModel) {
+		this.tokensList = this.tokensList.filter(
+			(item) => item.issuer !== token.issuer
+		)
+	}
+
 	private static instance: TokenRepo | null = null
 	public static getInstance(): TokenRepo {
 		if (TokenRepo.instance == null) {

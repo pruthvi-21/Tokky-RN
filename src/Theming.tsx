@@ -15,6 +15,7 @@ const lightTheme = {
 	text_color_secondary: "#242424",
 	text_color_hint: "#8c8c8c",
 	divider_color: "",
+	danger_color: "red",
 }
 
 const darkTheme = {
@@ -27,6 +28,7 @@ const darkTheme = {
 	text_color_secondary: "#A6a6a6",
 	text_color_hint: "#939393",
 	divider_color: "#2a2a2c",
+	danger_color: "#FC443A",
 }
 
 export default function useTheme() {
