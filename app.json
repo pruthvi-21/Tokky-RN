@@ -1,7 +1,7 @@
 {
 	"expo": {
-    	"name": "Tokky",
-    	"slug": "Tokky",
+		"name": "Tokky",
+		"slug": "Tokky",
 		"version": "1.0.0",
 		"orientation": "portrait",
 		"icon": "./assets/icon.png",
@@ -11,9 +11,7 @@
 			"resizeMode": "contain",
 			"backgroundColor": "#ffffff"
 		},
-		"assetBundlePatterns": [
-			"**/*"
-		],
+		"assetBundlePatterns": ["**/*"],
 		"ios": {
 			"supportsTablet": true,
 			"bundleIdentifier": "com.ps.tokky.rn"
@@ -28,5 +26,5 @@
 		"web": {
 			"favicon": "./assets/favicon.png"
 		}
-  	}
+	}
 }

@@ -4,23 +4,23 @@ import {
 	ScrollView,
 	TouchableOpacity,
 	View,
-} from "react-native"
-import { FAB } from "@rneui/themed"
-import { BottomSheet, ListItem } from "@rneui/themed"
-import React, { useEffect, useState } from "react"
-import { isAndroid, isIOS } from "../Utils"
-import useTheme from "../Theming"
-import TokensContainer from "../components/TokensContainer"
-import { Path, Svg } from "react-native-svg"
-import { NativeStackNavigationProp } from "@react-navigation/native-stack"
-import { RootStackParamList } from "../../App"
-import { Text } from "react-native-animatable"
-import { useFocusEffect } from "@react-navigation/native"
-import { useSelector } from "react-redux"
-import { RootState } from "../data/reducers"
+} from 'react-native'
+import { FAB } from '@rneui/themed'
+import { BottomSheet, ListItem } from '@rneui/themed'
+import React, { useEffect, useState } from 'react'
+import { isAndroid, isIOS } from '../Utils'
+import useTheme from '../Theming'
+import TokensContainer from '../components/TokensContainer'
+import { Path, Svg } from 'react-native-svg'
+import { NativeStackNavigationProp } from '@react-navigation/native-stack'
+import { RootStackParamList } from '../../App'
+import { Text } from 'react-native-animatable'
+import { useFocusEffect } from '@react-navigation/native'
+import { useSelector } from 'react-redux'
+import { RootState } from '../data/reducers'
 
 type HomeScreenProps = {
-	navigation: NativeStackNavigationProp<RootStackParamList, "HomeScreen">
+	navigation: NativeStackNavigationProp<RootStackParamList, 'HomeScreen'>
 }
 
 export default function HomeScreen({ navigation }: HomeScreenProps) {
@@ -30,7 +30,7 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
 
 	const content = useSelector((state: RootState) => state.tokenList)
 
-	const fabActions = ["Scan QR code", "Enter Manually", "Cancel"]
+	const fabActions = ['Scan QR code', 'Enter Manually', 'Cancel']
 
 	const IOSAddIcon = () => {
 		return (
@@ -67,7 +67,7 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
 					style={{
 						fontSize: 17,
 						color: theme.primary_color,
-						fontWeight: "600",
+						fontWeight: '600',
 					}}
 				>
 					Done
@@ -83,22 +83,22 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
 			//So wrapped it around a view instead and done manually
 			<View
 				style={{
-					flexDirection: "row",
-					alignItems: "center",
-					justifyContent: "flex-end",
+					flexDirection: 'row',
+					alignItems: 'center',
+					justifyContent: 'flex-end',
 					minWidth: 100,
 					minHeight: 36,
 				}}
 			>
-				{!inEditMode && <IconEdit key={"key_edit"} />}
-				{isIOS() && !inEditMode && <IOSAddIcon key={"key_add"} />}
-				{inEditMode && <IconDone key={"key_done"} />}
+				{!inEditMode && <IconEdit key={'key_edit'} />}
+				{isIOS() && !inEditMode && <IOSAddIcon key={'key_add'} />}
+				{inEditMode && <IconDone key={'key_done'} />}
 			</View>
 		)
 
 		navigation.setOptions({
 			headerRight: () => toolbarItems,
-			headerTitle: !inEditMode ? "Tokky" : "Edit Tokens",
+			headerTitle: !inEditMode ? 'Tokky' : 'Edit Tokens',
 		})
 	}, [inEditMode])
 
@@ -113,11 +113,11 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
 				return false
 			}
 
-			BackHandler.addEventListener("hardwareBackPress", onBackPress)
+			BackHandler.addEventListener('hardwareBackPress', onBackPress)
 
 			return () =>
 				BackHandler.removeEventListener(
-					"hardwareBackPress",
+					'hardwareBackPress',
 					onBackPress
 				)
 		}, [inEditMode])
@@ -128,8 +128,8 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
 		{ title: fabActions[1], onPress: () => setResult(1) },
 		{
 			title: fabActions[2],
-			containerStyle: { backgroundColor: "#ff0000" },
-			titleStyle: { color: "white" },
+			containerStyle: { backgroundColor: '#ff0000' },
+			titleStyle: { color: 'white' },
 			onPress: () => setResult(2),
 		},
 	]
@@ -161,7 +161,7 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
 			case 0:
 				break
 			case 1:
-				navigation.navigate("NewTokenScreen")
+				navigation.navigate('NewTokenScreen')
 				break
 		}
 	}
@@ -196,7 +196,7 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
 				<FAB
 					onPress={handleFabClick}
 					placement="right"
-					icon={{ name: "add", color: "white" }}
+					icon={{ name: 'add', color: 'white' }}
 					color={theme.primary_color}
 				/>
 			)}

@@ -1,4 +1,4 @@
-import React from "react"
+import React from 'react'
 import {
 	View,
 	Text,
@@ -6,8 +6,8 @@ import {
 	TextInputProps,
 	ViewStyle,
 	StyleProp,
-} from "react-native"
-import useTheme from "../Theming"
+} from 'react-native'
+import useTheme from '../Theming'
 
 interface Props extends TextInputProps {
 	label: string

@@ -1,6 +1,6 @@
-import { TokenRepo } from "../database/TokenRepo"
-import TokenModel from "../models/TokenModel"
-import { ADDITEM, TokenOperations, REMOVEITEM } from "./action"
+import { TokenRepo } from '../database/TokenRepo'
+import TokenModel from '../models/TokenModel'
+import { ADDITEM, TokenOperations, REMOVEITEM } from './action'
 
 const initialState: { tokenList: TokenModel[] } = {
 	tokenList: TokenRepo.getInstance().tokensList,

@@ -1,5 +1,5 @@
-import { useState } from "react"
-import { Appearance, StyleSheet, useColorScheme } from "react-native"
+import { useState } from 'react'
+import { Appearance, StyleSheet, useColorScheme } from 'react-native'
 
 const dimens = {
 	cornerRadius: 20,
@@ -7,28 +7,28 @@ const dimens = {
 
 const lightTheme = {
 	...dimens,
-	primary_color: "#669900",
-	bg: "#ffffff",
-	bg_variant: "#fafafa",
-	bg_variant2: "#bababa",
-	text_color_primary: "#000000",
-	text_color_secondary: "#242424",
-	text_color_hint: "#8c8c8c",
-	divider_color: "",
-	danger_color: "red",
+	primary_color: '#669900',
+	bg: '#ffffff',
+	bg_variant: '#fafafa',
+	bg_variant2: '#bababa',
+	text_color_primary: '#000000',
+	text_color_secondary: '#242424',
+	text_color_hint: '#8c8c8c',
+	divider_color: '',
+	danger_color: 'red',
 }
 
 const darkTheme = {
 	...dimens,
-	primary_color: "#669900",
-	bg: "#010101",
-	bg_variant: "#191919",
-	bg_variant2: "#333333",
-	text_color_primary: "#ffffff",
-	text_color_secondary: "#A6a6a6",
-	text_color_hint: "#939393",
-	divider_color: "#2a2a2c",
-	danger_color: "#FC443A",
+	primary_color: '#669900',
+	bg: '#010101',
+	bg_variant: '#191919',
+	bg_variant2: '#333333',
+	text_color_primary: '#ffffff',
+	text_color_secondary: '#A6a6a6',
+	text_color_hint: '#939393',
+	divider_color: '#2a2a2c',
+	danger_color: '#FC443A',
 }
 
 export default function useTheme() {
@@ -37,7 +37,7 @@ export default function useTheme() {
 		setTheme(obj.colorScheme)
 	})
 
-	const theme = currentTheme == "light" ? lightTheme : darkTheme
+	const theme = currentTheme == 'light' ? lightTheme : darkTheme
 
 	const styles = StyleSheet.create({
 		safe_area_container: {

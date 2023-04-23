@@ -1,12 +1,12 @@
-import { Alert, Text, TouchableOpacity, View } from "react-native"
-import { useEffect, useState } from "react"
-import useTheme from "../Theming"
-import Accordion from "react-native-collapsible/Accordion"
-import * as Animatable from "react-native-animatable"
-import { Path, Svg } from "react-native-svg"
-import TokenModel from "../models/TokenModel"
-import { useDispatch } from "react-redux"
-import { removeToken } from "../data/action"
+import { Alert, Text, TouchableOpacity, View } from 'react-native'
+import { useEffect, useState } from 'react'
+import useTheme from '../Theming'
+import Accordion from 'react-native-collapsible/Accordion'
+import * as Animatable from 'react-native-animatable'
+import { Path, Svg } from 'react-native-svg'
+import TokenModel from '../models/TokenModel'
+import { useDispatch } from 'react-redux'
+import { removeToken } from '../data/action'
 
 type Props = {
 	inEditMode: boolean
@@ -73,13 +73,13 @@ export default function TokensContainer({ inEditMode, content }: Props) {
 
 	const handleDeleteItem = (index: number) => {
 		Alert.alert(
-			"Warning",
-			"Before removing please ensure that you turn off 2FA for this account.\n\n This operation cannot be undone.",
+			'Warning',
+			'Before removing please ensure that you turn off 2FA for this account.\n\n This operation cannot be undone.',
 			[
-				{ text: "Cancel", style: "cancel", onPress: () => {} },
+				{ text: 'Cancel', style: 'cancel', onPress: () => {} },
 				{
-					text: "Delete",
-					style: "destructive",
+					text: 'Delete',
+					style: 'destructive',
 					onPress: () => {
 						dispatch(removeToken(content[index]))
 					},
@@ -106,9 +106,9 @@ export default function TokensContainer({ inEditMode, content }: Props) {
 			>
 				<View
 					style={{
-						display: "flex",
-						alignItems: "center",
-						flexDirection: "row",
+						display: 'flex',
+						alignItems: 'center',
+						flexDirection: 'row',
 					}}
 				>
 					<View style={cardStyles.preview} />
@@ -125,7 +125,7 @@ export default function TokensContainer({ inEditMode, content }: Props) {
 					{!inEditMode && (
 						<View
 							style={{
-								transform: isActive ? "rotateZ(180deg)" : "",
+								transform: isActive ? 'rotateZ(180deg)' : '',
 							}}
 						>
 							<IconArrow />
@@ -154,10 +154,10 @@ export default function TokensContainer({ inEditMode, content }: Props) {
 						styles.textPrimary,
 						{ fontSize: 30, marginLeft: 64 },
 					]}
-					animation={isActive ? "fadeIn" : undefined}
+					animation={isActive ? 'fadeIn' : undefined}
 					duration={500}
 				>
-					{"123 456"}
+					{'123 456'}
 				</Animatable.Text>
 			</Animatable.View>
 		)
@@ -167,7 +167,7 @@ export default function TokensContainer({ inEditMode, content }: Props) {
 		<View
 			style={{
 				borderRadius: 20,
-				overflow: "hidden",
+				overflow: 'hidden',
 				marginHorizontal: 15,
 			}}
 		>
@@ -193,7 +193,7 @@ const cardStyles = {
 	preview: {
 		width: 44,
 		aspectRatio: 1,
-		backgroundColor: "#333333",
+		backgroundColor: '#333333',
 		borderRadius: 10,
 		marginRight: 20,
 	},

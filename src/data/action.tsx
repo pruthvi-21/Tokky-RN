@@ -1,7 +1,7 @@
-import TokenModel from "../models/TokenModel"
+import TokenModel from '../models/TokenModel'
 
-export const ADDITEM = "AddItem"
-export const REMOVEITEM = "RemoveItem"
+export const ADDITEM = 'AddItem'
+export const REMOVEITEM = 'RemoveItem'
 
 export interface AddTokenOperation {
 	type: typeof ADDITEM

@@ -1,4 +1,4 @@
-import React from "react"
+import React from 'react'
 import {
 	View,
 	SafeAreaView,
@@ -6,7 +6,7 @@ import {
 	StatusBar,
 	StyleSheet,
 	ViewProps,
-} from "react-native"
+} from 'react-native'
 
 const styles = StyleSheet.create({
 	container: {
@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
 })
 
 export const SafeArea = React.memo((props: ViewProps) => {
-	if (Platform.OS === "ios") {
+	if (Platform.OS === 'ios') {
 		return <SafeAreaView style={props.style}>{props.children}</SafeAreaView>
 	}
 
