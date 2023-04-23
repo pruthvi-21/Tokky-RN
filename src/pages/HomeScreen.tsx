@@ -1,6 +1,5 @@
 import {
 	ActionSheetIOS,
-	Alert,
 	BackHandler,
 	ScrollView,
 	TouchableOpacity,
@@ -17,15 +16,19 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { RootStackParamList } from "../../App"
 import { Text } from "react-native-animatable"
 import { useFocusEffect } from "@react-navigation/native"
+import { useSelector } from "react-redux"
+import { RootState } from "../data/reducers"
 
 type HomeScreenProps = {
-	navigation: NativeStackNavigationProp<RootStackParamList, "NewTokenScreen">
+	navigation: NativeStackNavigationProp<RootStackParamList, "HomeScreen">
 }
 
 export default function HomeScreen({ navigation }: HomeScreenProps) {
 	const { theme, styles } = useTheme()
 	const [isVisible, setIsVisible] = useState(false)
 	const [inEditMode, enableEditMode] = useState(false)
+
+	const content = useSelector((state: RootState) => state.tokenList)
 
 	const fabActions = ["Scan QR code", "Enter Manually", "Cancel"]
 
@@ -186,7 +189,7 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
 			)}
 
 			<ScrollView contentInsetAdjustmentBehavior="automatic">
-				<TokensContainer inEditMode={inEditMode} />
+				<TokensContainer inEditMode={inEditMode} content={content} />
 			</ScrollView>
 
 			{isAndroid() && (

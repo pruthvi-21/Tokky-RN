@@ -10,22 +10,24 @@ import { FormField } from "../components/FormField"
 import { isAndroid, isIOS } from "../Utils"
 import { useLayoutEffect, useState } from "react"
 import useTheme from "../Theming"
-import { TokenRepo } from "../database/TokenRepo"
 import TokenModel from "../models/TokenModel"
 import { RootStackParamList } from "../../App"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
+import { useDispatch } from "react-redux"
+import { addToken } from "../data/action"
 
 type AddTokenScreenProps = {
 	navigation: NativeStackNavigationProp<RootStackParamList, "NewTokenScreen">
 }
 
 export default function NewTokenScreen({ navigation }: AddTokenScreenProps) {
-	const repo = TokenRepo.getInstance()
 	const { theme, styles } = useTheme()
 
 	const [issuer, setIssuer] = useState<string>("")
 	const [label, setLabel] = useState<string>("")
 	const [secretKey, setSecretKey] = useState<string>("")
+
+	const dispatch = useDispatch()
 
 	const saveDetails = (event: GestureResponderEvent) => {
 		if (issuer?.length == 0) {
@@ -37,7 +39,8 @@ export default function NewTokenScreen({ navigation }: AddTokenScreenProps) {
 			Alert.alert("Error", "Secret Key can't be empty")
 			return
 		}
-		repo.add(TokenModel.buildToken(issuer, label, secretKey))
+		const newToken = TokenModel.buildToken(issuer, label, secretKey)
+		dispatch(addToken(newToken))
 		navigation.goBack()
 	}
 

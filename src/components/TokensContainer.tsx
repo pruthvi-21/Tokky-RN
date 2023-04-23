@@ -1,45 +1,23 @@
-import { Alert, Animated, Text, TouchableOpacity, View } from "react-native"
-import { useEffect, useRef, useState } from "react"
+import { Alert, Text, TouchableOpacity, View } from "react-native"
+import { useEffect, useState } from "react"
 import useTheme from "../Theming"
 import Accordion from "react-native-collapsible/Accordion"
 import * as Animatable from "react-native-animatable"
 import { Path, Svg } from "react-native-svg"
-import { TokenRepo } from "../database/TokenRepo"
 import TokenModel from "../models/TokenModel"
-
-const cardStyles = {
-	preview: {
-		width: 44,
-		aspectRatio: 1,
-		backgroundColor: "#333333",
-		borderRadius: 10,
-		marginRight: 20,
-	},
-	container: {
-		paddingVertical: 10,
-		paddingHorizontal: 20,
-	},
-	collapsedContainer: {
-		paddingVertical: 10,
-		paddingHorizontal: 20,
-	},
-	title: {
-		fontSize: 17,
-	},
-	summary: {
-		marginTop: 3,
-	},
-}
+import { useDispatch } from "react-redux"
+import { removeToken } from "../data/action"
 
 type Props = {
 	inEditMode: boolean
+	content: TokenModel[]
 }
 
-export default function TokensContainer({ inEditMode }: Props) {
-	const repo = TokenRepo.getInstance()
+export default function TokensContainer({ inEditMode, content }: Props) {
 	const { theme, styles } = useTheme()
 	const [activeSections, setActiveSections] = useState<number[]>([])
-	const [content, setContent] = useState(repo.tokensList)
+
+	const dispatch = useDispatch()
 
 	useEffect(() => {
 		setActiveSections([])
@@ -103,8 +81,7 @@ export default function TokensContainer({ inEditMode }: Props) {
 					text: "Delete",
 					style: "destructive",
 					onPress: () => {
-						repo.remove(content[index])
-						setContent(repo.tokensList)
+						dispatch(removeToken(content[index]))
 					},
 				},
 			]
@@ -210,4 +187,28 @@ export default function TokensContainer({ inEditMode }: Props) {
 			/>
 		</View>
 	)
+}
+
+const cardStyles = {
+	preview: {
+		width: 44,
+		aspectRatio: 1,
+		backgroundColor: "#333333",
+		borderRadius: 10,
+		marginRight: 20,
+	},
+	container: {
+		paddingVertical: 10,
+		paddingHorizontal: 20,
+	},
+	collapsedContainer: {
+		paddingVertical: 10,
+		paddingHorizontal: 20,
+	},
+	title: {
+		fontSize: 17,
+	},
+	summary: {
+		marginTop: 3,
+	},
 }
