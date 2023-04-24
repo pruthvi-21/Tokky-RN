@@ -11,13 +11,18 @@ import { removeToken } from '../data/action'
 type Props = {
 	inEditMode: boolean
 	content: TokenModel[]
+	editTokenCallback: (id: string) => void
+	deleteTokenCallback: (id: string) => void
 }
 
-export default function TokensContainer({ inEditMode, content }: Props) {
+export default function TokensContainer({
+	inEditMode,
+	content,
+	editTokenCallback,
+	deleteTokenCallback,
+}: Props) {
 	const { theme, styles } = useTheme()
 	const [activeSections, setActiveSections] = useState<number[]>([])
-
-	const dispatch = useDispatch()
 
 	useEffect(() => {
 		setActiveSections([])
@@ -34,9 +39,12 @@ export default function TokensContainer({ inEditMode, content }: Props) {
 		)
 	}
 
-	const IconEdit = () => {
+	const IconEdit = ({ index }: { index: number }) => {
 		return (
-			<TouchableOpacity activeOpacity={0.5}>
+			<TouchableOpacity
+				activeOpacity={0.5}
+				onPress={() => editTokenCallback(content[index].id)}
+			>
 				<Svg height={24} width={24} viewBox="0 0 24 24">
 					<Path
 						d="M17.665,10.455L20.755,7.365L16.635,3.245L13.545,6.335M17.665,10.455L7.365,20.755L3.245,20.755L3.245,16.635L13.545,6.335M17.665,10.455L13.545,6.335"
@@ -53,7 +61,7 @@ export default function TokensContainer({ inEditMode, content }: Props) {
 			<TouchableOpacity
 				activeOpacity={0.5}
 				style={{ marginStart: 20 }}
-				onPress={() => handleDeleteItem(index)}
+				onPress={() => deleteTokenCallback(content[index].id)}
 			>
 				<Svg height={27} width={27} viewBox="0 0 24 24">
 					<Path
@@ -68,23 +76,6 @@ export default function TokensContainer({ inEditMode, content }: Props) {
 					/>
 				</Svg>
 			</TouchableOpacity>
-		)
-	}
-
-	const handleDeleteItem = (index: number) => {
-		Alert.alert(
-			'Warning',
-			'Before removing please ensure that you turn off 2FA for this account.\n\n This operation cannot be undone.',
-			[
-				{ text: 'Cancel', style: 'cancel', onPress: () => {} },
-				{
-					text: 'Delete',
-					style: 'destructive',
-					onPress: () => {
-						dispatch(removeToken(content[index].id))
-					},
-				},
-			]
 		)
 	}
 
@@ -131,7 +122,7 @@ export default function TokensContainer({ inEditMode, content }: Props) {
 							<IconArrow />
 						</View>
 					)}
-					{inEditMode && <IconEdit />}
+					{inEditMode && <IconEdit index={index} />}
 					{inEditMode && <IconDelete index={index} />}
 				</View>
 			</View>

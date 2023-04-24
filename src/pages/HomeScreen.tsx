@@ -1,7 +1,9 @@
 import {
 	ActionSheetIOS,
+	Alert,
 	BackHandler,
 	ScrollView,
+	StyleSheet,
 	TouchableOpacity,
 	View,
 } from 'react-native'
@@ -16,8 +18,9 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { RootStackParamList } from '../../App'
 import { Text } from 'react-native-animatable'
 import { useFocusEffect } from '@react-navigation/native'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../data/reducers'
+import { removeToken } from '../data/action'
 
 type HomeScreenProps = {
 	navigation: NativeStackNavigationProp<RootStackParamList, 'HomeScreen'>
@@ -25,9 +28,10 @@ type HomeScreenProps = {
 
 export default function HomeScreen({ navigation }: HomeScreenProps) {
 	const { theme, styles } = useTheme()
-	const [isVisible, setIsVisible] = useState(false)
+	const [bottomSheetVisible, setBottomSheetVisible] = useState(false)
 	const [inEditMode, enableEditMode] = useState(false)
 
+	const dispatch = useDispatch()
 	const content = useSelector((state: RootState) => state.tokenList)
 
 	const fabActions = ['Scan QR code', 'Enter Manually', 'Cancel']
@@ -152,11 +156,11 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
 				setResult
 			)
 
-		isAndroid() && setIsVisible(true)
+		isAndroid() && setBottomSheetVisible(true)
 	}
 
 	const setResult = (idx: number) => {
-		setIsVisible(false)
+		setBottomSheetVisible(false)
 		switch (idx) {
 			case 0:
 				break
@@ -166,13 +170,32 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
 		}
 	}
 
+	const handleEditItem = (id: string) => {}
+
+	const handleDeleteItem = (id: string) => {
+		Alert.alert(
+			'Warning',
+			'Before removing please ensure that you turn off 2FA for this account.\n\n This operation cannot be undone.',
+			[
+				{ text: 'Cancel', style: 'cancel', onPress: () => {} },
+				{
+					text: 'Delete',
+					style: 'destructive',
+					onPress: () => {
+						dispatch(removeToken(id))
+					},
+				},
+			]
+		)
+	}
+
 	return (
-		<View style={styles.container}>
+		<View style={[styles.container]}>
 			{isAndroid() && (
 				<BottomSheet
 					modalProps={{}}
-					isVisible={isVisible}
-					onBackdropPress={() => setIsVisible(false)}
+					isVisible={bottomSheetVisible}
+					onBackdropPress={() => setBottomSheetVisible(false)}
 				>
 					{androidList.map((item, i) => (
 						<ListItem
@@ -188,9 +211,27 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
 				</BottomSheet>
 			)}
 
-			<ScrollView contentInsetAdjustmentBehavior="automatic">
-				<TokensContainer inEditMode={inEditMode} content={content} />
-			</ScrollView>
+			{content.length != 0 && (
+				<ScrollView contentInsetAdjustmentBehavior="automatic">
+					<View>
+						<TokensContainer
+							inEditMode={inEditMode}
+							content={content}
+							editTokenCallback={handleEditItem}
+							deleteTokenCallback={handleDeleteItem}
+						/>
+					</View>
+				</ScrollView>
+			)}
+
+			{content.length == 0 && (
+				<View style={[homeStyles.emptyLayoutContainer]}>
+					<Text style={[styles.textPrimary]}>No accounts added</Text>
+					<Text style={[styles.textPrimary, { marginTop: 5 }]}>
+						Add a account by clicking on '+' on top
+					</Text>
+				</View>
+			)}
 
 			{isAndroid() && (
 				<FAB
@@ -203,3 +244,13 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
 		</View>
 	)
 }
+
+const homeStyles = StyleSheet.create({
+	emptyLayoutContainer: {
+		display: 'flex',
+		flex: 1,
+		flexDirection: 'column',
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
+})
