@@ -81,7 +81,7 @@ export default function TokensContainer({ inEditMode, content }: Props) {
 					text: 'Delete',
 					style: 'destructive',
 					onPress: () => {
-						dispatch(removeToken(content[index]))
+						dispatch(removeToken(content[index].id))
 					},
 				},
 			]

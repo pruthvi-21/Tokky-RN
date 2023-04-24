@@ -1,4 +1,9 @@
-import { DEFAULT_ALGORITHM, DEFAULT_DIGITS, DEFAULT_PERIOD } from '../Utils'
+import {
+	DEFAULT_ALGORITHM,
+	DEFAULT_DIGITS,
+	DEFAULT_PERIOD,
+	generateUUID,
+} from '../Utils'
 
 export default class TokenModel {
 	id: string
@@ -26,6 +31,7 @@ export default class TokenModel {
 		label: string,
 		secretKey: string
 	): TokenModel {
-		return new TokenModel('', issuer, label, secretKey)
+		const uuid = generateUUID()
+		return new TokenModel(uuid, issuer, label, secretKey)
 	}
 }

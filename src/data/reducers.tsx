@@ -13,7 +13,7 @@ export const mainReducer = (state = initialState, action: TokenOperations) => {
 			return { tokenList: newList }
 		case REMOVEITEM:
 			const newList1 = state.tokenList.filter(
-				(item) => item.issuer !== action.token.issuer
+				(item) => item.id !== action.id
 			)
 			return { tokenList: newList1 }
 		default:
