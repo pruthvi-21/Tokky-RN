@@ -4,7 +4,6 @@ import {
 	BackHandler,
 	ScrollView,
 	StyleSheet,
-	TouchableOpacity,
 	View,
 } from 'react-native'
 import { FAB } from '@rneui/themed'
@@ -13,14 +12,17 @@ import React, { useEffect, useState } from 'react'
 import { isAndroid, isIOS } from '../Utils'
 import useTheme from '../Theming'
 import TokensContainer from '../components/TokensContainer'
-import { Path, Svg } from 'react-native-svg'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { RootStackParamList } from '../../App'
-import { Text } from 'react-native-animatable'
 import { useFocusEffect } from '@react-navigation/native'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../data/reducers'
 import { removeToken } from '../data/action'
+import {
+	ThemedButton,
+	IconButton,
+	ThemedText,
+} from '../components/ThemedComponents'
 
 type HomeScreenProps = {
 	navigation: NativeStackNavigationProp<RootStackParamList, 'HomeScreen'>
@@ -36,67 +38,35 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
 
 	const fabActions = ['Scan QR code', 'Enter Manually', 'Cancel']
 
-	const IOSAddIcon = () => {
-		return (
-			<TouchableOpacity
-				activeOpacity={0.5}
-				onPress={handleFabClick}
-				style={{ marginStart: 15 }}
-			>
-				<Svg viewBox="0 0 24 24" width={36} height={36}>
-					<Path
-						d="M6,12H12M12,12H18M12,12V18M12,12V6"
-						stroke={theme.primary_color}
-						strokeWidth={1.5}
-					/>
-				</Svg>
-			</TouchableOpacity>
-		)
-	}
-
-	const IconEdit = () => {
-		return (
-			<TouchableOpacity activeOpacity={0.5} onPress={handleEditClick}>
-				<Text style={{ fontSize: 18, color: theme.primary_color }}>
-					Edit
-				</Text>
-			</TouchableOpacity>
-		)
-	}
-
-	const IconDone = () => {
-		return (
-			<TouchableOpacity activeOpacity={0.5} onPress={handleDoneClick}>
-				<Text
-					style={{
-						fontSize: 17,
-						color: theme.primary_color,
-						fontWeight: '600',
-					}}
-				>
-					Done
-				</Text>
-			</TouchableOpacity>
-		)
-	}
-
 	useEffect(() => {
 		const toolbarItems = (
 			//Due to some unknown reason when we enter into Edit mode
 			//the Done button is not properly aligned to the right
 			//So wrapped it around a view instead and done manually
-			<View
-				style={{
-					flexDirection: 'row',
-					alignItems: 'center',
-					justifyContent: 'flex-end',
-					minWidth: 100,
-					minHeight: 36,
-				}}
-			>
-				{!inEditMode && <IconEdit key={'key_edit'} />}
-				{isIOS() && !inEditMode && <IOSAddIcon key={'key_add'} />}
-				{inEditMode && <IconDone key={'key_done'} />}
+			<View style={[homeStyles.toolbarContainer]}>
+				{!inEditMode && (
+					<ThemedButton
+						key="key_edit"
+						title="Edit"
+						onPress={() => enableEditMode(true)}
+					/>
+				)}
+				{isIOS() && !inEditMode && (
+					<IconButton
+						key={'key_add'}
+						icon="add"
+						width={36}
+						height={36}
+						tint={theme.primary_color}
+						onPress={handleFabClick}
+					/>
+				)}
+				{inEditMode && (
+					<ThemedButton
+						title="Done"
+						onPress={() => enableEditMode(false)}
+					/>
+				)}
 			</View>
 		)
 
@@ -137,13 +107,6 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
 			onPress: () => setResult(2),
 		},
 	]
-
-	const handleEditClick = () => {
-		enableEditMode(true)
-	}
-	const handleDoneClick = () => {
-		enableEditMode(false)
-	}
 
 	const handleFabClick = () => {
 		isIOS() &&
@@ -226,10 +189,17 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
 
 			{content.length == 0 && (
 				<View style={[homeStyles.emptyLayoutContainer]}>
-					<Text style={[styles.textPrimary]}>No accounts added</Text>
-					<Text style={[styles.textPrimary, { marginTop: 5 }]}>
-						Add a account by clicking on '+' on top
-					</Text>
+					<ThemedText>No accounts added</ThemedText>
+					<ThemedText style={{ marginTop: 5 }}>
+						Add a account by clicking on '
+						<ThemedText
+							color={theme.primary_color}
+							style={{ fontSize: 20 }}
+						>
+							+
+						</ThemedText>
+						' on top
+					</ThemedText>
 				</View>
 			)}
 
@@ -252,5 +222,12 @@ const homeStyles = StyleSheet.create({
 		flexDirection: 'column',
 		justifyContent: 'center',
 		alignItems: 'center',
+	},
+	toolbarContainer: {
+		minWidth: 100,
+		minHeight: 36,
+		flexDirection: 'row',
+		alignItems: 'center',
+		justifyContent: 'flex-end',
 	},
 })

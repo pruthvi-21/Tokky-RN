@@ -1,13 +1,13 @@
 import React from 'react'
 import {
 	View,
-	Text,
 	TextInput,
 	TextInputProps,
 	ViewStyle,
 	StyleProp,
 } from 'react-native'
 import useTheme from '../Theming'
+import { ThemedText } from './ThemedComponents'
 
 interface Props extends TextInputProps {
 	label: string
@@ -20,9 +20,7 @@ export const FormField = ({ label, parentStyle, ...props }: Props) => {
 
 	return (
 		<View style={[parentStyle]}>
-			<Text style={[formStyles.labelTextStyle, styles.textPrimary]}>
-				{label}
-			</Text>
+			<ThemedText style={formStyles.labelTextStyle}>{label}</ThemedText>
 			<TextInput
 				style={[
 					formStyles.textInput,

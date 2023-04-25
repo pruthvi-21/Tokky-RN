@@ -1,12 +1,12 @@
-import { StatusBar } from "expo-status-bar"
-import { SafeArea } from "./src/components/Screen"
-import HomeScreen from "./src/pages/HomeScreen"
-import NewTokenScreen from "./src/pages/NewTokenScreen"
-import { NavigationContainer } from "@react-navigation/native"
-import { createNativeStackNavigator } from "@react-navigation/native-stack"
-import useTheme from "./src/Theming"
-import { Provider } from "react-redux"
-import { store } from "./src/data/store"
+import { StatusBar } from 'expo-status-bar'
+import { SafeArea } from './src/components/Screen'
+import HomeScreen from './src/pages/HomeScreen'
+import NewTokenScreen from './src/pages/NewTokenScreen'
+import { NavigationContainer } from '@react-navigation/native'
+import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import useTheme from './src/Theming'
+import { Provider } from 'react-redux'
+import { store } from './src/data/store'
 
 export type RootStackParamList = {
 	HomeScreen: undefined
@@ -27,7 +27,7 @@ export default function App() {
 							name="HomeScreen"
 							component={HomeScreen}
 							options={{
-								title: "Tokky",
+								title: 'Tokky',
 								headerStyle: styles.screenHeaderStyle,
 								headerTitleStyle: styles.screenHeaderTitleStyle,
 								headerTintColor: theme.primary_color,
@@ -38,7 +38,7 @@ export default function App() {
 							name="NewTokenScreen"
 							component={NewTokenScreen}
 							options={{
-								headerTitle: "New Token",
+								headerTitle: 'New Token',
 								headerStyle: styles.screenHeaderStyle,
 								headerTitleStyle: styles.screenHeaderTitleStyle,
 								headerTintColor: theme.primary_color,

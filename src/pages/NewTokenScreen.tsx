@@ -1,6 +1,5 @@
 import {
 	Alert,
-	Button,
 	GestureResponderEvent,
 	KeyboardAvoidingView,
 	ScrollView,
@@ -15,13 +14,14 @@ import { RootStackParamList } from '../../App'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { useDispatch } from 'react-redux'
 import { addToken } from '../data/action'
+import { ThemedButton } from '../components/ThemedComponents'
 
 type AddTokenScreenProps = {
 	navigation: NativeStackNavigationProp<RootStackParamList, 'NewTokenScreen'>
 }
 
 export default function NewTokenScreen({ navigation }: AddTokenScreenProps) {
-	const { theme, styles } = useTheme()
+	const { styles } = useTheme()
 
 	const [issuer, setIssuer] = useState<string>('')
 	const [label, setLabel] = useState<string>('')
@@ -44,9 +44,7 @@ export default function NewTokenScreen({ navigation }: AddTokenScreenProps) {
 		navigation.goBack()
 	}
 
-	const SaveBtn = () => (
-		<Button title="Add" color={theme.primary_color} onPress={saveDetails} />
-	)
+	const SaveBtn = () => <ThemedButton title="Add" onPress={saveDetails} />
 
 	useLayoutEffect(() => {
 		isIOS() && navigation.setOptions({ headerRight: () => <SaveBtn /> })
