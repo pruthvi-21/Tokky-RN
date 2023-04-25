@@ -7,20 +7,20 @@ const dimens = {
 
 const lightTheme = {
 	...dimens,
-	primary_color: '#669900',
-	bg: '#ffffff',
-	bg_variant: '#fafafa',
+	primary_color: '#007aff',
+	bg: '#f2f2f4',
+	bg_variant: '#ffffff',
 	bg_variant2: '#bababa',
-	text_color_primary: '#000000',
-	text_color_secondary: '#242424',
+	text_color_primary: '#040404',
+	text_color_secondary: '#85858A',
 	text_color_hint: '#8c8c8c',
-	divider_color: '',
-	danger_color: 'red',
+	divider_color: '#e7e7e7',
+	danger_color: '#ff3d31',
 }
 
 const darkTheme = {
 	...dimens,
-	primary_color: '#669900',
+	primary_color: '#0984ff',
 	bg: '#010101',
 	bg_variant: '#191919',
 	bg_variant2: '#333333',
@@ -28,7 +28,7 @@ const darkTheme = {
 	text_color_secondary: '#A6a6a6',
 	text_color_hint: '#939393',
 	divider_color: '#2a2a2c',
-	danger_color: '#FC443A',
+	danger_color: '#ff443a',
 }
 
 export default function useTheme() {
