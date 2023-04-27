@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar'
 import SafeArea from './src/components/SafeArea'
 import HomeScreen from './src/pages/HomeScreen'
-import NewTokenScreen from './src/pages/NewTokenScreen'
+import NewAccountScreen from './src/pages/NewAccountScreen'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import useTheme, { appTheme } from './src/Theming'
@@ -11,7 +11,7 @@ import { StyleSheet } from 'react-native'
 
 export type RootStackParamList = {
 	HomeScreen: undefined
-	NewTokenScreen: undefined
+	NewAccountScreen: undefined
 }
 
 export default function App() {
@@ -38,10 +38,10 @@ export default function App() {
 							}}
 						/>
 						<Stack.Screen
-							name="NewTokenScreen"
-							component={NewTokenScreen}
+							name="NewAccountScreen"
+							component={NewAccountScreen}
 							options={{
-								headerTitle: 'New Token',
+								headerTitle: 'New Account',
 								headerStyle: styles.headerStyle,
 								headerTitleStyle: styles.headerTitleStyle,
 								headerTintColor: theme.color.primary_color,

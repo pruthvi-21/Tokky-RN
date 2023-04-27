@@ -1,21 +1,19 @@
-import { TokenRepo } from '../database/TokenRepo'
-import TokenModel from '../models/TokenModel'
-import { ADDITEM, TokenOperations, REMOVEITEM } from './action'
+import AccountsRepo from '../database/AccountsRepo'
+import Account from '../models/Account'
+import { ADDITEM, AccountOperations, REMOVEITEM } from './action'
 
-const initialState: { tokenList: TokenModel[] } = {
-	tokenList: TokenRepo.getInstance().tokensList,
+const initialState: { accountsList: Account[] } = {
+	accountsList: AccountsRepo.getInstance().accountsList,
 }
 
-export const mainReducer = (state = initialState, action: TokenOperations) => {
+export const mainReducer = (state = initialState, action: AccountOperations) => {
 	switch (action.type) {
 		case ADDITEM:
-			const newList = [...state.tokenList, action.token]
-			return { tokenList: newList }
+			const newList = [...state.accountsList, action.account]
+			return { accountsList: newList }
 		case REMOVEITEM:
-			const newList1 = state.tokenList.filter(
-				(item) => item.id !== action.id
-			)
-			return { tokenList: newList1 }
+			const newList1 = state.accountsList.filter((item) => item.id !== action.id)
+			return { accountsList: newList1 }
 		default:
 			return state
 	}

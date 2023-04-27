@@ -4,13 +4,13 @@ import { BottomSheet, ListItem } from '@rneui/themed'
 import React, { useEffect, useState } from 'react'
 import { isAndroid, isIOS } from '../Utils'
 import useTheme, { appTheme } from '../Theming'
-import TokensContainer from '../components/TokensContainer'
+import AccountsContainer from '../components/AccountsContainer'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { RootStackParamList } from '../../App'
 import { useFocusEffect } from '@react-navigation/native'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../data/reducers'
-import { removeToken } from '../data/action'
+import { removeAccount } from '../data/action'
 import { ThemedButton, IconButton, ThemedText } from '../components/ThemedComponents'
 import RootView from '../components/RootView'
 
@@ -26,7 +26,7 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
 	const [inEditMode, enableEditMode] = useState(false)
 
 	const dispatch = useDispatch()
-	const content = useSelector((state: RootState) => state.tokenList)
+	const content = useSelector((state: RootState) => state.accountsList)
 
 	const fabActions = ['Scan QR code', 'Enter Manually', 'Cancel']
 
@@ -43,7 +43,7 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
 
 		navigation.setOptions({
 			headerRight: () => toolbarItems,
-			headerTitle: !inEditMode ? 'Tokky' : 'Edit Tokens',
+			headerTitle: !inEditMode ? 'Tokky' : 'Edit Accounts',
 		})
 	}, [inEditMode])
 
@@ -95,7 +95,7 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
 			case 0:
 				break
 			case 1:
-				navigation.navigate('NewTokenScreen')
+				navigation.navigate('NewAccountScreen')
 				break
 		}
 	}
@@ -112,7 +112,7 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
 					text: 'Delete',
 					style: 'destructive',
 					onPress: () => {
-						dispatch(removeToken(id))
+						dispatch(removeAccount(id))
 					},
 				},
 			]
@@ -137,11 +137,11 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
 
 			{content.length != 0 && (
 				<ScrollView contentInsetAdjustmentBehavior="automatic">
-					<TokensContainer
+					<AccountsContainer
 						inEditMode={inEditMode}
 						list={content}
-						editTokenCallback={handleEditItem}
-						deleteTokenCallback={handleDeleteItem}
+						editAccountCallback={handleEditItem}
+						deleteAccountCallback={handleDeleteItem}
 					/>
 				</ScrollView>
 			)}

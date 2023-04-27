@@ -1,11 +1,6 @@
-import {
-	DEFAULT_ALGORITHM,
-	DEFAULT_DIGITS,
-	DEFAULT_PERIOD,
-	generateUUID,
-} from '../Utils'
+import { DEFAULT_ALGORITHM, DEFAULT_DIGITS, DEFAULT_PERIOD, generateUUID } from '../Utils'
 
-export default class TokenModel {
+export default class Account {
 	id: string
 	issuer: string
 	label: string | null
@@ -26,12 +21,8 @@ export default class TokenModel {
 		this.period = DEFAULT_PERIOD
 	}
 
-	public static buildToken(
-		issuer: string,
-		label: string,
-		secretKey: string
-	): TokenModel {
+	public static createAccount(issuer: string, label: string, secretKey: string): Account {
 		const uuid = generateUUID()
-		return new TokenModel(uuid, issuer, label, secretKey)
+		return new Account(uuid, issuer, label, secretKey)
 	}
 }

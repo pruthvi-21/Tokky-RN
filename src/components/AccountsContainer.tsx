@@ -3,17 +3,17 @@ import { useEffect, useState } from 'react'
 import useTheme, { appTheme } from '../Theming'
 import Accordion from 'react-native-collapsible/Accordion'
 import * as Animatable from 'react-native-animatable'
-import TokenModel from '../models/TokenModel'
+import Account from '../models/Account'
 import { ThemedText, IconButton } from './ThemedComponents'
 
 type Props = {
 	inEditMode: boolean
-	list: TokenModel[]
-	editTokenCallback: (id: string) => void
-	deleteTokenCallback: (id: string) => void
+	list: Account[]
+	editAccountCallback: (id: string) => void
+	deleteAccountCallback: (id: string) => void
 }
 
-export default function TokensContainer({ inEditMode, list, editTokenCallback, deleteTokenCallback }: Props) {
+export default function AccountsContainer({ inEditMode, list, editAccountCallback, deleteAccountCallback }: Props) {
 	const theme = useTheme()
 	const styles = cardStyles(theme)
 
@@ -23,7 +23,7 @@ export default function TokensContainer({ inEditMode, list, editTokenCallback, d
 		setActiveSections([])
 	}, [inEditMode])
 
-	const renderHeader = (content: TokenModel, index: number, isActive: boolean) => {
+	const renderHeader = (content: Account, index: number, isActive: boolean) => {
 		return (
 			<View style={[styles.listItemWrapper, { borderTopWidth: index == 0 ? 0 : 1 }]}>
 				<View style={[styles.listItemContainer]}>
@@ -43,14 +43,14 @@ export default function TokensContainer({ inEditMode, list, editTokenCallback, d
 						<IconButton
 							style={styles.iconEdit}
 							icon="edit"
-							onPress={() => editTokenCallback(list[index].id)}
+							onPress={() => editAccountCallback(list[index].id)}
 						/>
 					)}
 					{inEditMode && (
 						<IconButton
 							style={styles.iconDelete}
 							icon="delete"
-							onPress={() => deleteTokenCallback(list[index].id)}
+							onPress={() => deleteAccountCallback(list[index].id)}
 						/>
 					)}
 				</View>
@@ -58,7 +58,7 @@ export default function TokensContainer({ inEditMode, list, editTokenCallback, d
 		)
 	}
 
-	const renderContent = (content: TokenModel, index: number, isActive: boolean) => {
+	const renderContent = (content: Account, index: number, isActive: boolean) => {
 		return (
 			<View style={[styles.listItemContainer]}>
 				<Animatable.Text style={styles.otpText} animation={isActive ? 'fadeIn' : undefined} duration={500}>

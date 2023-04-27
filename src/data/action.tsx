@@ -1,25 +1,25 @@
-import TokenModel from '../models/TokenModel'
+import Account from '../models/Account'
 
 export const ADDITEM = 'AddItem'
 export const REMOVEITEM = 'RemoveItem'
 
-export interface AddTokenOperation {
+export interface AddAccountOperation {
 	type: typeof ADDITEM
-	token: TokenModel | undefined
+	account: Account | undefined
 }
 
-export interface RemoveTokenOperation {
+export interface RemoveAccountOperation {
 	type: typeof REMOVEITEM
 	id: string
 }
 
-export type TokenOperations = AddTokenOperation | RemoveTokenOperation
+export type AccountOperations = AddAccountOperation | RemoveAccountOperation
 
-export const addToken = (token: TokenModel): AddTokenOperation => ({
+export const addAccount = (account: Account): AddAccountOperation => ({
 	type: ADDITEM,
-	token: token,
+	account: account,
 })
-export const removeToken = (id: string): RemoveTokenOperation => ({
+export const removeAccount = (id: string): RemoveAccountOperation => ({
 	type: REMOVEITEM,
 	id,
 })

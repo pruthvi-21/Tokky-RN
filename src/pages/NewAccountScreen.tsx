@@ -2,19 +2,19 @@ import { Alert, GestureResponderEvent, KeyboardAvoidingView, ScrollView, View } 
 import { FormField } from '../components/FormField'
 import { isAndroid, isIOS } from '../Utils'
 import { useLayoutEffect, useState } from 'react'
-import TokenModel from '../models/TokenModel'
+import Account from '../models/Account'
 import { RootStackParamList } from '../../App'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { useDispatch } from 'react-redux'
-import { addToken } from '../data/action'
+import { addAccount } from '../data/action'
 import { ThemedButton } from '../components/ThemedComponents'
 import RootView from '../components/RootView'
 
-type AddTokenScreenProps = {
-	navigation: NativeStackNavigationProp<RootStackParamList, 'NewTokenScreen'>
+type AddAccountScreenProps = {
+	navigation: NativeStackNavigationProp<RootStackParamList, 'NewAccountScreen'>
 }
 
-export default function NewTokenScreen({ navigation }: AddTokenScreenProps) {
+export default function NewAccountScreen({ navigation }: AddAccountScreenProps) {
 	const [issuer, setIssuer] = useState<string>('')
 	const [label, setLabel] = useState<string>('')
 	const [secretKey, setSecretKey] = useState<string>('')
@@ -31,8 +31,8 @@ export default function NewTokenScreen({ navigation }: AddTokenScreenProps) {
 			Alert.alert('Error', "Secret Key can't be empty")
 			return
 		}
-		const newToken = TokenModel.buildToken(issuer, label, secretKey)
-		dispatch(addToken(newToken))
+		const newAccount = Account.createAccount(issuer, label, secretKey)
+		dispatch(addAccount(newAccount))
 		navigation.goBack()
 	}
 
