@@ -1,16 +1,9 @@
-import {
-	ActionSheetIOS,
-	Alert,
-	BackHandler,
-	ScrollView,
-	StyleSheet,
-	View,
-} from 'react-native'
+import { ActionSheetIOS, Alert, BackHandler, ScrollView, StyleSheet, View } from 'react-native'
 import { FAB } from '@rneui/themed'
 import { BottomSheet, ListItem } from '@rneui/themed'
 import React, { useEffect, useState } from 'react'
 import { isAndroid, isIOS } from '../Utils'
-import useTheme from '../Theming'
+import useTheme, { appTheme } from '../Theming'
 import TokensContainer from '../components/TokensContainer'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { RootStackParamList } from '../../App'
@@ -18,18 +11,17 @@ import { useFocusEffect } from '@react-navigation/native'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../data/reducers'
 import { removeToken } from '../data/action'
-import {
-	ThemedButton,
-	IconButton,
-	ThemedText,
-} from '../components/ThemedComponents'
+import { ThemedButton, IconButton, ThemedText } from '../components/ThemedComponents'
+import RootView from '../components/RootView'
 
 type HomeScreenProps = {
 	navigation: NativeStackNavigationProp<RootStackParamList, 'HomeScreen'>
 }
 
 export default function HomeScreen({ navigation }: HomeScreenProps) {
-	const { theme, styles } = useTheme()
+	const theme = useTheme()
+	const styles = homeStyles(theme)
+
 	const [bottomSheetVisible, setBottomSheetVisible] = useState(false)
 	const [inEditMode, enableEditMode] = useState(false)
 
@@ -40,33 +32,12 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
 
 	useEffect(() => {
 		const toolbarItems = (
-			//Due to some unknown reason when we enter into Edit mode
-			//the Done button is not properly aligned to the right
-			//So wrapped it around a view instead and done manually
-			<View style={[homeStyles.toolbarContainer]}>
-				{!inEditMode && (
-					<ThemedButton
-						key="key_edit"
-						title="Edit"
-						onPress={() => enableEditMode(true)}
-					/>
-				)}
+			<View style={[styles.toolbarContainer]}>
+				{!inEditMode && <ThemedButton key="key_edit" title="Edit" onPress={() => enableEditMode(true)} />}
 				{isIOS() && !inEditMode && (
-					<IconButton
-						key={'key_add'}
-						icon="add"
-						width={36}
-						height={36}
-						tint={theme.primary_color}
-						onPress={handleFabClick}
-					/>
+					<IconButton style={styles.iconAddIOS} key={'key_add'} icon="add" onPress={handleFabClick} />
 				)}
-				{inEditMode && (
-					<ThemedButton
-						title="Done"
-						onPress={() => enableEditMode(false)}
-					/>
-				)}
+				{inEditMode && <ThemedButton title="Done" onPress={() => enableEditMode(false)} />}
 			</View>
 		)
 
@@ -89,11 +60,7 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
 
 			BackHandler.addEventListener('hardwareBackPress', onBackPress)
 
-			return () =>
-				BackHandler.removeEventListener(
-					'hardwareBackPress',
-					onBackPress
-				)
+			return () => BackHandler.removeEventListener('hardwareBackPress', onBackPress)
 		}, [inEditMode])
 	)
 
@@ -102,7 +69,7 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
 		{ title: fabActions[1], onPress: () => setResult(1) },
 		{
 			title: fabActions[2],
-			containerStyle: { backgroundColor: '#ff0000' },
+			containerStyle: { backgroundColor: theme.color.danger_color },
 			titleStyle: { color: 'white' },
 			onPress: () => setResult(2),
 		},
@@ -114,7 +81,7 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
 				{
 					options: [...fabActions],
 					cancelButtonIndex: 2,
-					tintColor: theme.primary_color,
+					tintColor: theme.color.primary_color,
 				},
 				setResult
 			)
@@ -153,7 +120,7 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
 	}
 
 	return (
-		<View style={[styles.container]}>
+		<RootView>
 			{isAndroid() && (
 				<BottomSheet
 					modalProps={{}}
@@ -161,14 +128,8 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
 					onBackdropPress={() => setBottomSheetVisible(false)}
 				>
 					{androidList.map((item, i) => (
-						<ListItem
-							key={i}
-							containerStyle={item.containerStyle}
-							onPress={item.onPress}
-						>
-							<ListItem.Title style={item.titleStyle}>
-								{item.title}
-							</ListItem.Title>
+						<ListItem key={i} containerStyle={item.containerStyle} onPress={item.onPress}>
+							<ListItem.Title style={item.titleStyle}>{item.title}</ListItem.Title>
 						</ListItem>
 					))}
 				</BottomSheet>
@@ -176,26 +137,21 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
 
 			{content.length != 0 && (
 				<ScrollView contentInsetAdjustmentBehavior="automatic">
-					<View>
-						<TokensContainer
-							inEditMode={inEditMode}
-							content={content}
-							editTokenCallback={handleEditItem}
-							deleteTokenCallback={handleDeleteItem}
-						/>
-					</View>
+					<TokensContainer
+						inEditMode={inEditMode}
+						list={content}
+						editTokenCallback={handleEditItem}
+						deleteTokenCallback={handleDeleteItem}
+					/>
 				</ScrollView>
 			)}
 
 			{content.length == 0 && (
-				<View style={[homeStyles.emptyLayoutContainer]}>
+				<View style={[styles.emptyLayoutContainer]}>
 					<ThemedText>No accounts added</ThemedText>
 					<ThemedText style={{ marginTop: 5 }}>
 						Add a account by clicking on '
-						<ThemedText
-							color={theme.primary_color}
-							style={{ fontSize: 20 }}
-						>
+						<ThemedText color={theme.color.primary_color} style={{ fontSize: 20 }}>
 							+
 						</ThemedText>
 						' on top
@@ -208,26 +164,34 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
 					onPress={handleFabClick}
 					placement="right"
 					icon={{ name: 'add', color: 'white' }}
-					color={theme.primary_color}
+					color={theme.color.primary_color}
 				/>
 			)}
-		</View>
+		</RootView>
 	)
 }
 
-const homeStyles = StyleSheet.create({
-	emptyLayoutContainer: {
-		display: 'flex',
-		flex: 1,
-		flexDirection: 'column',
-		justifyContent: 'center',
-		alignItems: 'center',
-	},
-	toolbarContainer: {
-		minWidth: 100,
-		minHeight: 36,
-		flexDirection: 'row',
-		alignItems: 'center',
-		justifyContent: 'flex-end',
-	},
-})
+const homeStyles = (theme: typeof appTheme) =>
+	StyleSheet.create({
+		emptyLayoutContainer: {
+			display: 'flex',
+			flex: 1,
+			flexDirection: 'column',
+			justifyContent: 'center',
+			alignItems: 'center',
+		},
+		toolbarContainer: {
+			minWidth: 100,
+			minHeight: 36,
+			flexDirection: 'row',
+			alignItems: 'center',
+			justifyContent: 'flex-end',
+		},
+
+		iconAddIOS: {
+			width: 36,
+			height: 36,
+			color: theme.color.primary_color,
+			marginStart: 8,
+		},
+	})

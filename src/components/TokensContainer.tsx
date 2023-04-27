@@ -1,6 +1,6 @@
 import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import { useEffect, useState } from 'react'
-import useTheme from '../Theming'
+import useTheme, { appTheme } from '../Theming'
 import Accordion from 'react-native-collapsible/Accordion'
 import * as Animatable from 'react-native-animatable'
 import TokenModel from '../models/TokenModel'
@@ -8,89 +8,49 @@ import { ThemedText, IconButton } from './ThemedComponents'
 
 type Props = {
 	inEditMode: boolean
-	content: TokenModel[]
+	list: TokenModel[]
 	editTokenCallback: (id: string) => void
 	deleteTokenCallback: (id: string) => void
 }
 
-export default function TokensContainer({
-	inEditMode,
-	content,
-	editTokenCallback,
-	deleteTokenCallback,
-}: Props) {
-	const { theme, styles } = useTheme()
+export default function TokensContainer({ inEditMode, list, editTokenCallback, deleteTokenCallback }: Props) {
+	const theme = useTheme()
+	const styles = cardStyles(theme)
+
 	const [activeSections, setActiveSections] = useState<number[]>([])
 
 	useEffect(() => {
 		setActiveSections([])
 	}, [inEditMode])
 
-	const renderHeader = (
-		content: TokenModel,
-		index: number,
-		isActive: boolean
-	) => {
+	const renderHeader = (content: TokenModel, index: number, isActive: boolean) => {
 		return (
-			<View
-				style={[
-					cardStyles.container,
-					{
-						backgroundColor: theme.bg_variant,
-						borderTopWidth: index != 0 ? 1 : 0,
-						borderTopColor: theme.divider_color,
-					},
-				]}
-			>
-				<View
-					style={{
-						display: 'flex',
-						alignItems: 'center',
-						flexDirection: 'row',
-					}}
-				>
-					<View style={cardStyles.preview} />
-					<View style={{ flex: 1 }}>
-						<ThemedText style={cardStyles.title}>
-							{content.issuer}
-						</ThemedText>
-						<ThemedText type="secondary" style={cardStyles.summary}>
+			<View style={[styles.listItemWrapper, { borderTopWidth: index == 0 ? 0 : 1 }]}>
+				<View style={[styles.listItemContainer]}>
+					<View style={styles.preview} />
+					<View style={styles.titleContainer}>
+						<ThemedText style={styles.issuerTextStyle}>{content.issuer}</ThemedText>
+						<ThemedText style={styles.labelTextStyle} type="secondary">
 							{content.label}
 						</ThemedText>
 					</View>
 					{!inEditMode && (
-						<View
-							style={{
-								transform: isActive ? 'rotateZ(180deg)' : '',
-							}}
-						>
-							<IconButton
-								icon="down-arrow"
-								width={20}
-								height={20}
-								tint={theme.text_color_secondary}
-							/>
+						<View style={{ transform: [{ rotateZ: isActive ? '180deg' : '0deg' }] }}>
+							<IconButton style={styles.iconArrow} icon="down-arrow" />
 						</View>
 					)}
 					{inEditMode && (
 						<IconButton
+							style={styles.iconEdit}
 							icon="edit"
-							height={24}
-							width={24}
-							tint={theme.text_color_secondary}
-							onPress={() => editTokenCallback(content[index].id)}
+							onPress={() => editTokenCallback(list[index].id)}
 						/>
 					)}
 					{inEditMode && (
 						<IconButton
+							style={styles.iconDelete}
 							icon="delete"
-							width={27}
-							height={27}
-							tint={theme.danger_color}
-							style={{ marginStart: 20 }}
-							onPress={() =>
-								deleteTokenCallback(content[index].id)
-							}
+							onPress={() => deleteTokenCallback(list[index].id)}
 						/>
 					)}
 				</View>
@@ -98,21 +58,10 @@ export default function TokensContainer({
 		)
 	}
 
-	const renderContent = (
-		content: TokenModel,
-		index: number,
-		isActive: boolean
-	) => {
+	const renderContent = (content: TokenModel, index: number, isActive: boolean) => {
 		return (
-			<View style={[cardStyles.container, styles.bgVariant]}>
-				<Animatable.Text
-					style={[
-						styles.textPrimary,
-						{ fontSize: 30, marginLeft: 64 },
-					]}
-					animation={isActive ? 'fadeIn' : undefined}
-					duration={500}
-				>
+			<View style={[styles.listItemContainer]}>
+				<Animatable.Text style={styles.otpText} animation={isActive ? 'fadeIn' : undefined} duration={500}>
 					{'123 456'}
 				</Animatable.Text>
 			</View>
@@ -120,10 +69,10 @@ export default function TokensContainer({
 	}
 
 	return (
-		<View style={[cardStyles.listWrapper]}>
+		<View style={[styles.listWrapper]}>
 			<Accordion
 				activeSections={activeSections}
-				sections={content!}
+				sections={list}
 				touchableComponent={inEditMode ? View : TouchableOpacity}
 				touchableProps={{ activeOpacity: 1 }}
 				expandMultiple={false}
@@ -139,27 +88,44 @@ export default function TokensContainer({
 	)
 }
 
-const cardStyles = StyleSheet.create({
-	preview: {
-		width: 44,
-		aspectRatio: 1,
-		backgroundColor: '#333333',
-		borderRadius: 10,
-		marginRight: 20,
-	},
-	container: {
-		paddingVertical: 10,
-		paddingHorizontal: 20,
-	},
-	listWrapper: {
-		borderRadius: 20,
-		overflow: 'hidden',
-		marginHorizontal: 15,
-	},
-	title: {
-		fontSize: 17,
-	},
-	summary: {
-		marginTop: 3,
-	},
-})
+const cardStyles = (theme: typeof appTheme) =>
+	StyleSheet.create({
+		listWrapper: {
+			borderRadius: 20,
+			overflow: 'hidden',
+			marginHorizontal: 15,
+			marginVertical: 10
+		},
+		listItemWrapper: { borderTopColor: theme.color.bg_variant2 },
+		listItemContainer: {
+			backgroundColor: theme.color.bg_variant,
+			alignItems: 'center',
+			flexDirection: 'row',
+			paddingHorizontal: 20,
+			paddingVertical: 10,
+		},
+		preview: {
+			width: 44,
+			aspectRatio: 1,
+			backgroundColor: theme.color.bg_variant2,
+			borderRadius: 10,
+			marginRight: 20,
+		},
+		titleContainer: { flex: 1 },
+		issuerTextStyle: { fontSize: 17 },
+		labelTextStyle: { marginTop: 3 },
+		otpText: {
+			color: theme.color.text_color_primary,
+			fontSize: 30,
+			marginLeft: 64,
+		},
+
+		iconArrow: { width: 20, height: 20, color: theme.color.text_color_secondary },
+		iconEdit: { width: 24, height: 24, color: theme.color.text_color_secondary },
+		iconDelete: {
+			marginStart: 20,
+			width: 27,
+			height: 27,
+			color: theme.color.danger_color,
+		},
+	})

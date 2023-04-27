@@ -1,28 +1,20 @@
-import {
-	Alert,
-	GestureResponderEvent,
-	KeyboardAvoidingView,
-	ScrollView,
-	View,
-} from 'react-native'
+import { Alert, GestureResponderEvent, KeyboardAvoidingView, ScrollView, View } from 'react-native'
 import { FormField } from '../components/FormField'
 import { isAndroid, isIOS } from '../Utils'
 import { useLayoutEffect, useState } from 'react'
-import useTheme from '../Theming'
 import TokenModel from '../models/TokenModel'
 import { RootStackParamList } from '../../App'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { useDispatch } from 'react-redux'
 import { addToken } from '../data/action'
 import { ThemedButton } from '../components/ThemedComponents'
+import RootView from '../components/RootView'
 
 type AddTokenScreenProps = {
 	navigation: NativeStackNavigationProp<RootStackParamList, 'NewTokenScreen'>
 }
 
 export default function NewTokenScreen({ navigation }: AddTokenScreenProps) {
-	const { styles } = useTheme()
-
 	const [issuer, setIssuer] = useState<string>('')
 	const [label, setLabel] = useState<string>('')
 	const [secretKey, setSecretKey] = useState<string>('')
@@ -61,12 +53,9 @@ export default function NewTokenScreen({ navigation }: AddTokenScreenProps) {
 	}
 
 	return (
-		<View style={[styles.container, { paddingHorizontal: 16 }]}>
+		<RootView style={{ paddingHorizontal: 16 }}>
 			<ScrollView>
-				<KeyboardAvoidingView
-					style={{ flex: 1 }}
-					behavior={isIOS() ? 'padding' : undefined}
-				>
+				<KeyboardAvoidingView style={{ flex: 1 }} behavior={isIOS() ? 'padding' : undefined}>
 					<FormField
 						parentStyle={{ marginTop: 30 }}
 						label="Issuer"
@@ -78,14 +67,10 @@ export default function NewTokenScreen({ navigation }: AddTokenScreenProps) {
 						placeholder="Username or email (Optional)"
 						onChangeText={handleLabelChange}
 					/>
-					<FormField
-						label="Secret Key"
-						placeholder="Secret Key"
-						onChangeText={handleSecretKeyChange}
-					/>
+					<FormField label="Secret Key" placeholder="Secret Key" onChangeText={handleSecretKeyChange} />
 				</KeyboardAvoidingView>
 			</ScrollView>
 			{isAndroid() && <SaveBtn />}
-		</View>
+		</RootView>
 	)
 }

@@ -1,12 +1,13 @@
 import { StatusBar } from 'expo-status-bar'
-import { SafeArea } from './src/components/Screen'
+import SafeArea from './src/components/SafeArea'
 import HomeScreen from './src/pages/HomeScreen'
 import NewTokenScreen from './src/pages/NewTokenScreen'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import useTheme from './src/Theming'
+import useTheme, { appTheme } from './src/Theming'
 import { Provider } from 'react-redux'
 import { store } from './src/data/store'
+import { StyleSheet } from 'react-native'
 
 export type RootStackParamList = {
 	HomeScreen: undefined
@@ -15,11 +16,13 @@ export type RootStackParamList = {
 
 export default function App() {
 	const Stack = createNativeStackNavigator<RootStackParamList>()
-	const { theme, styles } = useTheme()
+
+	const theme = useTheme()
+	const styles = appStyles(theme)
 
 	return (
 		<Provider store={store}>
-			<SafeArea style={styles.safe_area_container}>
+			<SafeArea>
 				<StatusBar style="auto" />
 				<NavigationContainer>
 					<Stack.Navigator>
@@ -28,9 +31,9 @@ export default function App() {
 							component={HomeScreen}
 							options={{
 								title: 'Tokky',
-								headerStyle: styles.screenHeaderStyle,
-								headerTitleStyle: styles.screenHeaderTitleStyle,
-								headerTintColor: theme.primary_color,
+								headerStyle: styles.headerStyle,
+								headerTitleStyle: styles.headerTitleStyle,
+								headerTintColor: theme.color.primary_color,
 								headerLargeTitle: true,
 							}}
 						/>
@@ -39,9 +42,9 @@ export default function App() {
 							component={NewTokenScreen}
 							options={{
 								headerTitle: 'New Token',
-								headerStyle: styles.screenHeaderStyle,
-								headerTitleStyle: styles.screenHeaderTitleStyle,
-								headerTintColor: theme.primary_color,
+								headerStyle: styles.headerStyle,
+								headerTitleStyle: styles.headerTitleStyle,
+								headerTintColor: theme.color.primary_color,
 							}}
 						/>
 					</Stack.Navigator>
@@ -50,3 +53,13 @@ export default function App() {
 		</Provider>
 	)
 }
+
+const appStyles = (theme: typeof appTheme) =>
+	StyleSheet.create({
+		headerStyle: {
+			backgroundColor: theme.color.bg,
+		},
+		headerTitleStyle: {
+			color: theme.color.text_color_primary,
+		},
+	})
