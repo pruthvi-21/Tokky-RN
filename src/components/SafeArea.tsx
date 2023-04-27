@@ -9,13 +9,11 @@ const SafeArea = (props: ViewProps) => {
 		container: {
 			flex: 1,
 			paddingTop: StatusBar.currentHeight,
-			backgroundColor: theme.color.bg
+			backgroundColor: theme.color.bg,
 		},
 	})
 
 	return <SafeAreaView style={[styles.container, props.style]}>{props.children}</SafeAreaView>
 }
-
-
 
 export default React.memo(SafeArea)

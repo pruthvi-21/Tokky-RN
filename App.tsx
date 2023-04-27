@@ -1,13 +1,13 @@
-import { StatusBar } from 'expo-status-bar'
-import SafeArea from './src/components/SafeArea'
-import HomeScreen from './src/pages/HomeScreen'
-import NewAccountScreen from './src/pages/NewAccountScreen'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import useTheme, { appTheme } from './src/Theming'
-import { Provider } from 'react-redux'
-import { store } from './src/data/store'
+import { StatusBar } from 'expo-status-bar'
 import { StyleSheet } from 'react-native'
+import { Provider } from 'react-redux'
+import useTheme, { appTheme } from './src/Theming'
+import SafeArea from './src/components/SafeArea'
+import { store } from './src/data/store'
+import HomeScreen from './src/pages/HomeScreen'
+import NewAccountScreen from './src/pages/NewAccountScreen'
 
 export type RootStackParamList = {
 	HomeScreen: undefined

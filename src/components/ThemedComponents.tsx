@@ -1,7 +1,7 @@
 import React from 'react'
 import { Button, ButtonProps, StyleSheet, Text, TextProps, TouchableOpacity } from 'react-native'
-import useTheme from '../Theming'
 import { Path, Svg } from 'react-native-svg'
+import useTheme from '../Theming'
 
 interface ThemedTextProps extends TextProps {
 	type?: 'primary' | 'secondary'

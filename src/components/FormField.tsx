@@ -1,12 +1,5 @@
 import React from 'react'
-import {
-	View,
-	TextInput,
-	TextInputProps,
-	ViewStyle,
-	StyleProp,
-	StyleSheet,
-} from 'react-native'
+import { StyleProp, StyleSheet, TextInput, TextInputProps, View, ViewStyle } from 'react-native'
 import useTheme, { appTheme } from '../Theming'
 import { ThemedText } from './ThemedComponents'
 

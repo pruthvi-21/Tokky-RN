@@ -1,10 +1,10 @@
-import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import { useEffect, useState } from 'react'
-import useTheme, { appTheme } from '../Theming'
-import Accordion from 'react-native-collapsible/Accordion'
+import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import * as Animatable from 'react-native-animatable'
+import Accordion from 'react-native-collapsible/Accordion'
+import useTheme, { appTheme } from '../Theming'
 import Account from '../models/Account'
-import { ThemedText, IconButton } from './ThemedComponents'
+import { IconButton, ThemedText } from './ThemedComponents'
 
 type Props = {
 	inEditMode: boolean
@@ -94,7 +94,7 @@ const cardStyles = (theme: typeof appTheme) =>
 			borderRadius: 20,
 			overflow: 'hidden',
 			marginHorizontal: 15,
-			marginVertical: 10
+			marginVertical: 10,
 		},
 		listItemWrapper: { borderTopColor: theme.color.bg_variant2 },
 		listItemContainer: {

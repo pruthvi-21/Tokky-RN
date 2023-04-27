@@ -1,14 +1,14 @@
-import { Alert, GestureResponderEvent, KeyboardAvoidingView, ScrollView, View } from 'react-native'
-import { FormField } from '../components/FormField'
-import { isAndroid, isIOS } from '../Utils'
-import { useLayoutEffect, useState } from 'react'
-import Account from '../models/Account'
-import { RootStackParamList } from '../../App'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
+import { useLayoutEffect, useState } from 'react'
+import { Alert, GestureResponderEvent, KeyboardAvoidingView, ScrollView, View } from 'react-native'
 import { useDispatch } from 'react-redux'
-import { addAccount } from '../data/action'
-import { ThemedButton } from '../components/ThemedComponents'
+import { RootStackParamList } from '../../App'
+import { isAndroid, isIOS } from '../Utils'
+import { FormField } from '../components/FormField'
 import RootView from '../components/RootView'
+import { ThemedButton } from '../components/ThemedComponents'
+import { addAccount } from '../data/action'
+import Account from '../models/Account'
 
 type AddAccountScreenProps = {
 	navigation: NativeStackNavigationProp<RootStackParamList, 'NewAccountScreen'>
