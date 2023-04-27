@@ -30,9 +30,11 @@ export default function AccountsContainer({ inEditMode, list, editAccountCallbac
 					<View style={styles.preview} />
 					<View style={styles.titleContainer}>
 						<ThemedText style={styles.issuerTextStyle}>{content.issuer}</ThemedText>
-						<ThemedText style={styles.labelTextStyle} type="secondary">
-							{content.label}
-						</ThemedText>
+						{content.label.length !== 0 && (
+							<ThemedText style={styles.labelTextStyle} type="secondary">
+								{content.label}
+							</ThemedText>
+						)}
 					</View>
 					{!inEditMode && (
 						<View style={{ transform: [{ rotateZ: isActive ? '180deg' : '0deg' }] }}>

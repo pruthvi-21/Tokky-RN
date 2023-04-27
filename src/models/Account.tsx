@@ -3,7 +3,7 @@ import { DEFAULT_ALGORITHM, DEFAULT_DIGITS, DEFAULT_PERIOD, generateUUID } from 
 export default class Account {
 	id: string
 	issuer: string
-	label: string | null
+	label: string
 	secretKey: string
 
 	algorithm: string
