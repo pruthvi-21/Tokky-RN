@@ -1,25 +1,17 @@
 import Account from '../models/Account'
+import { AccountActionTypes, AddAccountAction, RemoveAccountAction, UpdateAccountAction } from './types'
 
-export const ADDITEM = 'AddItem'
-export const REMOVEITEM = 'RemoveItem'
-
-export interface AddAccountOperation {
-	type: typeof ADDITEM
-	account: Account | undefined
-}
-
-export interface RemoveAccountOperation {
-	type: typeof REMOVEITEM
-	id: string
-}
-
-export type AccountOperations = AddAccountOperation | RemoveAccountOperation
-
-export const addAccount = (account: Account): AddAccountOperation => ({
-	type: ADDITEM,
-	account: account,
+export const addAccount = (account: Account): AddAccountAction => ({
+	type: AccountActionTypes.ADD_ITEM,
+	account,
 })
-export const removeAccount = (id: string): RemoveAccountOperation => ({
-	type: REMOVEITEM,
+export const removeAccount = (id: string): RemoveAccountAction => ({
+	type: AccountActionTypes.REMOVE_ITEM,
 	id,
+})
+export const updateAccount = (id: string, issuer: string, label: string): UpdateAccountAction => ({
+	type: AccountActionTypes.UPDATE_ITEM,
+	id,
+	issuer,
+	label,
 })

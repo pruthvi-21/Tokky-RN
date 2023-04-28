@@ -29,7 +29,7 @@ export default function AccountsContainer({ inEditMode, list, editAccountCallbac
 				<View style={[styles.listItemContainer]}>
 					<View style={styles.preview} />
 					<View style={styles.titleContainer}>
-						<ThemedText style={styles.issuerTextStyle}>{content.issuer}</ThemedText>
+						<ThemedText style={styles.issuerTextStyle}>{content?.issuer}</ThemedText>
 						{content.label.length !== 0 && (
 							<ThemedText style={styles.labelTextStyle} type="secondary">
 								{content.label}

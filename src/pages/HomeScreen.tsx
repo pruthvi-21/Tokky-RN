@@ -25,7 +25,7 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
 	const [inEditMode, enableEditMode] = useState(false)
 
 	const dispatch = useDispatch()
-	const content = useSelector((state: RootState) => state.accountsList)
+	const content = useSelector((state: RootState) => state.accounts)
 
 	const fabActions = ['Scan QR code', 'Enter Manually', 'Cancel']
 
@@ -99,7 +99,10 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
 		}
 	}
 
-	const handleEditItem = (id: string) => {}
+	const handleEditItem = (id: string) => {
+		const account = content.find((item) => item?.id === id)
+		if (account != undefined) navigation.navigate('EditAccountScreen', { account: account })
+	}
 
 	const handleDeleteItem = (id: string) => {
 		Alert.alert(

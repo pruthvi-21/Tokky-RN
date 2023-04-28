@@ -6,12 +6,15 @@ import { Provider } from 'react-redux'
 import useTheme, { appTheme } from './src/Theming'
 import SafeArea from './src/components/SafeArea'
 import { store } from './src/data/store'
+import Account from './src/models/Account'
+import EditAccountScreen from './src/pages/EditAccountScreen'
 import HomeScreen from './src/pages/HomeScreen'
 import NewAccountScreen from './src/pages/NewAccountScreen'
 
 export type RootStackParamList = {
 	HomeScreen: undefined
 	NewAccountScreen: undefined
+	EditAccountScreen: { account: Account }
 }
 
 export default function App() {
@@ -42,6 +45,16 @@ export default function App() {
 							component={NewAccountScreen}
 							options={{
 								headerTitle: 'New Account',
+								headerStyle: styles.headerStyle,
+								headerTitleStyle: styles.headerTitleStyle,
+								headerTintColor: theme.color.primary_color,
+							}}
+						/>
+						<Stack.Screen
+							name="EditAccountScreen"
+							component={EditAccountScreen}
+							options={{
+								headerTitle: 'Update account',
 								headerStyle: styles.headerStyle,
 								headerTitleStyle: styles.headerTitleStyle,
 								headerTintColor: theme.color.primary_color,
