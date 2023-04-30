@@ -8,12 +8,17 @@ const initialState: { accounts: Account[] } = {
 export const mainReducer = (state = initialState, action: AccountAction) => {
 	switch (action.type) {
 		case AccountActionTypes.LOAD_ITEMS:
-			return { ...state, accounts: action.payload }
+			return {
+				...state,
+				accounts: action.payload.sort((a, b) => (a.issuer + a.label).localeCompare(b.issuer + b.label)),
+			}
 		case AccountActionTypes.ADD_ITEM:
 			if (action.payload == undefined) return state
 			return {
 				...state,
-				accounts: [...state.accounts, action.payload],
+				accounts: [...state.accounts, action.payload].sort((a, b) =>
+					(a.issuer + a.label).localeCompare(b.issuer + b.label)
+				),
 			}
 		case AccountActionTypes.REMOVE_ITEM:
 			return {
@@ -30,7 +35,10 @@ export const mainReducer = (state = initialState, action: AccountAction) => {
 				}
 				return item
 			})
-			return { ...state, accounts: updatedList }
+			return {
+				...state,
+				accounts: updatedList.sort((a, b) => (a.issuer + a.label).localeCompare(b.issuer + b.label)),
+			}
 		default:
 			return state
 	}
