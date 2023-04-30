@@ -56,6 +56,17 @@ export default class Account {
 		return this._period
 	}
 
+	json() {
+		return {
+			id: this._id,
+			data: {
+				issuer: this._issuer,
+				label: this._label,
+				secretKey: this._secretKey,
+			},
+		}
+	}
+
 	public static createAccount(issuer: string, label: string, secretKey: string): Account {
 		const uuid = generateUUID()
 		return new Account(uuid, issuer, label, secretKey)

@@ -1,6 +1,6 @@
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { useLayoutEffect, useState } from 'react'
-import { Alert, GestureResponderEvent, KeyboardAvoidingView, ScrollView, View } from 'react-native'
+import { Alert, KeyboardAvoidingView, ScrollView, View } from 'react-native'
 import { useDispatch } from 'react-redux'
 import { RootStackParamList } from '../../App'
 import { isAndroid, isIOS } from '../Utils'
@@ -8,6 +8,7 @@ import { FormField } from '../components/FormField'
 import RootView from '../components/RootView'
 import { ThemedButton } from '../components/ThemedComponents'
 import { addAccount } from '../data/action'
+import { AccountsDB } from '../database/AccountsDB'
 import Account from '../models/Account'
 
 type AddAccountScreenProps = {
@@ -19,9 +20,10 @@ export default function NewAccountScreen({ navigation }: AddAccountScreenProps) 
 	const [label, setLabel] = useState<string>('')
 	const [secretKey, setSecretKey] = useState<string>('')
 
+	const db = AccountsDB.getInstance()
 	const dispatch = useDispatch()
 
-	const saveDetails = (event: GestureResponderEvent) => {
+	async function createAccount() {
 		if (issuer?.length == 0) {
 			Alert.alert('Error', 'Please enter a issuer name')
 			return
@@ -32,11 +34,18 @@ export default function NewAccountScreen({ navigation }: AddAccountScreenProps) 
 			return
 		}
 		const newAccount = Account.createAccount(issuer, label, secretKey)
-		dispatch(addAccount(newAccount))
+
+		try {
+			const rowId = await db.insert(newAccount)
+			if (typeof rowId === 'number' && rowId > 0) dispatch(addAccount(newAccount))
+		} catch (err) {
+			console.log(err)
+			Alert.alert('Error adding item to DB')
+		}
 		navigation.goBack()
 	}
 
-	const SaveBtn = () => <ThemedButton title="Add" onPress={saveDetails} />
+	const SaveBtn = () => <ThemedButton title="Add" onPress={createAccount} />
 
 	useLayoutEffect(() => {
 		isIOS() && navigation.setOptions({ headerRight: () => <SaveBtn /> })

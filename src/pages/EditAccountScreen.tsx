@@ -7,6 +7,7 @@ import { FormField } from '../components/FormField'
 import RootView from '../components/RootView'
 import { ThemedButton } from '../components/ThemedComponents'
 import { updateAccount } from '../data/action'
+import { AccountsDB } from '../database/AccountsDB'
 import Account from '../models/Account'
 
 type Props = {
@@ -20,6 +21,7 @@ export default function EditAccountScreen({ navigation, route }: Props) {
 	const [issuer, setIssuer] = useState<string>(account.issuer)
 	const [label, setLabel] = useState<string>(account.label)
 
+	const db = AccountsDB.getInstance()
 	const dispatch = useDispatch()
 
 	useEffect(() => {
@@ -28,9 +30,17 @@ export default function EditAccountScreen({ navigation, route }: Props) {
 		})
 	}, [navigation, issuer, label])
 
-	function handleSaveBtn() {
+	async function handleSaveBtn() {
 		if (!(issuer == account.issuer && label == account.label)) {
-			dispatch(updateAccount(account.id, issuer, label))
+			account.issuer = issuer
+			account.label = label
+
+			try {
+				await db.update(account)
+				dispatch(updateAccount(account))
+			} catch (err) {
+				console.log(err)
+			}
 		}
 		navigation.goBack()
 	}

@@ -10,8 +10,9 @@ import { isAndroid, isIOS } from '../Utils'
 import AccountsContainer from '../components/AccountsContainer'
 import RootView from '../components/RootView'
 import { IconButton, ThemedButton, ThemedText } from '../components/ThemedComponents'
-import { removeAccount } from '../data/action'
+import { loadAccounts, removeAccount } from '../data/action'
 import { RootState } from '../data/reducers'
+import { AccountsDB } from '../database/AccountsDB'
 
 type HomeScreenProps = {
 	navigation: NativeStackNavigationProp<RootStackParamList, 'HomeScreen'>
@@ -24,10 +25,19 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
 	const [bottomSheetVisible, setBottomSheetVisible] = useState(false)
 	const [inEditMode, enableEditMode] = useState(false)
 
+	const db = AccountsDB.getInstance()
 	const dispatch = useDispatch()
 	const content = useSelector((state: RootState) => state.accounts)
 
 	const fabActions = ['Scan QR code', 'Enter Manually', 'Cancel']
+
+	useEffect(() => {
+		db.getAll().then((data) => {
+			dispatch(loadAccounts(data))
+		}).catch((err) => {
+			console.log("Error fetching data " + err)
+		})
+	}, [])
 
 	useEffect(() => {
 		const toolbarItems = (
@@ -114,7 +124,9 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
 					text: 'Delete',
 					style: 'destructive',
 					onPress: () => {
-						dispatch(removeAccount(id))
+						db.remove(id).then(() => {
+							dispatch(removeAccount(id))
+						})
 					},
 				},
 			]

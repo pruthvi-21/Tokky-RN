@@ -1,26 +1,30 @@
-import Account from "../models/Account"
+import Account from '../models/Account'
 
 export enum AccountActionTypes {
+	LOAD_ITEMS = 'LoadItems',
 	ADD_ITEM = 'AddItem',
 	REMOVE_ITEM = 'RemoveItem',
 	UPDATE_ITEM = 'UpdateItem',
 }
 
+export interface LoadAccountsAction {
+	type: AccountActionTypes.LOAD_ITEMS
+	payload: Account[]
+}
+
 export interface AddAccountAction {
 	type: AccountActionTypes.ADD_ITEM
-	account: Account | undefined
+	payload: Account | undefined
 }
 
 export interface RemoveAccountAction {
 	type: AccountActionTypes.REMOVE_ITEM
-	id: string
+	payload: string
 }
 
 export interface UpdateAccountAction {
 	type: AccountActionTypes.UPDATE_ITEM
-	id: string
-	issuer: string
-	label: string
+	payload: Account | undefined
 }
 
-export type AccountAction = AddAccountAction | RemoveAccountAction | UpdateAccountAction
+export type AccountAction = LoadAccountsAction | AddAccountAction | RemoveAccountAction | UpdateAccountAction

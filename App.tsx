@@ -1,11 +1,13 @@
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { StatusBar } from 'expo-status-bar'
+import { useEffect } from 'react'
 import { StyleSheet } from 'react-native'
 import { Provider } from 'react-redux'
 import useTheme, { appTheme } from './src/Theming'
 import SafeArea from './src/components/SafeArea'
 import { store } from './src/data/store'
+import { AccountsDB } from './src/database/AccountsDB'
 import Account from './src/models/Account'
 import EditAccountScreen from './src/pages/EditAccountScreen'
 import HomeScreen from './src/pages/HomeScreen'
@@ -22,6 +24,10 @@ export default function App() {
 
 	const theme = useTheme()
 	const styles = appStyles(theme)
+
+	useEffect(() => {
+		AccountsDB.getInstance().init()
+	}, [])
 
 	return (
 		<Provider store={store}>

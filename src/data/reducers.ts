@@ -1,28 +1,32 @@
-import AccountsRepo from '../database/AccountsRepo'
 import Account from '../models/Account'
-import { AccountActionTypes, AccountAction } from './types'
+import { AccountAction, AccountActionTypes } from './types'
 
 const initialState: { accounts: Account[] } = {
-	accounts: AccountsRepo.getInstance().accounts,
+	accounts: [],
 }
 
 export const mainReducer = (state = initialState, action: AccountAction) => {
 	switch (action.type) {
+		case AccountActionTypes.LOAD_ITEMS:
+			return { ...state, accounts: action.payload }
 		case AccountActionTypes.ADD_ITEM:
+			if (action.payload == undefined) return state
 			return {
 				...state,
-				accounts: [...state.accounts, action.account],
+				accounts: [...state.accounts, action.payload],
 			}
 		case AccountActionTypes.REMOVE_ITEM:
 			return {
 				...state,
-				accounts: state.accounts.filter((item) => item.id !== action.id),
+				accounts: state.accounts.filter((item) => item.id !== action.payload),
 			}
 		case AccountActionTypes.UPDATE_ITEM:
+			if (action.payload == undefined) return state
+
 			const updatedList = state.accounts.map((item) => {
-				if (item.id === action.id) {
-					item.issuer = action.issuer
-					item.label = action.label
+				if (item.id === action.payload!.id) {
+					item.issuer = action.payload!.issuer
+					item.label = action.payload!.label
 				}
 				return item
 			})
