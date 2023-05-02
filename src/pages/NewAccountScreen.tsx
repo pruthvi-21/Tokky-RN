@@ -8,7 +8,7 @@ import { FormField } from '../components/FormField'
 import RootView from '../components/RootView'
 import { ThemedButton } from '../components/ThemedComponents'
 import { addAccount } from '../data/action'
-import { AccountsDB } from '../database/AccountsDB'
+import DB from '../database/AccountsDB'
 import Account from '../models/Account'
 
 type AddAccountScreenProps = {
@@ -20,7 +20,6 @@ export default function NewAccountScreen({ navigation }: AddAccountScreenProps) 
 	const [label, setLabel] = useState<string>('')
 	const [secretKey, setSecretKey] = useState<string>('')
 
-	const db = AccountsDB.getInstance()
 	const dispatch = useDispatch()
 
 	async function createAccount() {
@@ -36,7 +35,7 @@ export default function NewAccountScreen({ navigation }: AddAccountScreenProps) 
 		const newAccount = Account.createAccount(issuer, label, secretKey)
 
 		try {
-			const rowId = await db.insert(newAccount)
+			const rowId = await DB.insert(newAccount)
 			if (typeof rowId === 'number' && rowId > 0) dispatch(addAccount(newAccount))
 		} catch (err) {
 			console.log(err)
