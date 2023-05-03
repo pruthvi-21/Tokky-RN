@@ -11,58 +11,58 @@ import DB from '../database/AccountsDB'
 import Account from '../models/Account'
 
 type Props = {
-	navigation: NativeStackNavigationProp<RootStackParamList, 'EditAccountScreen'>
-	route: RouteProp<RootStackParamList, 'EditAccountScreen'>
+    navigation: NativeStackNavigationProp<RootStackParamList, 'EditAccountScreen'>
+    route: RouteProp<RootStackParamList, 'EditAccountScreen'>
 }
 
 export default function EditAccountScreen({ navigation, route }: Props) {
-	const account: Account = route.params.account
+    const account: Account = route.params.account
 
-	const [issuer, setIssuer] = useState<string>(account.issuer)
-	const [label, setLabel] = useState<string>(account.label)
+    const [issuer, setIssuer] = useState<string>(account.issuer)
+    const [label, setLabel] = useState<string>(account.label)
 
-	const dispatch = useDispatch()
+    const dispatch = useDispatch()
 
-	useEffect(() => {
-		navigation.setOptions({
-			headerRight: () => <ThemedButton title="Save" onPress={handleSaveBtn} />,
-		})
-	}, [navigation, issuer, label])
+    useEffect(() => {
+        navigation.setOptions({
+            headerRight: () => <ThemedButton title="Save" onPress={handleSaveBtn} />,
+        })
+    }, [navigation, issuer, label])
 
-	async function handleSaveBtn() {
-		if (!(issuer == account.issuer && label == account.label)) {
-			account.issuer = issuer
-			account.label = label
+    async function handleSaveBtn() {
+        if (!(issuer == account.issuer && label == account.label)) {
+            account.issuer = issuer
+            account.label = label
 
-			try {
-				await DB.update(account)
-				dispatch(updateAccount(account))
-			} catch (err) {
-				console.log(err)
-			}
-		}
-		navigation.goBack()
-	}
+            try {
+                await DB.update(account)
+                dispatch(updateAccount(account))
+            } catch (err) {
+                console.log(err)
+            }
+        }
+        navigation.goBack()
+    }
 
-	return (
-		<RootView style={{ paddingHorizontal: 16 }}>
-			<FormField
-				parentStyle={{ marginTop: 30 }}
-				label="Issuer"
-				value={issuer}
-				placeholder="Company name"
-				onChangeText={(text) => {
-					setIssuer(text)
-				}}
-			/>
-			<FormField
-				label="Label"
-				value={label}
-				placeholder="Username or email (Optional)"
-				onChangeText={(text) => {
-					setLabel(text)
-				}}
-			/>
-		</RootView>
-	)
+    return (
+        <RootView style={{ paddingHorizontal: 16 }}>
+            <FormField
+                parentStyle={{ marginTop: 30 }}
+                label="Issuer"
+                value={issuer}
+                placeholder="Company name"
+                onChangeText={text => {
+                    setIssuer(text)
+                }}
+            />
+            <FormField
+                label="Label"
+                value={label}
+                placeholder="Username or email (Optional)"
+                onChangeText={text => {
+                    setLabel(text)
+                }}
+            />
+        </RootView>
+    )
 }

@@ -1,13 +1,5 @@
 import React from 'react'
-import {
-    Button,
-    ButtonProps,
-    StyleSheet,
-    Text,
-    TextProps,
-    TouchableOpacity,
-    View,
-} from 'react-native'
+import { Button, ButtonProps, StyleSheet, Text, TextProps, TouchableOpacity, View } from 'react-native'
 import { Path, Svg } from 'react-native-svg'
 import useTheme from '../Theming'
 
@@ -24,10 +16,7 @@ export const ThemedText = (props: ThemedTextProps) => {
     const theme = useTheme()
     const { style, type, color, ...restProps } = props
 
-    let textColor =
-        type == 'secondary'
-            ? theme.color.text_color_secondary
-            : theme.color.text_color_primary
+    let textColor = type == 'secondary' ? theme.color.text_color_secondary : theme.color.text_color_primary
 
     if (color) textColor = color
 
@@ -49,11 +38,7 @@ export const IconButton = ({ icon, ...props }: IconButtonProps) => {
 
     const IconAdd = () => (
         <Svg viewBox="0 0 24 24" width={width} height={height}>
-            <Path
-                d="M6,12H12M12,12H18M12,12V18M12,12V6"
-                stroke={color}
-                strokeWidth={1.5}
-            />
+            <Path d="M6,12H12M12,12H18M12,12V18M12,12V6" stroke={color} strokeWidth={1.5} />
         </Svg>
     )
 
@@ -92,10 +77,7 @@ export const IconButton = ({ icon, ...props }: IconButtonProps) => {
     )
 
     const Wrapper = (props: any) => {
-        if (props.onPress)
-            return (
-                <TouchableOpacity {...props}>{props.children}</TouchableOpacity>
-            )
+        if (props.onPress) return <TouchableOpacity {...props}>{props.children}</TouchableOpacity>
         else return <View {...props}>{props.children}</View>
     }
 

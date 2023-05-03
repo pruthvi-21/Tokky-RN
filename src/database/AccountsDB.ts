@@ -30,23 +30,18 @@ class AccountsDB {
         )
     }
 
-    public async insert(
-        account: Account | undefined,
-    ): Promise<number | undefined> {
+    public async insert(account: Account | undefined): Promise<number | undefined> {
         if (account == undefined) return -1
-        const result = await this.executeSql(
-            `INSERT INTO accounts (id, data) VALUES (?, ?)`,
-            [account.json().id, JSON.stringify(account.json().data)],
-        )
+        const result = await this.executeSql(`INSERT INTO accounts (id, data) VALUES (?, ?)`, [
+            account.json().id,
+            JSON.stringify(account.json().data),
+        ])
         return result.insertId
     }
 
     public async remove(id: string | null | undefined): Promise<number> {
         if (id == null || id == undefined) return 0
-        const result = await this.executeSql(
-            `DELETE FROM accounts WHERE id=?`,
-            [id],
-        )
+        const result = await this.executeSql(`DELETE FROM accounts WHERE id=?`, [id])
         return result.rowsAffected
     }
 
@@ -68,23 +63,13 @@ class AccountsDB {
         for (let i = 0; i < result.rows.length; i++) {
             const account = result.rows.item(i)
             const data = JSON.parse(account.data)
-            accounts.push(
-                new Account(
-                    account.id,
-                    data.issuer,
-                    data.label,
-                    data.secretKey,
-                ),
-            )
+            accounts.push(new Account(account.id, data.issuer, data.label, data.secretKey))
         }
 
         return accounts
     }
 
-    private async executeSql(
-        query: string,
-        params: any[] = [],
-    ): Promise<SQLite.ResultSet> {
+    private async executeSql(query: string, params: any[] = []): Promise<SQLite.ResultSet> {
         return new Promise((resolve, reject) => {
             if (this._db == null) reject('DB is null')
             this._db?.transaction(tx => {

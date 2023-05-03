@@ -12,74 +12,70 @@ import DB from '../database/AccountsDB'
 import Account from '../models/Account'
 
 type AddAccountScreenProps = {
-	navigation: NativeStackNavigationProp<RootStackParamList, 'NewAccountScreen'>
+    navigation: NativeStackNavigationProp<RootStackParamList, 'NewAccountScreen'>
 }
 
 export default function NewAccountScreen({ navigation }: AddAccountScreenProps) {
-	const [issuer, setIssuer] = useState<string>('')
-	const [label, setLabel] = useState<string>('')
-	const [secretKey, setSecretKey] = useState<string>('')
+    const [issuer, setIssuer] = useState<string>('')
+    const [label, setLabel] = useState<string>('')
+    const [secretKey, setSecretKey] = useState<string>('')
 
-	const dispatch = useDispatch()
+    const dispatch = useDispatch()
 
-	async function createAccount() {
-		if (issuer?.length == 0) {
-			Alert.alert('Error', 'Please enter a issuer name')
-			return
-		}
+    async function createAccount() {
+        if (issuer?.length == 0) {
+            Alert.alert('Error', 'Please enter a issuer name')
+            return
+        }
 
-		if (secretKey?.length == 0) {
-			Alert.alert('Error', "Secret Key can't be empty")
-			return
-		}
-		const newAccount = Account.createAccount(issuer, label, secretKey)
+        if (secretKey?.length == 0) {
+            Alert.alert('Error', "Secret Key can't be empty")
+            return
+        }
+        const newAccount = Account.createAccount(issuer, label, secretKey)
 
-		try {
-			const rowId = await DB.insert(newAccount)
-			if (typeof rowId === 'number' && rowId > 0) dispatch(addAccount(newAccount))
-		} catch (err) {
-			console.log(err)
-			Alert.alert('Error adding item to DB')
-		}
-		navigation.goBack()
-	}
+        try {
+            const rowId = await DB.insert(newAccount)
+            if (typeof rowId === 'number' && rowId > 0) dispatch(addAccount(newAccount))
+        } catch (err) {
+            console.log(err)
+            Alert.alert('Error adding item to DB')
+        }
+        navigation.goBack()
+    }
 
-	const SaveBtn = () => <ThemedButton title="Add" onPress={createAccount} />
+    const SaveBtn = () => <ThemedButton title="Add" onPress={createAccount} />
 
-	useLayoutEffect(() => {
-		isIOS() && navigation.setOptions({ headerRight: () => <SaveBtn /> })
-	}, [navigation, issuer, label, secretKey])
+    useLayoutEffect(() => {
+        isIOS() && navigation.setOptions({ headerRight: () => <SaveBtn /> })
+    }, [navigation, issuer, label, secretKey])
 
-	const handleIssuerChange = (text: string) => {
-		setIssuer(text)
-	}
-	const handleLabelChange = (text: string) => {
-		setLabel(text)
-	}
-	const handleSecretKeyChange = (text: string) => {
-		setSecretKey(text)
-	}
+    const handleIssuerChange = (text: string) => {
+        setIssuer(text)
+    }
+    const handleLabelChange = (text: string) => {
+        setLabel(text)
+    }
+    const handleSecretKeyChange = (text: string) => {
+        setSecretKey(text)
+    }
 
-	return (
-		<RootView style={{ paddingHorizontal: 16 }}>
-			<ScrollView>
-				<KeyboardAvoidingView style={{ flex: 1 }} behavior={isIOS() ? 'padding' : undefined}>
-					<FormField
-						parentStyle={{ marginTop: 30 }}
-						label="Issuer"
-						placeholder="Company name"
-						onChangeText={handleIssuerChange}
-						autoFocus={true}
-					/>
-					<FormField
-						label="Label"
-						placeholder="Username or email (Optional)"
-						onChangeText={handleLabelChange}
-					/>
-					<FormField label="Secret Key" placeholder="Secret Key" onChangeText={handleSecretKeyChange} />
-				</KeyboardAvoidingView>
-			</ScrollView>
-			{isAndroid() && <SaveBtn />}
-		</RootView>
-	)
+    return (
+        <RootView style={{ paddingHorizontal: 16 }}>
+            <ScrollView>
+                <KeyboardAvoidingView style={{ flex: 1 }} behavior={isIOS() ? 'padding' : undefined}>
+                    <FormField
+                        parentStyle={{ marginTop: 30 }}
+                        label="Issuer"
+                        placeholder="Company name"
+                        onChangeText={handleIssuerChange}
+                        autoFocus={true}
+                    />
+                    <FormField label="Label" placeholder="Username or email (Optional)" onChangeText={handleLabelChange} />
+                    <FormField label="Secret Key" placeholder="Secret Key" onChangeText={handleSecretKeyChange} />
+                </KeyboardAvoidingView>
+            </ScrollView>
+            {isAndroid() && <SaveBtn />}
+        </RootView>
+    )
 }
