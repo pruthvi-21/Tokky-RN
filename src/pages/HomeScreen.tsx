@@ -1,6 +1,6 @@
 import { useFocusEffect } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import { BottomSheet, FAB, ListItem } from '@rneui/themed'
+import { BottomSheet, ListItem } from '@rneui/themed'
 import React, { useEffect, useState } from 'react'
 import { ActionSheetIOS, Alert, BackHandler, ScrollView, StyleSheet, View } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
@@ -8,8 +8,9 @@ import { RootStackParamList } from '../../App'
 import useTheme, { appTheme } from '../Theming'
 import { isAndroid, isIOS } from '../Utils'
 import AccountsContainer from '../components/AccountsContainer'
+import FAB from '../components/HomeFAB'
 import RootView from '../components/RootView'
-import { IconButton, ThemedButton, ThemedText } from '../components/ThemedComponents'
+import { ThemedButton, ThemedText } from '../components/ThemedComponents'
 import { loadAccounts, removeAccount } from '../data/action'
 import { RootState } from '../data/reducers'
 import DB from '../database/AccountsDB'
@@ -38,16 +39,17 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
 		})
 	}, [])
 
-	useEffect(() => {
-		const toolbarItems = (
-			<View style={[styles.toolbarContainer]}>
-				{!inEditMode && <ThemedButton key="key_edit" title="Edit" onPress={() => enableEditMode(true)} />}
-				{isIOS() && !inEditMode && (
-					<IconButton style={styles.iconAddIOS} key={'key_add'} icon="add" onPress={handleFabClick} />
-				)}
-				{inEditMode && <ThemedButton title="Done" onPress={() => enableEditMode(false)} />}
-			</View>
-		)
+    useEffect(() => {
+        const toolbarItems = (
+            <View style={[styles.toolbarContainer]}>
+                {!inEditMode && (
+                    <ThemedButton key="key_edit" title="Edit" onPress={() => enableEditMode(true)}/>
+                )}
+                {inEditMode && (
+                    <ThemedButton title="Done" onPress={() => enableEditMode(false)}/>
+                )}
+            </View>
+        )
 
 		navigation.setOptions({
 			headerRight: () => toolbarItems,
@@ -172,16 +174,9 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
 				</View>
 			)}
 
-			{isAndroid() && (
-				<FAB
-					onPress={handleFabClick}
-					placement="right"
-					icon={{ name: 'add', color: 'white' }}
-					color={theme.color.primary_color}
-				/>
-			)}
-		</RootView>
-	)
+            <FAB onPress={handleFabClick} />
+        </RootView>
+    )
 }
 
 const homeStyles = (theme: typeof appTheme) =>
