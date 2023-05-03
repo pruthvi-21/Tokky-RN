@@ -1,6 +1,6 @@
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { useLayoutEffect, useState } from 'react'
-import { Alert, KeyboardAvoidingView, ScrollView, View } from 'react-native'
+import { Alert, KeyboardAvoidingView, ScrollView } from 'react-native'
 import { useDispatch } from 'react-redux'
 import { RootStackParamList } from '../../App'
 import { isAndroid, isIOS } from '../Utils'
@@ -69,6 +69,7 @@ export default function NewAccountScreen({ navigation }: AddAccountScreenProps) 
 						label="Issuer"
 						placeholder="Company name"
 						onChangeText={handleIssuerChange}
+						autoFocus={true}
 					/>
 					<FormField
 						label="Label"
