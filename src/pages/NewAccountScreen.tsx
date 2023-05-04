@@ -3,7 +3,7 @@ import { useLayoutEffect, useState } from 'react'
 import { Alert, KeyboardAvoidingView, ScrollView } from 'react-native'
 import { useDispatch } from 'react-redux'
 import { RootStackParamList } from '../../App'
-import { isAndroid, isIOS } from '../Utils'
+import { encodeSecretKey, isAndroid, isIOS } from '../Utils'
 import { FormField } from '../components/FormField'
 import RootView from '../components/RootView'
 import { ThemedButton } from '../components/ThemedComponents'
@@ -32,7 +32,12 @@ export default function NewAccountScreen({ navigation }: AddAccountScreenProps) 
             Alert.alert('Error', "Secret Key can't be empty")
             return
         }
-        const newAccount = Account.createAccount(issuer, label, secretKey)
+        const encodedSecretKey = encodeSecretKey(secretKey)
+        if (encodedSecretKey == null) {
+            Alert.alert('Invalid secret key')
+            return
+        }
+        const newAccount = Account.createAccount(issuer, label, encodedSecretKey)
 
         try {
             const rowId = await DB.insert(newAccount)
