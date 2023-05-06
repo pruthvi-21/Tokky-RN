@@ -1,4 +1,6 @@
-import { DEFAULT_ALGORITHM, DEFAULT_DIGITS, DEFAULT_PERIOD, generateUUID } from '../Utils'
+import { DEFAULT_ALGORITHM, DEFAULT_DIGITS, DEFAULT_PERIOD, generateUUID } from '../utils/Utils'
+import { AlgorithmType } from '../utils/Constants'
+import { getToken } from '../utils/RFC6238'
 
 export default class Account {
     private _id: string
@@ -6,7 +8,7 @@ export default class Account {
     private _label: string
     private _secretKey: string
 
-    private _algorithm: string
+    private _algorithm: AlgorithmType
     private _digits: number
     private _period: number
 
@@ -44,7 +46,7 @@ export default class Account {
         return this._secretKey
     }
 
-    get algorithm(): string {
+    get algorithm(): AlgorithmType {
         return this._algorithm
     }
 
@@ -54,6 +56,24 @@ export default class Account {
 
     get period(): number {
         return this._period
+    }
+
+    getCurrentToken(): string {
+        return getToken(this.secretKey, { algorithm: this.algorithm, digits: this.digits, period: this.period })
+    }
+    currentOTP: string = ''
+    private _lastUpdatedCounter: number = 0
+
+    updateOTP(): Boolean {
+        const time = Date.now() / 1000
+        const count = time / this.period
+
+        if (count > this._lastUpdatedCounter) {
+            this.currentOTP = this.getCurrentToken()
+            this._lastUpdatedCounter = count
+            return true
+        }
+        return false
     }
 
     json() {

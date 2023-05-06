@@ -6,7 +6,7 @@ import { ActionSheetIOS, Alert, BackHandler, ScrollView, StyleSheet, View } from
 import { useDispatch, useSelector } from 'react-redux'
 import { RootStackParamList } from '../../App'
 import useTheme, { appTheme } from '../Theming'
-import { isAndroid, isIOS } from '../Utils'
+import { isAndroid, isIOS } from '../utils/Utils'
 import AccountsContainer from '../components/AccountsContainer'
 import FAB from '../components/HomeFAB'
 import RootView from '../components/RootView'

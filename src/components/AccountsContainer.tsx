@@ -16,12 +16,25 @@ type Props = {
 export default function AccountsContainer({ inEditMode, list, editAccountCallback, deleteAccountCallback }: Props) {
     const theme = useTheme()
     const styles = cardStyles(theme)
+    const [otp, currentOTP] = useState('')
 
     const [activeSections, setActiveSections] = useState<number[]>([])
 
     useEffect(() => {
         setActiveSections([])
+
+        setInterval(() => {
+            getOTP(list[activeSections[0]])
+        }, 1000)
     }, [inEditMode])
+
+    function getOTP(account: Account) {
+        // console.log(account)
+        if (account !== undefined) {
+            account.updateOTP()
+            currentOTP(account.currentOTP)
+        }
+    }
 
     const renderHeader = (content: Account, index: number, isActive: boolean) => {
         return (
@@ -54,7 +67,7 @@ export default function AccountsContainer({ inEditMode, list, editAccountCallbac
         return (
             <View style={[styles.listItemContainer]}>
                 <Animatable.Text style={styles.otpText} animation={isActive ? 'fadeIn' : undefined} duration={500}>
-                    {'123 456'}
+                    {otp}
                 </Animatable.Text>
             </View>
         )

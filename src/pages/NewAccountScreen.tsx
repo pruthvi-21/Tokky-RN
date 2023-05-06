@@ -3,13 +3,14 @@ import { useLayoutEffect, useState } from 'react'
 import { Alert, KeyboardAvoidingView, ScrollView } from 'react-native'
 import { useDispatch } from 'react-redux'
 import { RootStackParamList } from '../../App'
-import { encodeSecretKey, isAndroid, isIOS } from '../Utils'
+import { isAndroid, isIOS } from '../utils/Utils'
 import { FormField } from '../components/FormField'
 import RootView from '../components/RootView'
 import { ThemedButton } from '../components/ThemedComponents'
 import { addAccount } from '../data/action'
 import DB from '../database/AccountsDB'
 import Account from '../models/Account'
+import { Base32 } from '../utils/Base32'
 
 type AddAccountScreenProps = {
     navigation: NativeStackNavigationProp<RootStackParamList, 'NewAccountScreen'>
@@ -32,21 +33,22 @@ export default function NewAccountScreen({ navigation }: AddAccountScreenProps) 
             Alert.alert('Error', "Secret Key can't be empty")
             return
         }
-        const encodedSecretKey = encodeSecretKey(secretKey)
-        if (encodedSecretKey == null) {
-            Alert.alert('Invalid secret key')
-            return
-        }
-        const newAccount = Account.createAccount(issuer, label, encodedSecretKey)
-
         try {
-            const rowId = await DB.insert(newAccount)
-            if (typeof rowId === 'number' && rowId > 0) dispatch(addAccount(newAccount))
-        } catch (err) {
-            console.log(err)
-            Alert.alert('Error adding item to DB')
+            const secretKeyHex = Base32.base32ToHex(secretKey)
+            console.log(secretKey, secretKeyHex)
+            const newAccount = Account.createAccount(issuer, label, secretKeyHex)
+
+            try {
+                const rowId = await DB.insert(newAccount)
+                if (typeof rowId === 'number' && rowId > 0) dispatch(addAccount(newAccount))
+            } catch (err) {
+                console.log(err)
+                Alert.alert('Error adding item to DB')
+            }
+            navigation.goBack()
+        } catch (er: any) {
+            Alert.alert(er.message)
         }
-        navigation.goBack()
     }
 
     const SaveBtn = () => <ThemedButton title="Add" onPress={createAccount} />
