@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { StyleSheet, TouchableOpacity, View } from 'react-native'
-import * as Animatable from 'react-native-animatable'
 import Accordion from 'react-native-collapsible/Accordion'
 import useTheme, { appTheme } from '../Theming'
 import Account from '../models/Account'
 import { IconButton, ThemedText } from './ThemedComponents'
+import OTPView from './OTPView'
+import { useFocusEffect } from '@react-navigation/native'
 
 type Props = {
     inEditMode: boolean
@@ -16,25 +17,16 @@ type Props = {
 export default function AccountsContainer({ inEditMode, list, editAccountCallback, deleteAccountCallback }: Props) {
     const theme = useTheme()
     const styles = cardStyles(theme)
-    const [otp, currentOTP] = useState('')
-
     const [activeSections, setActiveSections] = useState<number[]>([])
 
-    useEffect(() => {
-        setActiveSections([])
-
-        setInterval(() => {
-            getOTP(list[activeSections[0]])
-        }, 1000)
-    }, [inEditMode])
-
-    function getOTP(account: Account) {
-        // console.log(account)
-        if (account !== undefined) {
-            account.updateOTP()
-            currentOTP(account.currentOTP)
-        }
-    }
+    useFocusEffect(
+        useCallback(() => {
+            setActiveSections([])
+            return () => {
+                setActiveSections([])
+            }
+        }, [inEditMode]),
+    )
 
     const renderHeader = (content: Account, index: number, isActive: boolean) => {
         return (
@@ -64,13 +56,7 @@ export default function AccountsContainer({ inEditMode, list, editAccountCallbac
     }
 
     const renderContent = (content: Account, index: number, isActive: boolean) => {
-        return (
-            <View style={[styles.listItemContainer]}>
-                <Animatable.Text style={styles.otpText} animation={isActive ? 'fadeIn' : undefined} duration={500}>
-                    {otp}
-                </Animatable.Text>
-            </View>
-        )
+        return <OTPView style={[styles.listItemContainer]} account={content} isActive={isActive} />
     }
 
     return (
@@ -119,12 +105,6 @@ const cardStyles = (theme: typeof appTheme) =>
         titleContainer: { flex: 1 },
         issuerTextStyle: { fontSize: 17 },
         labelTextStyle: { marginTop: 3 },
-        otpText: {
-            color: theme.color.text_color_primary,
-            fontSize: 30,
-            marginLeft: 64,
-        },
-
         iconArrow: { width: 20, height: 20, color: theme.color.text_color_secondary },
         iconEdit: { width: 24, height: 24, color: theme.color.text_color_secondary },
         iconDelete: {

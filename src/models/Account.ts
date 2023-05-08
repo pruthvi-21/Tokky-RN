@@ -12,6 +12,9 @@ export default class Account {
     private _digits: number
     private _period: number
 
+    currentOTP: string = ''
+    private _lastUpdatedCounter: number = 0
+
     constructor(id: string, issuer: string, label: string, secretKey: string) {
         this._id = id
         this._issuer = issuer
@@ -58,18 +61,16 @@ export default class Account {
         return this._period
     }
 
-    getCurrentToken(): string {
-        return getToken(this.secretKey, { algorithm: this.algorithm, digits: this.digits, period: this.period })
-    }
-    currentOTP: string = ''
-    private _lastUpdatedCounter: number = 0
-
     updateOTP(): Boolean {
         const time = Date.now() / 1000
-        const count = time / this.period
+        const count = Math.floor(time / this.period)
 
         if (count > this._lastUpdatedCounter) {
-            this.currentOTP = this.getCurrentToken()
+            this.currentOTP = getToken(this.secretKey, {
+                algorithm: this.algorithm,
+                digits: this.digits,
+                period: this.period,
+            })
             this._lastUpdatedCounter = count
             return true
         }

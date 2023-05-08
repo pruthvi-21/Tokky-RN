@@ -35,7 +35,6 @@ export default function NewAccountScreen({ navigation }: AddAccountScreenProps) 
         }
         try {
             const secretKeyHex = Base32.base32ToHex(secretKey)
-            console.log(secretKey, secretKeyHex)
             const newAccount = Account.createAccount(issuer, label, secretKeyHex)
 
             try {
