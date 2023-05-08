@@ -168,7 +168,7 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
                 </View>
             )}
 
-            <FAB onPress={handleFabClick} />
+            {!inEditMode && <FAB onPress={handleFabClick} />}
         </RootView>
     )
 }
