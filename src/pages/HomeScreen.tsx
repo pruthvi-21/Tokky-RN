@@ -46,6 +46,14 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
             <View style={[styles.toolbarContainer]}>
                 {!inEditMode && <ThemedButton key="key_edit" title="Edit" onPress={() => enableEditMode(true)} />}
                 {inEditMode && <ThemedButton title="Done" onPress={() => enableEditMode(false)} />}
+                {
+                    <ThemedButton
+                        title="Settings"
+                        onPress={() => {
+                            navigation.navigate('SettingsScreen')
+                        }}
+                    />
+                }
             </View>
         )
 

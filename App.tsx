@@ -1,6 +1,6 @@
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import { StatusBar, StyleSheet } from 'react-native'
+import { Button, StatusBar, StyleSheet } from 'react-native'
 import { Provider } from 'react-redux'
 import useTheme, { appTheme } from './src/Theming'
 import SafeArea from './src/components/SafeArea'
@@ -9,11 +9,13 @@ import Account from './src/models/Account'
 import EditAccountScreen from './src/pages/EditAccountScreen'
 import HomeScreen from './src/pages/HomeScreen'
 import NewAccountScreen from './src/pages/NewAccountScreen'
+import SettingsScreen from './src/pages/SettingsScreen'
 
 export type RootStackParamList = {
     HomeScreen: undefined
     NewAccountScreen: undefined
     EditAccountScreen: { account: Account }
+    SettingsScreen: undefined
 }
 
 export default function App() {
@@ -54,6 +56,16 @@ export default function App() {
                             component={EditAccountScreen}
                             options={{
                                 headerTitle: 'Update account',
+                                headerStyle: styles.headerStyle,
+                                headerTitleStyle: styles.headerTitleStyle,
+                                headerTintColor: theme.color.primary_color,
+                            }}
+                        />
+                        <Stack.Screen
+                            name="SettingsScreen"
+                            component={SettingsScreen}
+                            options={{
+                                headerTitle: 'Settings',
                                 headerStyle: styles.headerStyle,
                                 headerTitleStyle: styles.headerTitleStyle,
                                 headerTintColor: theme.color.primary_color,
