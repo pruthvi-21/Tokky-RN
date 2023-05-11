@@ -1,15 +1,28 @@
 import React from 'react'
-import { Button, ButtonProps, StyleSheet, Text, TextProps, TouchableOpacity, View } from 'react-native'
-import { Path, Svg } from 'react-native-svg'
+import {
+    Button,
+    ButtonProps,
+    StyleProp,
+    StyleSheet,
+    Text,
+    TextProps,
+    TextStyle,
+    TouchableOpacity,
+    TouchableOpacityProps,
+    View,
+} from 'react-native'
+import { Circle, Path, Svg } from 'react-native-svg'
 import useTheme from '../Theming'
+import { isIOS } from '../utils/Utils'
 
 interface ThemedTextProps extends TextProps {
     type?: 'primary' | 'secondary'
     color?: string
 }
 
-interface IconButtonProps extends TextProps {
-    icon: 'add' | 'edit' | 'delete' | 'down-arrow'
+interface IconButtonProps extends TouchableOpacityProps {
+    icon: 'add' | 'edit' | 'delete' | 'down-arrow' | 'overflow-menu'
+    style?: StyleProp<TextStyle> | undefined
 }
 
 export const ThemedText = (props: ThemedTextProps) => {
@@ -76,6 +89,26 @@ export const IconButton = ({ icon, ...props }: IconButtonProps) => {
         </Svg>
     )
 
+    const IconOverflowMenu = () => {
+        if (isIOS())
+            return (
+                <Svg viewBox="0 0 24 24" width={width} height={width}>
+                    <Circle cx={12} cy={12} r={11} fill={'#0000'} stroke={color} strokeWidth={1.8} />
+                    <Circle cx={6.5} cy={12} r={1.8} fill={color} />
+                    <Circle cx={12} cy={12} r={1.8} fill={color} />
+                    <Circle cx={17.5} cy={12} r={1.8} fill={color} />
+                </Svg>
+            )
+
+        return (
+            <Svg viewBox="0 0 24 24" width={width} height={width}>
+                <Circle cx={12} cy={5} r={2} fill={color} />
+                <Circle cx={12} cy={12} r={2} fill={color} />
+                <Circle cx={12} cy={19} r={2} fill={color} />
+            </Svg>
+        )
+    }
+
     const Wrapper = (props: any) => {
         if (props.onPress) return <TouchableOpacity {...props}>{props.children}</TouchableOpacity>
         else return <View {...props}>{props.children}</View>
@@ -87,6 +120,7 @@ export const IconButton = ({ icon, ...props }: IconButtonProps) => {
             {icon == 'edit' && <IconEdit />}
             {icon == 'delete' && <IconDelete />}
             {icon == 'down-arrow' && <IconDownArrow />}
+            {icon == 'overflow-menu' && <IconOverflowMenu />}
         </Wrapper>
     )
 }

@@ -14,6 +14,7 @@ import { ThemedButton, ThemedText } from '../components/ThemedComponents'
 import { loadAccounts, removeAccount } from '../data/action'
 import { RootState } from '../data/reducers'
 import DB from '../database/AccountsDB'
+import Menu from '../components/Menu'
 
 type HomeScreenProps = {
     navigation: NativeStackNavigationProp<RootStackParamList, 'HomeScreen'>
@@ -41,24 +42,19 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
             })
     }, [])
 
-    useEffect(() => {
-        const toolbarItems = (
-            <View style={[styles.toolbarContainer]}>
-                {!inEditMode && <ThemedButton key="key_edit" title="Edit" onPress={() => enableEditMode(true)} />}
-                {inEditMode && <ThemedButton title="Done" onPress={() => enableEditMode(false)} />}
-                {
-                    <ThemedButton
-                        title="Settings"
-                        onPress={() => {
-                            navigation.navigate('SettingsScreen')
-                        }}
-                    />
-                }
-            </View>
-        )
+    const menuItems = [
+        { title: 'Edit accounts', callback: () => enableEditMode(true) },
+        { title: 'Settings', callback: () => navigation.navigate('SettingsScreen') },
+    ]
 
+    useEffect(() => {
         navigation.setOptions({
-            headerRight: () => toolbarItems,
+            headerRight: () => (
+                <View style={[styles.toolbarContainer]}>
+                    {!inEditMode && <Menu menuItems={menuItems} />}
+                    {inEditMode && <ThemedButton title="Done" onPress={() => enableEditMode(false)} />}
+                </View>
+            ),
             headerTitle: !inEditMode ? 'Tokky' : 'Edit Accounts',
         })
     }, [inEditMode])

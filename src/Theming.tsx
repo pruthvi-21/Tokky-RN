@@ -13,6 +13,8 @@ export const appTheme = {
         text_color_hint: '#8c8c8c',
         divider_color: '#e7e7e7',
         danger_color: '#ff3d31',
+        menu_bg: '#F5F6F5',
+        menu_divider: '#DFE0DF',
     },
 }
 
@@ -29,6 +31,8 @@ export const appThemeDark = {
         text_color_hint: '#939393',
         divider_color: '#2a2a2c',
         danger_color: '#ff443a',
+        menu_bg: '#2A2A2A',
+        menu_divider: '#3D3D3E',
     },
 }
 
