@@ -15,6 +15,11 @@ export const appTheme = {
         danger_color: '#ff3d31',
         menu_bg: '#F5F6F5',
         menu_divider: '#DFE0DF',
+        modal: {
+            bg: '#f2f2f7',
+            bg_variant: '#ffffff',
+            bg_variant2: '#e1e1e1',
+        },
     },
 }
 
@@ -33,6 +38,11 @@ export const appThemeDark = {
         danger_color: '#ff443a',
         menu_bg: '#2A2A2A',
         menu_divider: '#3D3D3E',
+        modal: {
+            bg: '#1c1c1e',
+            bg_variant: '#2c2c2e',
+            bg_variant2: '#353536',
+        },
     },
 }
 

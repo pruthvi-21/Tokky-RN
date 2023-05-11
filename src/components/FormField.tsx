@@ -2,6 +2,7 @@ import React from 'react'
 import { StyleProp, StyleSheet, TextInput, TextInputProps, View, ViewStyle } from 'react-native'
 import useTheme, { appTheme } from '../Theming'
 import { ThemedText } from './ThemedComponents'
+import { isIOS } from '../utils/Utils'
 
 interface Props extends TextInputProps {
     label: string
@@ -33,7 +34,7 @@ const formStyles = (theme: typeof appTheme) =>
             paddingHorizontal: 10,
         },
         textInput: {
-            backgroundColor: theme.color.bg_variant,
+            backgroundColor: theme.color.bg_variant2,
             borderColor: theme.color.bg_variant2,
             borderWidth: 2,
             borderRadius: 11,

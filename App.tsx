@@ -46,9 +46,10 @@ export default function App() {
                             component={NewAccountScreen}
                             options={{
                                 headerTitle: 'New Account',
-                                headerStyle: styles.headerStyle,
+                                headerStyle: styles.headerStyleModal,
                                 headerTitleStyle: styles.headerTitleStyle,
-                                headerTintColor: theme.color.primary_color,
+                                presentation: 'modal',
+                                gestureEnabled: false,
                             }}
                         />
                         <Stack.Screen
@@ -82,6 +83,9 @@ const appStyles = (theme: typeof appTheme) =>
     StyleSheet.create({
         headerStyle: {
             backgroundColor: theme.color.bg,
+        },
+        headerStyleModal: {
+            backgroundColor: theme.color.modal.bg,
         },
         headerTitleStyle: {
             color: theme.color.text_color_primary,
