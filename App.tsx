@@ -57,9 +57,10 @@ export default function App() {
                             component={EditAccountScreen}
                             options={{
                                 headerTitle: 'Update account',
-                                headerStyle: styles.headerStyle,
+                                headerStyle: styles.headerStyleModal,
                                 headerTitleStyle: styles.headerTitleStyle,
-                                headerTintColor: theme.color.primary_color,
+                                presentation: 'modal',
+                                gestureEnabled: false,
                             }}
                         />
                         <Stack.Screen
