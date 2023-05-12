@@ -18,6 +18,7 @@ export const FormField = ({ label, parentStyle, ...props }: Props) => {
     return (
         <View style={[styles.container, style]}>
             <ThemedText style={styles.labelTextStyle}>{label}</ThemedText>
+            {/* <View style={{ flex: 1 }} /> */}
             <TextInput
                 style={[styles.textInput, style]}
                 placeholderTextColor={theme.color.text_color_hint}
@@ -37,15 +38,18 @@ const formStyles = (theme: typeof appTheme) =>
             overflow: 'hidden',
         },
         labelTextStyle: {
-            paddingHorizontal: 15,
-            width: 110,
+            width: 120,
             fontSize: 17,
-            fontWeight: 'bold',
+            fontWeight: '800',
+            paddingStart: 16,
+            paddingEnd: 10,
         },
         textInput: {
-            flex: 1,
-            fontSize: 16,
-            padding: 15,
             color: theme.color.text_color_primary,
+            fontSize: 16,
+            textAlign: 'right',
+            flex: 1,
+            paddingVertical: 15,
+            paddingEnd: 16,
         },
     })

@@ -26,19 +26,22 @@ export default function PickerDial({ title, fieldValue, ...props }: Props) {
             {...props}>
             <View
                 style={{
-                    padding: 15,
                     backgroundColor: theme.color.modal.bg_variant,
                     flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    paddingVertical: 15,
                 }}>
                 <ThemedText
                     style={{
-                        width: 110,
-                        fontSize: 16,
-                        fontWeight: 'bold',
+                        width: 120,
+                        fontSize: 17,
+                        fontWeight: '800',
+                        paddingStart: 16,
+                        paddingEnd: 10,
                     }}>
                     {title}
                 </ThemedText>
-                <ThemedText style={{ fontSize: 16 }}>{fieldValue}</ThemedText>
+                <ThemedText style={{ fontSize: 16, textAlign: 'right', paddingEnd: 16 }}>{fieldValue}</ThemedText>
             </View>
         </PickerSelect>
     )

@@ -129,7 +129,7 @@ export default function NewAccountScreen({ navigation }: AddAccountScreenProps) 
                         onChangeText={handleLabelChange}
                     />
                     <Divider />
-                    <FormField style={styles.textInputStyle} label="Key" placeholder="Secret Key" onChangeText={handleSecretKeyChange} />
+                    <FormField style={styles.textInputStyle} label="Secret Key" placeholder="Secret Key" onChangeText={handleSecretKeyChange} />
 
                     <View style={styles.adv_layout_container}>
                         <ThemedText style={styles.adv_layout_title}>Advanced options</ThemedText>
