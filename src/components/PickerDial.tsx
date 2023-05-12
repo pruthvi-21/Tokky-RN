@@ -15,7 +15,7 @@ export default function PickerDial({ title, fieldValue, ...props }: Props) {
     return (
         <PickerSelect
             style={{
-                chevronActive: { borderColor: theme.color.primary_color },
+                chevron: { width: 0, height: 0, opacity: 0 },
                 modalViewMiddle: { backgroundColor: theme.color.modal.bg_variant2, borderTopColor: theme.color.divider_color },
                 modalViewBottom: { backgroundColor: theme.color.modal.bg_variant },
                 done: { color: theme.color.primary_color, fontSize: 17 },
