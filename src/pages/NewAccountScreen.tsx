@@ -104,10 +104,15 @@ export default function NewAccountScreen({ navigation }: AddAccountScreenProps) 
         setSecretKey(text)
     }
 
+    function Divider() {
+        return <View style={styles.divider} />
+    }
+
     return (
-        <RootView style={[{ paddingHorizontal: 16 }, isIOS() && styles.root]}>
+        <RootView style={[isIOS() && styles.root]}>
             <ScrollView>
                 <KeyboardAvoidingView style={{ flex: 1 }} behavior={isIOS() ? 'padding' : undefined}>
+                    <View style={{ height: 25 }} />
                     <FormField
                         style={styles.textInputStyle}
                         parentStyle={{ marginTop: 30 }}
@@ -116,18 +121,15 @@ export default function NewAccountScreen({ navigation }: AddAccountScreenProps) 
                         onChangeText={handleIssuerChange}
                         autoFocus={true}
                     />
+                    <Divider />
                     <FormField
                         style={styles.textInputStyle}
                         label="Label"
                         placeholder="Username or email (Optional)"
                         onChangeText={handleLabelChange}
                     />
-                    <FormField
-                        style={styles.textInputStyle}
-                        label="Secret Key"
-                        placeholder="Secret Key"
-                        onChangeText={handleSecretKeyChange}
-                    />
+                    <Divider />
+                    <FormField style={styles.textInputStyle} label="Key" placeholder="Secret Key" onChangeText={handleSecretKeyChange} />
 
                     <View style={styles.adv_layout_container}>
                         <ThemedText style={styles.adv_layout_title}>Advanced options</ThemedText>
@@ -136,30 +138,26 @@ export default function NewAccountScreen({ navigation }: AddAccountScreenProps) 
                         </ThemedText>
                     </View>
 
-                    <View style={{ marginTop: 20 }}>
-                        <PickerDial
-                            title={'Algorithm'}
-                            onValueChange={value => setAlgo(value)}
-                            items={algorithm_options}
-                            value={algo}
-                            fieldValue={algorithm_options.find(item => item.value === algo)!.inputLabel}
-                        />
-                    </View>
-                    <View style={{ marginTop: 20 }}>
-                        <PickerDial
-                            title={'OTP Length'}
-                            onValueChange={value => setDigits(value)}
-                            items={digits_options}
-                            value={digits}
-                            fieldValue={digits_options.find(item => item.value === digits)!.label}
-                        />
-                    </View>
-
+                    <PickerDial
+                        title={'Algorithm'}
+                        onValueChange={value => setAlgo(value)}
+                        items={algorithm_options}
+                        value={algo}
+                        fieldValue={algorithm_options.find(item => item.value === algo)!.inputLabel}
+                    />
+                    <Divider />
+                    <PickerDial
+                        title={'Length'}
+                        onValueChange={value => setDigits(value)}
+                        items={digits_options}
+                        value={digits}
+                        fieldValue={digits_options.find(item => item.value === digits)!.label}
+                    />
+                    <Divider />
                     <FormField
                         style={styles.textInputStyle}
                         label="Period"
                         placeholder="Period"
-                        parentStyle={{ marginTop: 10 }}
                         onChangeText={value => setPeriod(parseInt(value))}
                     />
                 </KeyboardAvoidingView>
@@ -174,18 +172,25 @@ const pageStyles = (theme: typeof appTheme) =>
         root: {
             backgroundColor: theme.color.modal.bg,
         },
+        divider: {
+            height: 1.5,
+            backgroundColor: theme.color.modal.bg_variant2,
+        },
         textInputStyle: {
             backgroundColor: theme.color.modal.bg_variant,
             borderColor: theme.color.modal.bg_variant2,
         },
         adv_layout_container: {
             marginTop: 40,
+            marginBottom: 25
         },
         adv_layout_title: {
             fontSize: 16,
+            textAlign: 'center',
         },
         adv_layout_summary: {
             color: theme.color.text_color_secondary,
             marginTop: 5,
+            textAlign: 'center',
         },
     })

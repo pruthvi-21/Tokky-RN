@@ -16,7 +16,7 @@ export const FormField = ({ label, parentStyle, ...props }: Props) => {
     const styles = formStyles(theme)
 
     return (
-        <View style={[parentStyle]}>
+        <View style={[styles.container, style]}>
             <ThemedText style={styles.labelTextStyle}>{label}</ThemedText>
             <TextInput
                 style={[styles.textInput, style]}
@@ -30,17 +30,22 @@ export const FormField = ({ label, parentStyle, ...props }: Props) => {
 
 const formStyles = (theme: typeof appTheme) =>
     StyleSheet.create({
+        container: {
+            backgroundColor: theme.color.bg_variant2,
+            flexDirection: 'row',
+            alignItems: 'center',
+            overflow: 'hidden',
+        },
         labelTextStyle: {
-            paddingHorizontal: 10,
+            paddingHorizontal: 15,
+            width: 110,
+            fontSize: 17,
+            fontWeight: 'bold',
         },
         textInput: {
-            backgroundColor: theme.color.bg_variant2,
-            borderColor: theme.color.bg_variant2,
-            borderWidth: 2,
-            borderRadius: 11,
+            flex: 1,
             fontSize: 16,
-            marginVertical: 10,
-            padding: 11,
+            padding: 15,
             color: theme.color.text_color_primary,
         },
     })

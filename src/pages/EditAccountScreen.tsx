@@ -1,7 +1,7 @@
 import { RouteProp } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import React, { useEffect, useState } from 'react'
-import { StyleSheet } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import { useDispatch } from 'react-redux'
 import { RootStackParamList } from '../../App'
 import useTheme, { appTheme } from '../Theming'
@@ -50,10 +50,13 @@ export default function EditAccountScreen({ navigation, route }: Props) {
         navigation.goBack()
     }
 
+    function Divider() {
+        return <View style={styles.divider} />
+    }
+
     return (
         <RootView style={styles.root}>
             <FormField
-                parentStyle={{ marginTop: 30 }}
                 style={styles.textInputStyle}
                 label="Issuer"
                 value={issuer}
@@ -62,6 +65,7 @@ export default function EditAccountScreen({ navigation, route }: Props) {
                     setIssuer(text)
                 }}
             />
+            <Divider />
             <FormField
                 style={styles.textInputStyle}
                 label="Label"
@@ -79,7 +83,11 @@ const pageStyles = (theme: typeof appTheme) =>
     StyleSheet.create({
         root: {
             backgroundColor: theme.color.modal.bg,
-            paddingHorizontal: 16,
+            paddingTop: 25,
+        },
+        divider: {
+            height: 1.5,
+            backgroundColor: theme.color.modal.bg_variant2,
         },
         textInputStyle: {
             backgroundColor: theme.color.modal.bg_variant,

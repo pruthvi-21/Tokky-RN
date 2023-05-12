@@ -26,16 +26,13 @@ export default function PickerDial({ title, fieldValue, ...props }: Props) {
             {...props}>
             <View
                 style={{
-                    padding: 11,
+                    padding: 15,
                     backgroundColor: theme.color.modal.bg_variant,
-                    borderColor: theme.color.modal.bg_variant2,
-                    borderWidth: 2,
-                    borderRadius: 11,
                     flexDirection: 'row',
                 }}>
                 <ThemedText
                     style={{
-                        width: 120,
+                        width: 110,
                         fontSize: 16,
                         fontWeight: 'bold',
                     }}>
