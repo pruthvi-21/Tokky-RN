@@ -15,14 +15,22 @@ export default class Account {
     currentOTP: string = ''
     private _lastUpdatedCounter: number = 0
 
-    constructor(id: string, issuer: string, label: string, secretKey: string) {
+    constructor(
+        id: string,
+        issuer: string,
+        label: string,
+        secretKey: string,
+        algorithm: AlgorithmType = DEFAULT_ALGORITHM,
+        digits: number = DEFAULT_DIGITS,
+        period: number = DEFAULT_PERIOD,
+    ) {
         this._id = id
         this._issuer = issuer
         this._label = label
         this._secretKey = secretKey
-        this._algorithm = DEFAULT_ALGORITHM
-        this._digits = DEFAULT_DIGITS
-        this._period = DEFAULT_PERIOD
+        this._algorithm = algorithm
+        this._digits = digits
+        this._period = period
     }
 
     set issuer(issuer: string) {
@@ -84,12 +92,22 @@ export default class Account {
                 issuer: this._issuer,
                 label: this._label,
                 secretKey: this._secretKey,
+                algorithm: this._algorithm,
+                digits: this._digits,
+                period: this._period,
             },
         }
     }
 
-    public static createAccount(issuer: string, label: string, secretKey: string): Account {
+    public static createAccount(
+        issuer: string,
+        label: string,
+        secretKey: string,
+        algorithm?: AlgorithmType,
+        digits?: number,
+        period?: number,
+    ): Account {
         const uuid = generateUUID()
-        return new Account(uuid, issuer, label, secretKey)
+        return new Account(uuid, issuer, label, secretKey, algorithm, digits, period)
     }
 }

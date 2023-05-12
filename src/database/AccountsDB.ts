@@ -63,7 +63,7 @@ class AccountsDB {
         for (let i = 0; i < result.rows.length; i++) {
             const account = result.rows.item(i)
             const data = JSON.parse(account.data)
-            accounts.push(new Account(account.id, data.issuer, data.label, data.secretKey))
+            accounts.push(new Account(account.id, data.issuer, data.label, data.secretKey, data.algorithm, data.digits, data.period))
         }
 
         return accounts
