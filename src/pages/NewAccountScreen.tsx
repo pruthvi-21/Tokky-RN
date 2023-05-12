@@ -85,7 +85,7 @@ export default function NewAccountScreen({ navigation }: AddAccountScreenProps) 
         isIOS() &&
             navigation.setOptions({
                 headerRight: () => <SaveBtn />,
-                headerLeft: () => <Button title="Cancel" onPress={() => navigation.goBack()} />,
+                headerLeft: () => <ThemedButton title="Cancel" onPress={() => navigation.goBack()} />,
             })
 
         StatusBar.setBarStyle('light-content', true)
