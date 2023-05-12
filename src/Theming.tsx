@@ -4,7 +4,7 @@ import { Appearance, useColorScheme } from 'react-native'
 export const appTheme = {
     dimen: { cornerRadius: 20 },
     color: {
-        primary_color: '#007aff',
+        primary_color: '#228811',
         bg: '#f2f2f4',
         bg_variant: '#ffffff',
         bg_variant2: '#bababa',
@@ -27,7 +27,7 @@ export const appThemeDark = {
     ...appTheme,
     color: {
         ...appTheme.color,
-        primary_color: '#0984ff',
+        primary_color: '#228811',
         bg: '#010101',
         bg_variant: '#191919',
         bg_variant2: '#333333',
