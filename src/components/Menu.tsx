@@ -1,5 +1,5 @@
-import React, { useRef, useState } from 'react'
-import { Animated, Modal, StyleSheet, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native'
+import React, { useEffect, useRef, useState } from 'react'
+import { Animated, Easing, Modal, StyleSheet, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native'
 import useTheme, { appTheme } from '../Theming'
 import { IconButton, ThemedText } from './ThemedComponents'
 import { isAndroid, isIOS } from '../utils/Utils'
@@ -21,14 +21,37 @@ const Menu = ({ menuItems }: Props) => {
     const [Y, setY] = useState(0)
     const iconRef = useRef<TouchableOpacity>(null)
 
-    const toggleMenu = (status: boolean) => {
-        iconRef.current?.measure((x: number, y: number, width: number, height: number, pageX: number, pageY: number) => {
-            let top = pageY
-            if (isIOS()) top += 22.5 + 5
-            setY(top)
-        })
+    const fadeAnim = useState(new Animated.Value(0))[0]
+    const interpolationConfig = {
+        //y = sqrt(x)
+        inputRange: [0, 0.25, 0.5, 0.75, 1],
+        outputRange: [0, 0.5, 0.7071, 0.866, 1],
+    }
+    useEffect(() => {}, [isVisible])
 
-        setIsVisible(status)
+    const toggleMenu = (status: boolean) => {
+        if (status) {
+            iconRef.current?.measure((x: number, y: number, width: number, height: number, pageX: number, pageY: number) => {
+                let top = pageY
+                if (isIOS()) top += 22.5 + 5
+                setY(top)
+            })
+
+            setIsVisible(status)
+            Animated.timing(fadeAnim, {
+                toValue: 1,
+                duration: 100,
+                useNativeDriver: true,
+            }).start()
+        } else {
+            Animated.timing(fadeAnim, {
+                toValue: 0,
+                duration: 100,
+                useNativeDriver: true,
+            }).start(() => {
+                setIsVisible(false)
+            })
+        }
     }
 
     const handleMenuItemPress = (item: MenuItem) => {
@@ -48,10 +71,14 @@ const Menu = ({ menuItems }: Props) => {
                     }}
                 />
             </TouchableOpacity>
-            <Modal visible={isVisible} animationType={'fade'} transparent={true} onRequestClose={() => toggleMenu(false)}>
+            <Modal visible={isVisible} transparent={true} onRequestClose={() => toggleMenu(false)}>
                 <TouchableWithoutFeedback onPressIn={() => toggleMenu(false)}>
                     <View style={styles.modalBackground}>
-                        <Animated.View>
+                        <Animated.View
+                            style={{
+                                opacity: fadeAnim.interpolate(interpolationConfig),
+                                transform: [{ scaleY: fadeAnim.interpolate(interpolationConfig) }],
+                            }}>
                             <View style={[styles.modalContainer, { marginTop: Y }]}>
                                 {menuItems.map((item, index) => (
                                     <View key={index}>
@@ -76,7 +103,6 @@ const menuStyles = (theme: typeof appTheme) =>
             flex: 1,
             justifyContent: 'flex-start',
             alignItems: 'flex-end',
-            backgroundColor: 'rgba(0,0,0,.2)',
         },
         modalContainer: {
             backgroundColor: theme.color.menu_bg,
