@@ -50,6 +50,7 @@ export default function App() {
                                     headerTitleStyle: styles.headerTitleStyle,
                                     headerTintColor: theme.color.primary_color,
                                     headerLargeTitle: true,
+                                    headerShadowVisible: false,
                                 }}
                             />
                             <Stack.Screen
@@ -82,6 +83,7 @@ export default function App() {
                                     headerStyle: styles.headerStyle,
                                     headerTitleStyle: styles.headerTitleStyle,
                                     headerTintColor: theme.color.primary_color,
+                                    headerShadowVisible: false,
                                 }}
                             />
                         </Stack.Navigator>
