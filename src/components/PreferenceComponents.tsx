@@ -68,7 +68,9 @@ export function SwitchPreference(props: SwitchPreferenceProps) {
     return (
         <View style={styles.preferenceStyle}>
             <View>
-                <ThemedText style={styles.preferenceTitleStyle}>{title}</ThemedText>
+                <ThemedText style={[styles.preferenceTitleStyle, props.disabled && styles.preferenceTitleDisabledStyle]}>
+                    {title}
+                </ThemedText>
                 {summary && <ThemedText style={{ color: theme.color.text_color_secondary }}>{summary}</ThemedText>}
             </View>
             <Switch onValueChange={toggleSwitch} value={isEnabled} {...switchProps} />
@@ -104,6 +106,9 @@ const preferenceStyles = (theme: typeof appTheme) => {
         preferenceTitleStyle: {
             fontSize: 17,
             color: theme.color.text_color_primary,
+        },
+        preferenceTitleDisabledStyle: {
+            color: theme.color.text_color_disabled,
         },
         preferenceDivider: {
             height: 0.5,

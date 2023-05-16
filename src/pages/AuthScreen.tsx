@@ -20,6 +20,8 @@ export const AuthScreen = (props: Props) => {
 
                 if (result.isAvailable) {
                     authenticate()
+                } else {
+                    props.callback?.(true)
                 }
             })
         }
