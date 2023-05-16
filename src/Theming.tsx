@@ -20,6 +20,9 @@ export const appTheme = {
             bg_variant: '#ffffff',
             bg_variant2: '#e1e1e1',
         },
+        preferences:{
+            category_title: '#939393'
+        }
     },
 }
 
@@ -43,6 +46,9 @@ export const appThemeDark = {
             bg_variant: '#2c2c2e',
             bg_variant2: '#353536',
         },
+        preferences:{
+            category_title: '#7C7C81'
+        }
     },
 }
 

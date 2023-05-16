@@ -1,11 +1,13 @@
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import { Button, StatusBar, StyleSheet } from 'react-native'
+import { useState } from 'react'
+import { StatusBar, StyleSheet } from 'react-native'
 import { Provider } from 'react-redux'
 import useTheme, { appTheme } from './src/Theming'
 import SafeArea from './src/components/SafeArea'
 import { store } from './src/data/store'
 import Account from './src/models/Account'
+import { AuthScreen } from './src/pages/AuthScreen'
 import EditAccountScreen from './src/pages/EditAccountScreen'
 import HomeScreen from './src/pages/HomeScreen'
 import NewAccountScreen from './src/pages/NewAccountScreen'
@@ -19,62 +21,72 @@ export type RootStackParamList = {
 }
 
 export default function App() {
+    const [isAuthenticated, setIsAuthenticated] = useState(false)
+
     const Stack = createNativeStackNavigator<RootStackParamList>()
 
     const theme = useTheme()
     const styles = appStyles(theme)
 
+    function handleAuthorization(success: boolean) {
+        setIsAuthenticated(success)
+    }
+
     return (
         <Provider store={store}>
             <SafeArea>
                 <StatusBar />
-                <NavigationContainer>
-                    <Stack.Navigator>
-                        <Stack.Screen
-                            name="HomeScreen"
-                            component={HomeScreen}
-                            options={{
-                                title: 'Tokky',
-                                headerStyle: styles.headerStyle,
-                                headerTitleStyle: styles.headerTitleStyle,
-                                headerTintColor: theme.color.primary_color,
-                                headerLargeTitle: true,
-                            }}
-                        />
-                        <Stack.Screen
-                            name="NewAccountScreen"
-                            component={NewAccountScreen}
-                            options={{
-                                headerTitle: 'New Account',
-                                headerStyle: styles.headerStyleModal,
-                                headerTitleStyle: styles.headerTitleStyle,
-                                presentation: 'modal',
-                                gestureEnabled: false,
-                            }}
-                        />
-                        <Stack.Screen
-                            name="EditAccountScreen"
-                            component={EditAccountScreen}
-                            options={{
-                                headerTitle: 'Update account',
-                                headerStyle: styles.headerStyleModal,
-                                headerTitleStyle: styles.headerTitleStyle,
-                                presentation: 'modal',
-                                gestureEnabled: false,
-                            }}
-                        />
-                        <Stack.Screen
-                            name="SettingsScreen"
-                            component={SettingsScreen}
-                            options={{
-                                headerTitle: 'Settings',
-                                headerStyle: styles.headerStyle,
-                                headerTitleStyle: styles.headerTitleStyle,
-                                headerTintColor: theme.color.primary_color,
-                            }}
-                        />
-                    </Stack.Navigator>
-                </NavigationContainer>
+                {!isAuthenticated ? (
+                    <AuthScreen callback={handleAuthorization} />
+                ) : (
+                    <NavigationContainer>
+                        <Stack.Navigator>
+                            <Stack.Screen
+                                name="HomeScreen"
+                                component={HomeScreen}
+                                options={{
+                                    title: 'Tokky',
+                                    headerStyle: styles.headerStyle,
+                                    headerTitleStyle: styles.headerTitleStyle,
+                                    headerTintColor: theme.color.primary_color,
+                                    headerLargeTitle: true,
+                                }}
+                            />
+                            <Stack.Screen
+                                name="NewAccountScreen"
+                                component={NewAccountScreen}
+                                options={{
+                                    headerTitle: 'New Account',
+                                    headerStyle: styles.headerStyleModal,
+                                    headerTitleStyle: styles.headerTitleStyle,
+                                    presentation: 'modal',
+                                    gestureEnabled: false,
+                                }}
+                            />
+                            <Stack.Screen
+                                name="EditAccountScreen"
+                                component={EditAccountScreen}
+                                options={{
+                                    headerTitle: 'Update account',
+                                    headerStyle: styles.headerStyleModal,
+                                    headerTitleStyle: styles.headerTitleStyle,
+                                    presentation: 'modal',
+                                    gestureEnabled: false,
+                                }}
+                            />
+                            <Stack.Screen
+                                name="SettingsScreen"
+                                component={SettingsScreen}
+                                options={{
+                                    headerTitle: 'Settings',
+                                    headerStyle: styles.headerStyle,
+                                    headerTitleStyle: styles.headerTitleStyle,
+                                    headerTintColor: theme.color.primary_color,
+                                }}
+                            />
+                        </Stack.Navigator>
+                    </NavigationContainer>
+                )}
             </SafeArea>
         </Provider>
     )
