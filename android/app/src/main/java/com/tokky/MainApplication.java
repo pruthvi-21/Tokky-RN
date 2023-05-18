@@ -10,6 +10,7 @@ import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint;
 import com.facebook.react.defaults.DefaultReactNativeHost;
 import com.facebook.soloader.SoLoader;
 import com.tokky.packages.BiometricAuthPackage;
+import com.tokky.packages.KeyStoragePackage;
 
 import java.util.List;
 
@@ -29,6 +30,7 @@ public class MainApplication extends Application implements ReactApplication {
                     // Packages that cannot be autolinked yet can be added manually here, for example:
                     // packages.add(new MyReactNativePackage());
                     packages.add(new BiometricAuthPackage());
+                    packages.add(new KeyStoragePackage());
                     return packages;
                 }
 

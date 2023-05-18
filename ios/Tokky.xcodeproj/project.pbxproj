@@ -16,6 +16,8 @@
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		AC6C246A2A0365D80016DF62 /* BiometricAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC6C24692A0365D80016DF62 /* BiometricAuth.swift */; };
 		AC6C246C2A0366840016DF62 /* BiometricAuth.m in Sources */ = {isa = PBXBuildFile; fileRef = AC6C246B2A0366840016DF62 /* BiometricAuth.m */; };
+		ACA44E4C2A139F1200D4761B /* KeychainManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACA44E4B2A139F1200D4761B /* KeychainManager.swift */; };
+		ACA44E4E2A139F3F00D4761B /* KeychainManager.m in Sources */ = {isa = PBXBuildFile; fileRef = ACA44E4D2A139F3F00D4761B /* KeychainManager.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,6 +50,8 @@
 		AC6C24682A0365D70016DF62 /* Tokky-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Tokky-Bridging-Header.h"; sourceTree = "<group>"; };
 		AC6C24692A0365D80016DF62 /* BiometricAuth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiometricAuth.swift; sourceTree = "<group>"; };
 		AC6C246B2A0366840016DF62 /* BiometricAuth.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BiometricAuth.m; sourceTree = "<group>"; };
+		ACA44E4B2A139F1200D4761B /* KeychainManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainManager.swift; sourceTree = "<group>"; };
+		ACA44E4D2A139F3F00D4761B /* KeychainManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KeychainManager.m; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -98,8 +102,10 @@
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB71A68108700A75B9A /* main.m */,
 				AC6C24692A0365D80016DF62 /* BiometricAuth.swift */,
+				ACA44E4B2A139F1200D4761B /* KeychainManager.swift */,
 				AC6C24682A0365D70016DF62 /* Tokky-Bridging-Header.h */,
 				AC6C246B2A0366840016DF62 /* BiometricAuth.m */,
+				ACA44E4D2A139F3F00D4761B /* KeychainManager.m */,
 			);
 			name = Tokky;
 			sourceTree = "<group>";
@@ -421,9 +427,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
+				ACA44E4C2A139F1200D4761B /* KeychainManager.swift in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 				AC6C246A2A0365D80016DF62 /* BiometricAuth.swift in Sources */,
 				AC6C246C2A0366840016DF62 /* BiometricAuth.m in Sources */,
+				ACA44E4E2A139F3F00D4761B /* KeychainManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
