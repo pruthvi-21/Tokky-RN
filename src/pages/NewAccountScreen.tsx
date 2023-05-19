@@ -85,13 +85,7 @@ export default function NewAccountScreen({ navigation }: AddAccountScreenProps) 
         isIOS() &&
             navigation.setOptions({
                 headerRight: () => <SaveBtn />,
-                headerLeft: () => <ThemedButton title="Cancel" onPress={() => navigation.goBack()} />,
             })
-
-        StatusBar.setBarStyle('light-content', true)
-        return () => {
-            StatusBar.setBarStyle('default', true)
-        }
     }, [navigation, issuer, label, secretKey, algo, digits, period])
 
     const handleIssuerChange = (text: string) => {
@@ -129,7 +123,12 @@ export default function NewAccountScreen({ navigation }: AddAccountScreenProps) 
                         onChangeText={handleLabelChange}
                     />
                     <Divider />
-                    <FormField style={styles.textInputStyle} label="Secret Key" placeholder="Secret Key" onChangeText={handleSecretKeyChange} />
+                    <FormField
+                        style={styles.textInputStyle}
+                        label="Secret Key"
+                        placeholder="Secret Key"
+                        onChangeText={handleSecretKeyChange}
+                    />
 
                     <View style={styles.adv_layout_container}>
                         <ThemedText style={styles.adv_layout_title}>Advanced options</ThemedText>
@@ -170,19 +169,19 @@ export default function NewAccountScreen({ navigation }: AddAccountScreenProps) 
 const pageStyles = (theme: typeof appTheme) =>
     StyleSheet.create({
         root: {
-            backgroundColor: theme.color.modal.bg,
+            backgroundColor: theme.color.bg,
         },
         divider: {
             height: 1.5,
-            backgroundColor: theme.color.modal.bg_variant2,
+            backgroundColor: theme.color.divider_color,
         },
         textInputStyle: {
-            backgroundColor: theme.color.modal.bg_variant,
-            borderColor: theme.color.modal.bg_variant2,
+            backgroundColor: theme.color.bg_variant,
+            borderColor: theme.color.bg_variant2,
         },
         adv_layout_container: {
             marginTop: 40,
-            marginBottom: 25
+            marginBottom: 25,
         },
         adv_layout_title: {
             fontSize: 16,

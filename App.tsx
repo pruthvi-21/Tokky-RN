@@ -69,10 +69,10 @@ export default function App() {
                                 component={NewAccountScreen}
                                 options={{
                                     headerTitle: 'New Account',
-                                    headerStyle: styles.headerStyleModal,
+                                    headerStyle: styles.headerStyle,
                                     headerTitleStyle: styles.headerTitleStyle,
-                                    presentation: 'modal',
-                                    gestureEnabled: false,
+                                    headerTintColor: theme.color.primary_color,
+                                    headerShadowVisible: false,
                                 }}
                             />
                             <Stack.Screen
