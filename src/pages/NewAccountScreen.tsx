@@ -1,18 +1,18 @@
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import React, { useLayoutEffect, useState } from 'react'
-import { Alert, Button, KeyboardAvoidingView, ScrollView, StatusBar, StyleSheet, TextInput, View } from 'react-native'
+import React, { useState } from 'react'
+import { Alert, KeyboardAvoidingView, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native'
 import { useDispatch } from 'react-redux'
 import { RootStackParamList } from '../../App'
 import useTheme, { appTheme } from '../Theming'
 import { FormField } from '../components/FormField'
 import PickerDial from '../components/PickerDial'
 import RootView from '../components/RootView'
-import { ThemedButton, ThemedText } from '../components/ThemedComponents'
+import { ThemedText } from '../components/ThemedComponents'
 import { addAccount } from '../data/action'
 import DB from '../database/AccountsDB'
 import Account from '../models/Account'
 import { Base32 } from '../utils/Base32'
-import { DEFAULT_DIGITS, DEFAULT_PERIOD, isAndroid, isIOS } from '../utils/Utils'
+import { DEFAULT_DIGITS, DEFAULT_PERIOD, isIOS } from '../utils/Utils'
 import { AlgorithmType } from '../utils/Constants'
 
 type AddAccountScreenProps = {
@@ -79,15 +79,6 @@ export default function NewAccountScreen({ navigation }: AddAccountScreenProps) 
         }
     }
 
-    const SaveBtn = () => <ThemedButton title="Done" onPress={createAccount} />
-
-    useLayoutEffect(() => {
-        isIOS() &&
-            navigation.setOptions({
-                headerRight: () => <SaveBtn />,
-            })
-    }, [navigation, issuer, label, secretKey, algo, digits, period])
-
     const handleIssuerChange = (text: string) => {
         setIssuer(text)
     }
@@ -104,31 +95,33 @@ export default function NewAccountScreen({ navigation }: AddAccountScreenProps) 
 
     return (
         <RootView style={[isIOS() && styles.root]}>
-            <ScrollView>
-                <KeyboardAvoidingView style={{ flex: 1 }} behavior={isIOS() ? 'padding' : undefined}>
+            <KeyboardAvoidingView style={{ flex: 1 }} behavior={isIOS() ? 'padding' : undefined}>
+                <ScrollView contentInsetAdjustmentBehavior="automatic">
                     <View style={{ height: 25 }} />
-                    <FormField
-                        style={styles.textInputStyle}
-                        parentStyle={{ marginTop: 30 }}
-                        label="Issuer"
-                        placeholder="Company name"
-                        onChangeText={handleIssuerChange}
-                        autoFocus={true}
-                    />
-                    <Divider />
-                    <FormField
-                        style={styles.textInputStyle}
-                        label="Label"
-                        placeholder="Username or email (Optional)"
-                        onChangeText={handleLabelChange}
-                    />
-                    <Divider />
-                    <FormField
-                        style={styles.textInputStyle}
-                        label="Secret Key"
-                        placeholder="Secret Key"
-                        onChangeText={handleSecretKeyChange}
-                    />
+                    <View style={{ borderRadius: 11, overflow: 'hidden' }}>
+                        <FormField
+                            style={styles.textInputStyle}
+                            parentStyle={{ marginTop: 30 }}
+                            label="Issuer"
+                            placeholder="Company name"
+                            onChangeText={handleIssuerChange}
+                        />
+                        <Divider />
+                        <FormField
+                            style={styles.textInputStyle}
+                            label="Label"
+                            placeholder="Username or email (Optional)"
+                            onChangeText={handleLabelChange}
+                        />
+                    </View>
+                    <View style={{ borderRadius: 11, overflow: 'hidden', marginTop: 25 }}>
+                        <FormField
+                            style={styles.textInputStyle}
+                            label="Secret Key"
+                            placeholder="Secret Key"
+                            onChangeText={handleSecretKeyChange}
+                        />
+                    </View>
 
                     <View style={styles.adv_layout_container}>
                         <ThemedText style={styles.adv_layout_title}>Advanced options</ThemedText>
@@ -137,31 +130,35 @@ export default function NewAccountScreen({ navigation }: AddAccountScreenProps) 
                         </ThemedText>
                     </View>
 
-                    <PickerDial
-                        title={'Algorithm'}
-                        onValueChange={value => setAlgo(value)}
-                        items={algorithm_options}
-                        value={algo}
-                        fieldValue={algorithm_options.find(item => item.value === algo)!.inputLabel}
-                    />
-                    <Divider />
-                    <PickerDial
-                        title={'Length'}
-                        onValueChange={value => setDigits(value)}
-                        items={digits_options}
-                        value={digits}
-                        fieldValue={digits_options.find(item => item.value === digits)!.label}
-                    />
-                    <Divider />
-                    <FormField
-                        style={styles.textInputStyle}
-                        label="Period"
-                        placeholder="Period"
-                        onChangeText={value => setPeriod(parseInt(value))}
-                    />
-                </KeyboardAvoidingView>
-            </ScrollView>
-            {isAndroid() && <SaveBtn />}
+                    <View style={{ borderRadius: 11, overflow: 'hidden' }}>
+                        <PickerDial
+                            title={'Algorithm'}
+                            onValueChange={value => setAlgo(value)}
+                            items={algorithm_options}
+                            value={algo}
+                            fieldValue={algorithm_options.find(item => item.value === algo)!.inputLabel}
+                        />
+                        <Divider />
+                        <PickerDial
+                            title={'Length'}
+                            onValueChange={value => setDigits(value)}
+                            items={digits_options}
+                            value={digits}
+                            fieldValue={digits_options.find(item => item.value === digits)!.label}
+                        />
+                        <Divider />
+                        <FormField
+                            style={styles.textInputStyle}
+                            label="Period"
+                            placeholder="Period"
+                            onChangeText={value => setPeriod(parseInt(value))}
+                        />
+                    </View>
+                </ScrollView>
+            </KeyboardAvoidingView>
+            <TouchableOpacity activeOpacity={0.7} style={styles.buttonStyle} onPress={createAccount}>
+                <ThemedText style={styles.buttonTextStyle}>Done</ThemedText>
+            </TouchableOpacity>
         </RootView>
     )
 }
@@ -169,7 +166,7 @@ export default function NewAccountScreen({ navigation }: AddAccountScreenProps) 
 const pageStyles = (theme: typeof appTheme) =>
     StyleSheet.create({
         root: {
-            backgroundColor: theme.color.bg,
+            paddingHorizontal: 15,
         },
         divider: {
             height: 1.5,
@@ -184,12 +181,28 @@ const pageStyles = (theme: typeof appTheme) =>
             marginBottom: 25,
         },
         adv_layout_title: {
-            fontSize: 16,
+            fontSize: 17,
+            fontWeight: 'bold',
             textAlign: 'center',
         },
         adv_layout_summary: {
             color: theme.color.text_color_secondary,
-            marginTop: 5,
+            marginTop: 10,
             textAlign: 'center',
+        },
+        buttonStyle: {
+            borderRadius: 15,
+            flexDirection: 'row',
+            backgroundColor: theme.color.primary_color,
+            marginHorizontal: 7,
+            marginTop: 15,
+            marginBottom: 20,
+        },
+        buttonTextStyle: {
+            padding: 15,
+            fontSize: 18,
+            flex: 1,
+            textAlign: 'center',
+            color: 'white',
         },
     })

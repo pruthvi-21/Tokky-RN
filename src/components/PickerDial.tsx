@@ -34,8 +34,8 @@ export default function PickerDial({ title, fieldValue, ...props }: Props) {
                 <ThemedText
                     style={{
                         width: 120,
-                        fontSize: 17,
-                        fontWeight: '800',
+                        fontSize: 16,
+                        fontWeight: 'bold',
                         paddingStart: 16,
                         paddingEnd: 10,
                     }}>
