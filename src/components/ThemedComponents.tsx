@@ -72,7 +72,7 @@ export const IconButton = ({ icon, ...props }: IconButtonProps) => {
 
     const IconAdd = () => (
         <Svg viewBox="0 0 24 24" width={width} height={height}>
-            <Path d="M6,12H12M12,12H18M12,12V18M12,12V6" stroke={color} strokeWidth={1.5} />
+            <Path d="M6,12H12M12,12H18M12,12V18M12,12V6" fillOpacity={0} stroke={color} strokeWidth={1.5} />
         </Svg>
     )
 
@@ -80,6 +80,7 @@ export const IconButton = ({ icon, ...props }: IconButtonProps) => {
         <Svg viewBox="0 0 24 24" width={width} height={height}>
             <Path
                 d="M17.665,10.455L20.755,7.365L16.635,3.245L13.545,6.335M17.665,10.455L7.365,20.755L3.245,20.755L3.245,16.635L13.545,6.335M17.665,10.455L13.545,6.335"
+                fillOpacity={0}
                 stroke={color}
                 strokeWidth={1.5}
             />
@@ -90,11 +91,13 @@ export const IconButton = ({ icon, ...props }: IconButtonProps) => {
         <Svg viewBox="0 0 24 24" width={width} height={height}>
             <Path
                 d="M13.94,11.03L13.94,16.85,M10.06,11.03L10.06,16.85,M4.24,7.15L19.76,7.15,M6.18,7.15L12,7.15L17.82,7.15L17.82,17.82C17.82,19.427 16.517,20.73 14.91,20.73L9.09,20.73C7.483,20.73 6.18,19.427 6.18,17.82L6.18,7.15Z"
+                fillOpacity={0}
                 stroke={color}
                 strokeWidth={1.5}
             />
             <Path
                 d="M9.09,5.21C9.09,4.139 9.959,3.27 11.03,3.27L12.97,3.27C14.041,3.27 14.91,4.139 14.91,5.21L14.91,7.15L9.09,7.15L9.09,5.21Z"
+                fillOpacity={0}
                 stroke={color}
                 strokeWidth={1.5}
             />
