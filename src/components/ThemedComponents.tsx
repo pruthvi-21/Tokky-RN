@@ -20,8 +20,12 @@ interface ThemedTextProps extends TextProps {
     color?: string
 }
 
+interface ThemedButtonProps extends ButtonProps {
+    filled?: boolean
+}
+
 interface IconButtonProps extends TouchableOpacityProps {
-    icon: 'add' | 'edit' | 'delete' | 'down-arrow' | 'overflow-menu'
+    icon: 'add' | 'edit' | 'delete' | 'down-arrow' | 'overflow-menu' | 'close'
     style?: StyleProp<TextStyle> | undefined
 }
 
@@ -40,8 +44,25 @@ export const ThemedText = (props: ThemedTextProps) => {
     )
 }
 
-export const ThemedButton = (props: ButtonProps) => {
+export const ThemedButton = (props: ThemedButtonProps) => {
     const theme = useTheme()
+
+    if (props?.filled == true)
+        return (
+            <TouchableOpacity
+                activeOpacity={0.7}
+                style={{
+                    borderRadius: 15,
+                    flexDirection: 'row',
+                    backgroundColor: theme.color.primary_color,
+                    marginHorizontal: 7,
+                    marginTop: 15,
+                    marginBottom: 20,
+                }}
+                {...props}>
+                <ThemedText style={{ padding: 15, fontSize: 18, flex: 1, textAlign: 'center', color: 'white' }}>{props.title}</ThemedText>
+            </TouchableOpacity>
+        )
 
     return <Button color={theme.color.primary_color} {...props} />
 }
@@ -109,6 +130,20 @@ export const IconButton = ({ icon, ...props }: IconButtonProps) => {
         )
     }
 
+    const IconClose = () => {
+        return (
+            <Svg width={width} height={height} viewBox="0 0 24 24">
+                <Path
+                    d="M21 21L12 12M12 12L3 3M12 12L21.0001 3M12 12L3 21.0001"
+                    stroke={color}
+                    strokeWidth={2}
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                />
+            </Svg>
+        )
+    }
+
     const Wrapper = (props: any) => {
         if (props.onPress) return <TouchableOpacity {...props}>{props.children}</TouchableOpacity>
         else return <View {...props}>{props.children}</View>
@@ -121,6 +156,7 @@ export const IconButton = ({ icon, ...props }: IconButtonProps) => {
             {icon == 'delete' && <IconDelete />}
             {icon == 'down-arrow' && <IconDownArrow />}
             {icon == 'overflow-menu' && <IconOverflowMenu />}
+            {icon == 'close' && <IconClose />}
         </Wrapper>
     )
 }

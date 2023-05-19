@@ -1,13 +1,13 @@
 import { RouteProp } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import React, { useEffect, useState } from 'react'
-import { StyleSheet, View } from 'react-native'
+import { StatusBar, StyleSheet, TouchableOpacity, View } from 'react-native'
 import { useDispatch } from 'react-redux'
 import { RootStackParamList } from '../../App'
 import useTheme, { appTheme } from '../Theming'
 import { FormField } from '../components/FormField'
 import RootView from '../components/RootView'
-import { ThemedButton } from '../components/ThemedComponents'
+import { IconButton, ThemedButton } from '../components/ThemedComponents'
 import { updateAccount } from '../data/action'
 import DB from '../database/AccountsDB'
 import Account from '../models/Account'
@@ -30,9 +30,16 @@ export default function EditAccountScreen({ navigation, route }: Props) {
 
     useEffect(() => {
         navigation.setOptions({
-            headerRight: () => <ThemedButton title="Save" onPress={handleSaveBtn} />,
-            headerLeft: () => <ThemedButton title="Cancel" onPress={() => navigation.goBack()} />,
+            headerLeft: () => (
+                <TouchableOpacity style={{ padding: 7 }} onPress={() => navigation.goBack()}>
+                    <IconButton style={{ width: 19, height: 19, color: theme.color.text_color_primary }} icon="close" />
+                </TouchableOpacity>
+            ),
         })
+        StatusBar.setBarStyle('light-content', true)
+        return () => {
+            StatusBar.setBarStyle('default', true)
+        }
     }, [navigation, issuer, label])
 
     async function handleSaveBtn() {
@@ -56,25 +63,31 @@ export default function EditAccountScreen({ navigation, route }: Props) {
 
     return (
         <RootView style={styles.root}>
-            <FormField
-                style={styles.textInputStyle}
-                label="Issuer"
-                value={issuer}
-                placeholder="Company name"
-                onChangeText={text => {
-                    setIssuer(text)
-                }}
-            />
-            <Divider />
-            <FormField
-                style={styles.textInputStyle}
-                label="Label"
-                value={label}
-                placeholder="Username or email (Optional)"
-                onChangeText={text => {
-                    setLabel(text)
-                }}
-            />
+            <View style={{ borderRadius: 11, overflow: 'hidden' }}>
+                <FormField
+                    style={styles.textInputStyle}
+                    label="Issuer"
+                    value={issuer}
+                    placeholder="Company name"
+                    onChangeText={text => {
+                        setIssuer(text)
+                    }}
+                />
+                <Divider />
+                <FormField
+                    style={styles.textInputStyle}
+                    label="Label"
+                    value={label}
+                    placeholder="Username or email (Optional)"
+                    onChangeText={text => {
+                        setLabel(text)
+                    }}
+                />
+            </View>
+            <View style={{ flex: 1 }} />
+            <View style={{ marginVertical: 20 }}>
+                <ThemedButton title="Update" filled={true} onPress={handleSaveBtn} />
+            </View>
         </RootView>
     )
 }
@@ -84,6 +97,7 @@ const pageStyles = (theme: typeof appTheme) =>
         root: {
             backgroundColor: theme.color.modal.bg,
             paddingTop: 25,
+            paddingHorizontal: 15,
         },
         divider: {
             height: 1.5,
