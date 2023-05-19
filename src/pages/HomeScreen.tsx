@@ -15,6 +15,7 @@ import { loadAccounts, removeAccount } from '../data/action'
 import { RootState } from '../data/reducers'
 import DB from '../database/AccountsDB'
 import Menu from '../components/Menu'
+import { UserSettings } from '../utils/UserSettings'
 
 type HomeScreenProps = {
     navigation: NativeStackNavigationProp<RootStackParamList, 'HomeScreen'>
@@ -33,6 +34,9 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
     const fabActions = ['Scan QR code', 'Enter Manually', 'Cancel']
 
     useEffect(() => {
+        if (!UserSettings.isAppIntroDone()) {
+            navigation.navigate('IntroScreen')
+        }
         DB.getAll()
             .then(data => {
                 dispatch(loadAccounts(data))

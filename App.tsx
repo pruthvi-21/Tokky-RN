@@ -12,9 +12,11 @@ import EditAccountScreen from './src/pages/EditAccountScreen'
 import HomeScreen from './src/pages/HomeScreen'
 import NewAccountScreen from './src/pages/NewAccountScreen'
 import SettingsScreen from './src/pages/SettingsScreen'
+import { IntroScreen } from './src/pages/intro/IntroScreen'
 
 export type RootStackParamList = {
     HomeScreen: undefined
+    IntroScreen: undefined
     NewAccountScreen: undefined
     EditAccountScreen: { account: Account }
     SettingsScreen: undefined
@@ -51,6 +53,15 @@ export default function App() {
                                     headerTintColor: theme.color.primary_color,
                                     headerLargeTitle: true,
                                     headerShadowVisible: false,
+                                }}
+                            />
+                            <Stack.Screen
+                                name="IntroScreen"
+                                component={IntroScreen}
+                                options={{
+                                    headerShown: false,
+                                    presentation: 'modal',
+                                    gestureEnabled: false,
                                 }}
                             />
                             <Stack.Screen
