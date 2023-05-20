@@ -56,8 +56,6 @@ export const ThemedButton = (props: ThemedButtonProps) => {
                     flexDirection: 'row',
                     backgroundColor: theme.color.primary_color,
                     marginHorizontal: 7,
-                    marginTop: 15,
-                    marginBottom: 20,
                 }}
                 {...props}>
                 <ThemedText style={{ padding: 15, fontSize: 18, flex: 1, textAlign: 'center', color: 'white' }}>{props.title}</ThemedText>

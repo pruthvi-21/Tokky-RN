@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react'
 import RootView from '../components/RootView'
 import { ThemedButton } from '../components/ThemedComponents'
 import { Biometrics, BiometricsEnrolledResult, BiometryType } from '../utils/BiometryUtils'
-import { UserSettings } from '../utils/UserSettings'
-import { generateKey, encryptData, decryptData } from '../utils/CryptoUtils'
+import { ENC_KEY } from '../utils/Constants'
 import { KeychainManager } from '../utils/KeychainManager'
+import { UserSettings } from '../utils/UserSettings'
 import { generateRandomKey } from '../utils/Utils'
 
 type Props = {
@@ -12,8 +12,6 @@ type Props = {
 }
 
 export const AuthScreen = (props: Props) => {
-    const ENC_KEY = 'tokky-enc-key'
-
     const [biometryType, setBiometryType] = useState<BiometryType>()
 
     useEffect(() => {
