@@ -1,12 +1,12 @@
+import { RouteProp } from '@react-navigation/native'
+import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import React from 'react'
+import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import useTheme, { appTheme } from '../../Theming'
 import RootView from '../../components/RootView'
-import { ThemedText } from '../../components/ThemedComponents'
-import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import { IntroStackParamList } from './IntroScreen'
-import { StyleSheet, TouchableOpacity, View } from 'react-native'
-import { RouteProp } from '@react-navigation/native'
+import { ThemedButton, ThemedText } from '../../components/ThemedComponents'
 import { UserSettings } from '../../utils/UserSettings'
+import { IntroStackParamList } from './IntroScreen'
 
 type Props = {
     navigation: NativeStackNavigationProp<IntroStackParamList, 'WelcomeScreen'>
@@ -33,9 +33,8 @@ export const WelcomeScreen = ({ navigation, route }: Props) => {
 
             <View style={{ flex: 1 }} />
 
-            <TouchableOpacity hitSlop={0} activeOpacity={0.7} style={styles.buttonStyle} onPress={handleContinueClick}>
-                <ThemedText style={styles.buttonTextStyle}>Continue</ThemedText>
-            </TouchableOpacity>
+            <ThemedButton title="Continue" filled={true} onPress={handleContinueClick} />
+            <View style={{ height: 40 }} />
         </RootView>
     )
 }
@@ -57,20 +56,5 @@ const welcomeStyles = (theme: typeof appTheme) =>
             textAlign: 'center',
             marginTop: 20,
             fontSize: 17,
-        },
-        buttonStyle: {
-            borderRadius: 15,
-            flexDirection: 'row',
-            backgroundColor: theme.color.primary_color,
-            marginHorizontal: 7,
-            marginTop: 35,
-            marginBottom: 60,
-        },
-        buttonTextStyle: {
-            padding: 15,
-            fontSize: 18,
-            flex: 1,
-            textAlign: 'center',
-            color: 'white',
         },
     })

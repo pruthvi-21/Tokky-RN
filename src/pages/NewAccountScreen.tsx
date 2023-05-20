@@ -7,7 +7,7 @@ import useTheme, { appTheme } from '../Theming'
 import { FormField } from '../components/FormField'
 import PickerDial from '../components/PickerDial'
 import RootView from '../components/RootView'
-import { ThemedText } from '../components/ThemedComponents'
+import { ThemedButton, ThemedText } from '../components/ThemedComponents'
 import { addAccount } from '../data/action'
 import DB from '../database/AccountsDB'
 import Account from '../models/Account'
@@ -158,9 +158,7 @@ export default function NewAccountScreen({ navigation }: AddAccountScreenProps) 
                     </View>
                 </ScrollView>
             </KeyboardAvoidingView>
-            <TouchableOpacity activeOpacity={0.7} style={styles.buttonStyle} onPress={createAccount}>
-                <ThemedText style={styles.buttonTextStyle}>Done</ThemedText>
-            </TouchableOpacity>
+            <ThemedButton title="Done" filled={true} onPress={createAccount} />
         </RootView>
     )
 }
@@ -191,20 +189,5 @@ const pageStyles = (theme: typeof appTheme) =>
             color: theme.color.text_color_secondary,
             marginTop: 10,
             textAlign: 'center',
-        },
-        buttonStyle: {
-            borderRadius: 15,
-            flexDirection: 'row',
-            backgroundColor: theme.color.primary_color,
-            marginHorizontal: 7,
-            marginTop: 15,
-            marginBottom: 20,
-        },
-        buttonTextStyle: {
-            padding: 15,
-            fontSize: 18,
-            flex: 1,
-            textAlign: 'center',
-            color: 'white',
         },
     })
