@@ -89,7 +89,6 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
     }
 
     const setResult = (idx: number) => {
-        setBottomSheetVisible(false)
         switch (idx) {
             case 0:
                 break
