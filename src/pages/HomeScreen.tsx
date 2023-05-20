@@ -100,7 +100,7 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
 
     const handleEditItem = (id: string) => {
         const account = content.find(item => item?.id === id)
-        if (account != undefined) navigation.navigate('EditAccountScreen', { account: account })
+        if (account != undefined) navigation.navigate('UpdateAccountScreen', { account: account })
     }
 
     const handleDeleteItem = (id: string) => {

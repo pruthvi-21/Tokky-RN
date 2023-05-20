@@ -8,7 +8,7 @@ import SafeArea from './src/components/SafeArea'
 import { store } from './src/data/store'
 import Account from './src/models/Account'
 import { AuthScreen } from './src/pages/AuthScreen'
-import EditAccountScreen from './src/pages/EditAccountScreen'
+import UpdateAccountScreen from './src/pages/UpdateAccountScreen'
 import HomeScreen from './src/pages/HomeScreen'
 import NewAccountScreen from './src/pages/NewAccountScreen'
 import SettingsScreen from './src/pages/SettingsScreen'
@@ -18,7 +18,7 @@ export type RootStackParamList = {
     HomeScreen: undefined
     IntroScreen: undefined
     NewAccountScreen: undefined
-    EditAccountScreen: { account: Account }
+    UpdateAccountScreen: { account: Account }
     SettingsScreen: undefined
 }
 
@@ -76,8 +76,8 @@ export default function App() {
                                 }}
                             />
                             <Stack.Screen
-                                name="EditAccountScreen"
-                                component={EditAccountScreen}
+                                name="UpdateAccountScreen"
+                                component={UpdateAccountScreen}
                                 options={{
                                     headerTitle: 'Update account',
                                     headerStyle: styles.headerStyleModal,

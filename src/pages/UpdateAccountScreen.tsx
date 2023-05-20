@@ -13,11 +13,11 @@ import DB from '../database/AccountsDB'
 import Account from '../models/Account'
 
 type Props = {
-    navigation: NativeStackNavigationProp<RootStackParamList, 'EditAccountScreen'>
-    route: RouteProp<RootStackParamList, 'EditAccountScreen'>
+    navigation: NativeStackNavigationProp<RootStackParamList, 'UpdateAccountScreen'>
+    route: RouteProp<RootStackParamList, 'UpdateAccountScreen'>
 }
 
-export default function EditAccountScreen({ navigation, route }: Props) {
+export default function UpdateAccountScreen({ navigation, route }: Props) {
     const account: Account = route.params.account
 
     const [issuer, setIssuer] = useState<string>(account.issuer)
