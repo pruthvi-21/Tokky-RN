@@ -1,12 +1,10 @@
 import { useFocusEffect } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import { BottomSheet, ListItem } from '@rneui/themed'
 import React, { useEffect, useState } from 'react'
 import { ActionSheetIOS, Alert, BackHandler, ScrollView, StyleSheet, View } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootStackParamList } from '../../App'
 import useTheme, { appTheme } from '../Theming'
-import { isAndroid, isIOS } from '../utils/Utils'
 import AccountsContainer from '../components/AccountsContainer'
 import FAB from '../components/HomeFAB'
 import RootView from '../components/RootView'
@@ -25,7 +23,6 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
     const theme = useTheme()
     const styles = homeStyles(theme)
 
-    const [bottomSheetVisible, setBottomSheetVisible] = useState(false)
     const [inEditMode, enableEditMode] = useState(false)
 
     const dispatch = useDispatch()
@@ -80,29 +77,15 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
         }, [inEditMode]),
     )
 
-    const androidList = [
-        { title: fabActions[0], onPress: () => setResult(0) },
-        { title: fabActions[1], onPress: () => setResult(1) },
-        {
-            title: fabActions[2],
-            containerStyle: { backgroundColor: theme.color.danger_color },
-            titleStyle: { color: 'white' },
-            onPress: () => setResult(2),
-        },
-    ]
-
     const handleFabClick = () => {
-        isIOS() &&
-            ActionSheetIOS.showActionSheetWithOptions(
-                {
-                    options: [...fabActions],
-                    cancelButtonIndex: 2,
-                    tintColor: theme.color.primary_color,
-                },
-                setResult,
-            )
-
-        isAndroid() && setBottomSheetVisible(true)
+        ActionSheetIOS.showActionSheetWithOptions(
+            {
+                options: [...fabActions],
+                cancelButtonIndex: 2,
+                tintColor: theme.color.primary_color,
+            },
+            setResult,
+        )
     }
 
     const setResult = (idx: number) => {
@@ -142,16 +125,6 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
 
     return (
         <RootView>
-            {isAndroid() && (
-                <BottomSheet modalProps={{}} isVisible={bottomSheetVisible} onBackdropPress={() => setBottomSheetVisible(false)}>
-                    {androidList.map((item, i) => (
-                        <ListItem key={i} containerStyle={item.containerStyle} onPress={item.onPress}>
-                            <ListItem.Title style={item.titleStyle}>{item.title}</ListItem.Title>
-                        </ListItem>
-                    ))}
-                </BottomSheet>
-            )}
-
             {content.length != 0 && (
                 <ScrollView contentInsetAdjustmentBehavior="automatic">
                     <AccountsContainer
