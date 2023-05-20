@@ -26,7 +26,7 @@ export default function NewAccountScreen({ navigation }: AddAccountScreenProps) 
 
     const [algo, setAlgo] = useState<string>('sha1')
     const [digits, setDigits] = useState<number>(DEFAULT_DIGITS)
-    const [period, setPeriod] = useState<number>(DEFAULT_PERIOD)
+    const [period, setPeriod] = useState<string>(DEFAULT_PERIOD + '')
 
     const theme = useTheme()
     const styles = pageStyles(theme)
@@ -64,7 +64,7 @@ export default function NewAccountScreen({ navigation }: AddAccountScreenProps) 
             if (algo == 'sha256') algoType = 'SHA-256'
             if (algo == 'sha512') algoType = 'SHA-512'
 
-            const newAccount = Account.createAccount(issuer, label, secretKeyHex, algoType, digits, period)
+            const newAccount = Account.createAccount(issuer, label, secretKeyHex, algoType, digits, parseInt(period))
 
             try {
                 const rowId = await DB.insert(newAccount)
@@ -151,7 +151,9 @@ export default function NewAccountScreen({ navigation }: AddAccountScreenProps) 
                             style={styles.textInputStyle}
                             label="Period"
                             placeholder="Period"
-                            onChangeText={value => setPeriod(parseInt(value))}
+                            value={period}
+                            inputMode="numeric"
+                            onChangeText={value => setPeriod(value)}
                         />
                     </View>
                 </ScrollView>
