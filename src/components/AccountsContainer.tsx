@@ -1,23 +1,24 @@
 import { useCallback, useEffect, useState } from 'react'
 import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import Accordion from 'react-native-collapsible/Accordion'
+import { ContextMenuView } from 'react-native-ios-context-menu'
 import useTheme, { appTheme } from '../Theming'
 import Account from '../models/Account'
-import { IconButton, ThemedText } from './ThemedComponents'
 import OTPView from './OTPView'
+import { IconButton, ThemedText } from './ThemedComponents'
 import { useFocusEffect } from '@react-navigation/native'
 
 type Props = {
-    inEditMode: boolean
     list: Account[]
     editAccountCallback: (id: string) => void
     deleteAccountCallback: (id: string) => void
 }
 
-export default function AccountsContainer({ inEditMode, list, editAccountCallback, deleteAccountCallback }: Props) {
+export default function AccountsContainer({ list, editAccountCallback, deleteAccountCallback }: Props) {
     const theme = useTheme()
     const styles = cardStyles(theme)
     const [activeSections, setActiveSections] = useState<number[]>([])
+    const [isContextMenuVisible, setIsContextMenuVisible] = useState<boolean>(false)
 
     useFocusEffect(
         useCallback(() => {
@@ -25,33 +26,65 @@ export default function AccountsContainer({ inEditMode, list, editAccountCallbac
             return () => {
                 setActiveSections([])
             }
-        }, [inEditMode]),
+        }, []),
     )
 
     const renderHeader = (content: Account, index: number, isActive: boolean) => {
         return (
-            <View style={[styles.listItemWrapper, { borderTopWidth: index == 0 ? 0 : 1 }]}>
-                <View style={[styles.listItemContainer]}>
-                    <View style={styles.preview} />
-                    <View style={styles.titleContainer}>
-                        <ThemedText style={styles.issuerTextStyle}>{content?.issuer}</ThemedText>
-                        {content.label.length !== 0 && (
-                            <ThemedText style={styles.labelTextStyle} type="secondary">
-                                {content.label}
-                            </ThemedText>
+            <ContextMenuView
+                shouldWaitForMenuToHideBeforeFiringOnPressMenuItem={false}
+                onPressMenuItem={event => {
+                    switch (event.nativeEvent.actionKey) {
+                        case 'key-menu-edit':
+                            editAccountCallback(list[index].id)
+                            return
+                        case 'key-menu-delete':
+                            deleteAccountCallback(list[index].id)
+                    }
+                }}
+                onMenuWillShow={() => {
+                    setIsContextMenuVisible(true)
+                }}
+                onMenuWillHide={() => {
+                    setIsContextMenuVisible(false)
+                }}
+                menuConfig={{
+                    menuTitle: '',
+                    menuItems: [
+                        {
+                            actionKey: 'key-menu-edit',
+                            actionTitle: 'Edit',
+                        },
+                        {
+                            actionKey: 'key-menu-delete',
+                            actionTitle: 'Delete Account',
+                            menuAttributes: ['destructive'],
+                            icon: {
+                                iconType: 'SYSTEM',
+                                iconValue: 'trash',
+                            },
+                        },
+                    ],
+                }}>
+                <View style={[styles.listItemWrapper, { borderTopWidth: isContextMenuVisible ? 0 : index == 0 ? 0 : 1 }]}>
+                    <View style={[styles.listItemContainer]}>
+                        <View style={styles.preview} />
+                        <View style={styles.titleContainer}>
+                            <ThemedText style={styles.issuerTextStyle}>{content?.issuer}</ThemedText>
+                            {content.label.length !== 0 && (
+                                <ThemedText style={styles.labelTextStyle} type="secondary">
+                                    {content.label}
+                                </ThemedText>
+                            )}
+                        </View>
+                        {!isContextMenuVisible && (
+                            <View style={{ transform: [{ rotateZ: isActive ? '180deg' : '0deg' }] }}>
+                                <IconButton style={styles.iconArrow} icon="down-arrow" />
+                            </View>
                         )}
                     </View>
-                    {!inEditMode && (
-                        <View style={{ transform: [{ rotateZ: isActive ? '180deg' : '0deg' }] }}>
-                            <IconButton style={styles.iconArrow} icon="down-arrow" />
-                        </View>
-                    )}
-                    {inEditMode && <IconButton style={styles.iconEdit} icon="edit" onPress={() => editAccountCallback(list[index].id)} />}
-                    {inEditMode && (
-                        <IconButton style={styles.iconDelete} icon="delete" onPress={() => deleteAccountCallback(list[index].id)} />
-                    )}
                 </View>
-            </View>
+            </ContextMenuView>
         )
     }
 
@@ -64,7 +97,7 @@ export default function AccountsContainer({ inEditMode, list, editAccountCallbac
             <Accordion
                 activeSections={activeSections}
                 sections={list}
-                touchableComponent={inEditMode ? View : TouchableOpacity}
+                touchableComponent={TouchableOpacity}
                 touchableProps={{ activeOpacity: 1 }}
                 expandMultiple={false}
                 renderHeader={renderHeader}

@@ -1,18 +1,17 @@
-import { useFocusEffect } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import React, { useEffect, useState } from 'react'
-import { ActionSheetIOS, Alert, BackHandler, ScrollView, StyleSheet, View } from 'react-native'
+import React, { useEffect } from 'react'
+import { ActionSheetIOS, Alert, ScrollView, StyleSheet, Text, View } from 'react-native'
+import { ContextMenuButton } from 'react-native-ios-context-menu'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootStackParamList } from '../../App'
 import useTheme, { appTheme } from '../Theming'
 import AccountsContainer from '../components/AccountsContainer'
 import FAB from '../components/HomeFAB'
 import RootView from '../components/RootView'
-import { ThemedButton, ThemedText } from '../components/ThemedComponents'
+import { IconButton, ThemedText } from '../components/ThemedComponents'
 import { loadAccounts, removeAccount } from '../data/action'
 import { RootState } from '../data/reducers'
 import DB from '../database/AccountsDB'
-import Menu from '../components/Menu'
 import { UserSettings } from '../utils/UserSettings'
 
 type HomeScreenProps = {
@@ -23,14 +22,17 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
     const theme = useTheme()
     const styles = homeStyles(theme)
 
-    const [inEditMode, enableEditMode] = useState(false)
-
     const dispatch = useDispatch()
     const content = useSelector((state: RootState) => state.accounts)
 
     const fabActions = ['Scan QR code', 'Enter Manually', 'Cancel']
 
     useEffect(() => {
+        navigation.setOptions({
+            headerRight: () => <ContextMenu />,
+            headerTitle: 'Tokky',
+        })
+
         if (!UserSettings.isAppIntroDone()) {
             navigation.navigate('IntroScreen')
         }
@@ -43,39 +45,34 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
             })
     }, [])
 
-    const menuItems = [
-        { title: 'Edit accounts', callback: () => enableEditMode(true) },
-        { title: 'Settings', callback: () => navigation.navigate('SettingsScreen') },
-    ]
-
-    useEffect(() => {
-        navigation.setOptions({
-            headerRight: () => (
-                <View style={[styles.toolbarContainer]}>
-                    {!inEditMode && <Menu menuItems={menuItems} />}
-                    {inEditMode && <ThemedButton title="Done" onPress={() => enableEditMode(false)} />}
-                </View>
-            ),
-            headerTitle: !inEditMode ? 'Tokky' : 'Edit Accounts',
-        })
-    }, [inEditMode])
-
-    //Listen to Back button. if inEditMode = true, then set to false
-    useFocusEffect(
-        React.useCallback(() => {
-            const onBackPress = () => {
-                if (inEditMode) {
-                    enableEditMode(false)
-                    return true
-                }
-                return false
-            }
-
-            BackHandler.addEventListener('hardwareBackPress', onBackPress)
-
-            return () => BackHandler.removeEventListener('hardwareBackPress', onBackPress)
-        }, [inEditMode]),
-    )
+    function ContextMenu() {
+        return (
+            <ContextMenuButton
+                isMenuPrimaryAction={true}
+                onPressMenuItem={event => {
+                    switch (event.nativeEvent.actionKey) {
+                        case 'key-menu-settings':
+                            navigation.navigate('SettingsScreen')
+                            return
+                    }
+                }}
+                menuConfig={{
+                    menuTitle: '',
+                    menuItems: [
+                        {
+                            actionKey: 'key-menu-settings',
+                            actionTitle: 'Settings',
+                            icon: {
+                                iconType: 'SYSTEM',
+                                iconValue: 'gear',
+                            },
+                        },
+                    ],
+                }}>
+                <IconButton icon="overflow-menu" style={styles.iconOverflowMenu} />
+            </ContextMenuButton>
+        )
+    }
 
     const handleFabClick = () => {
         ActionSheetIOS.showActionSheetWithOptions(
@@ -126,12 +123,7 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
         <RootView>
             {content.length != 0 && (
                 <ScrollView contentInsetAdjustmentBehavior="automatic">
-                    <AccountsContainer
-                        inEditMode={inEditMode}
-                        list={content}
-                        editAccountCallback={handleEditItem}
-                        deleteAccountCallback={handleDeleteItem}
-                    />
+                    <AccountsContainer list={content} editAccountCallback={handleEditItem} deleteAccountCallback={handleDeleteItem} />
                 </ScrollView>
             )}
 
@@ -148,7 +140,7 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
                 </View>
             )}
 
-            {!inEditMode && <FAB onPress={handleFabClick} />}
+            <FAB onPress={handleFabClick} />
         </RootView>
     )
 }
@@ -169,11 +161,15 @@ const homeStyles = (theme: typeof appTheme) =>
             alignItems: 'center',
             justifyContent: 'flex-end',
         },
-
         iconAddIOS: {
             width: 36,
             height: 36,
             color: theme.color.primary_color,
             marginStart: 8,
+        },
+        iconOverflowMenu: {
+            width: 22.5,
+            height: 22.5,
+            color: theme.color.primary_color,
         },
     })
