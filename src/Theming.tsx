@@ -41,8 +41,8 @@ export const appThemeDark = {
         text_color_disabled: '#615F5B',
         divider_color: '#2a2a2c',
         danger_color: '#ff443a',
-        menu_bg: '#2A2A2A',
-        menu_divider: '#3D3D3E',
+        menu_bg: '#202020',
+        menu_divider: '#3D3D3E99',
         modal: {
             bg: '#1c1c1e',
             bg_variant: '#2c2c2e',
