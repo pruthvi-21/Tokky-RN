@@ -1,7 +1,7 @@
 import React, { ReactNode, useState } from 'react'
-import { ScrollView, StyleSheet, Switch, SwitchProps, View } from 'react-native'
+import { ScrollView, StyleSheet, Switch, SwitchProps, TouchableOpacity, TouchableOpacityProps, View, ViewProps } from 'react-native'
 import useTheme, { appTheme } from '../Theming'
-import { ThemedText } from './ThemedComponents'
+import { IconButton, ThemedText } from './ThemedComponents'
 
 type PreferenceScreenProps = {
     children?: ReactNode | undefined
@@ -10,6 +10,12 @@ type PreferenceScreenProps = {
 type PreferenceCategoryProps = {
     title?: string
     children?: ReactNode | undefined
+}
+
+interface PreferenceProps extends TouchableOpacityProps {
+    title: string
+    summary?: string
+    displayArrowAtEnd?: boolean
 }
 
 interface SwitchPreferenceProps extends SwitchProps {
@@ -54,6 +60,22 @@ export function PreferenceDivider() {
     return <View style={styles.preferenceDivider} />
 }
 
+export function Preference(props: PreferenceProps) {
+    const { title, summary, ...viewProps } = props
+    const theme = useTheme()
+    const styles = preferenceStyles(theme)
+
+    return (
+        <TouchableOpacity style={[styles.preferenceStyle, viewProps.disabled && styles.disabled]} {...viewProps}>
+            <ThemedText style={[styles.preferenceTitleStyle]}>{title}</ThemedText>
+            {summary && <ThemedText style={{ color: theme.color.text_color_secondary }}>{summary}</ThemedText>}
+            {props.displayArrowAtEnd == true && (
+                <IconButton icon="chevron-right" style={{ width: 20, height: 20, color: theme.color.text_color_secondary }} />
+            )}
+        </TouchableOpacity>
+    )
+}
+
 export function SwitchPreference(props: SwitchPreferenceProps) {
     const { title, summary, ...switchProps } = props
     const theme = useTheme()
@@ -66,15 +88,13 @@ export function SwitchPreference(props: SwitchPreferenceProps) {
     }
 
     return (
-        <View style={styles.preferenceStyle}>
+        <TouchableOpacity style={[styles.preferenceStyle, props.disabled && styles.disabled]} activeOpacity={1} disabled={props.disabled}>
             <View>
-                <ThemedText style={[styles.preferenceTitleStyle, props.disabled && styles.preferenceTitleDisabledStyle]}>
-                    {title}
-                </ThemedText>
+                <ThemedText style={styles.preferenceTitleStyle}>{title}</ThemedText>
                 {summary && <ThemedText style={{ color: theme.color.text_color_secondary }}>{summary}</ThemedText>}
             </View>
             <Switch onValueChange={toggleSwitch} value={isEnabled} {...switchProps} />
-        </View>
+        </TouchableOpacity>
     )
 }
 
@@ -107,8 +127,8 @@ const preferenceStyles = (theme: typeof appTheme) => {
             fontSize: 17,
             color: theme.color.text_color_primary,
         },
-        preferenceTitleDisabledStyle: {
-            color: theme.color.text_color_disabled,
+        disabled: {
+            opacity: 0.4,
         },
         preferenceDivider: {
             height: 0.5,

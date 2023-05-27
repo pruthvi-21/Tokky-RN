@@ -11,7 +11,6 @@ export const appTheme = {
         text_color_primary: '#040404',
         text_color_secondary: '#85858A',
         text_color_hint: '#8c8c8c',
-        text_color_disabled: '#9a9994',
         divider_color: '#e7e7e7',
         danger_color: '#ff3d31',
         menu_bg: '#F5F6F5',
@@ -21,9 +20,10 @@ export const appTheme = {
             bg_variant: '#ffffff',
             bg_variant2: '#e1e1e1',
         },
-        preferences:{
-            category_title: '#939393'
-        }
+        preferences: {
+            category_title: '#939393',
+        },
+        keypad_btn_bg: '#E4E4E4',
     },
 }
 
@@ -38,7 +38,6 @@ export const appThemeDark = {
         text_color_primary: '#ffffff',
         text_color_secondary: '#A6a6a6',
         text_color_hint: '#939393',
-        text_color_disabled: '#615F5B',
         divider_color: '#2a2a2c',
         danger_color: '#ff443a',
         menu_bg: '#202020',
@@ -48,9 +47,10 @@ export const appThemeDark = {
             bg_variant: '#2c2c2e',
             bg_variant2: '#353536',
         },
-        preferences:{
-            category_title: '#7C7C81'
-        }
+        preferences: {
+            category_title: '#7C7C81',
+        },
+        keypad_btn_bg: '#191919',
     },
 }
 
