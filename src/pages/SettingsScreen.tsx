@@ -4,6 +4,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { RootStackParamList } from '../../App'
 import { Preference, PreferenceCategory, PreferenceScreen, SwitchPreference } from '../components/PreferenceComponents'
 import RootView from '../components/RootView'
+import { IconButton } from '../components/ThemedComponents'
 import { Biometrics, BiometricsEnrolledResult } from '../utils/BiometryUtils'
 import { PINChangeModes } from '../utils/Constants'
 import { UserSettings } from '../utils/UserSettings'
@@ -70,8 +71,10 @@ export default function SettingsScreen({ navigation }: Props) {
     return (
         <RootView>
             <PreferenceScreen>
-                <PreferenceCategory>
+                <PreferenceCategory footer={appLockChecked ? 'Please turn off and turn on the app lock in order to change the pin.' : ''}>
                     <SwitchPreference title="Enable App Lock" value={appLockChecked} onValueChange={handleAppLockChange} />
+                </PreferenceCategory>
+                <PreferenceCategory>
                     <SwitchPreference
                         title={'Unlock with ' + getBiometricsPreferenceTitle()}
                         value={biometricsChecked}
