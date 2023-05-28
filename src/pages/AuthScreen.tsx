@@ -1,14 +1,14 @@
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import React, { useEffect, useState } from 'react'
-import { ActivityIndicator, Alert, Modal, StyleSheet, TouchableOpacity, View } from 'react-native'
+import { ActivityIndicator, Alert, Modal, StyleSheet } from 'react-native'
 import { RootStackParamList } from '../../App'
 import useTheme, { appTheme } from '../Theming'
 import Dialpad from '../components/Dialpad'
 import PINDotIndicator from '../components/PINDotIndicator'
 import RootView from '../components/RootView'
 import { ThemedButton, ThemedText } from '../components/ThemedComponents'
-import { Biometrics, BiometricsEnrolledResult, BiometryType } from '../utils/BiometryUtils'
-import { ENC_KEY, PIN_HASH } from '../utils/Constants'
+import { Biometrics, BiometricsEnrolledResult } from '../utils/BiometryUtils'
+import { PIN_HASH } from '../utils/Constants'
 import { hashPasscode } from '../utils/CryptoUtils'
 import { KeychainManager } from '../utils/KeychainManager'
 import { UserSettings } from '../utils/UserSettings'
@@ -32,6 +32,11 @@ export const AuthScreen = ({ navigation }: Props) => {
         } else {
             Biometrics.enrolled().then((result: BiometricsEnrolledResult) => {
                 setBiometrics(result)
+                if (result.isAvailable && UserSettings.isPromptBiometricsOnStartEnabled()) {
+                    Biometrics.authenticate('Authenticate to access Tokky').then(result => {
+                        if (result.success) gotoHome()
+                    })
+                }
             })
         }
     }, [])

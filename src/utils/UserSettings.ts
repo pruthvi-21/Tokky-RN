@@ -1,5 +1,5 @@
 import { Settings } from 'react-native'
-import { KEY_APP_INTRO_DONE, KEY_SETTINGS_APP_LOCK, KEY_SETTINGS_BIOMETRICS } from './Constants'
+import { KEY_APP_INTRO_DONE, KEY_SETTINGS_APP_LOCK, KEY_SETTINGS_BIOMETRICS, KEY_SETTINGS_PROMPT_BIOMETRICS_ON_START } from './Constants'
 
 export class UserSettings {
     static get(key: string, defaultValue: any) {
@@ -28,6 +28,14 @@ export class UserSettings {
 
     static setBiometricsEnabled(value: boolean) {
         this.set(KEY_SETTINGS_BIOMETRICS, value)
+    }
+
+    static isPromptBiometricsOnStartEnabled(): boolean {
+        return this.get(KEY_SETTINGS_PROMPT_BIOMETRICS_ON_START, false) == 1
+    }
+
+    static setPromptBiometricsOnStartEmabled(value: boolean) {
+        this.set(KEY_SETTINGS_PROMPT_BIOMETRICS_ON_START, value)
     }
 
     static isAppIntroDone(): boolean {

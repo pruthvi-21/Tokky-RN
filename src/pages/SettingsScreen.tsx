@@ -2,9 +2,8 @@ import { useFocusEffect } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import React, { useCallback, useEffect, useState } from 'react'
 import { RootStackParamList } from '../../App'
-import { Preference, PreferenceCategory, PreferenceScreen, SwitchPreference } from '../components/PreferenceComponents'
+import { PreferenceCategory, PreferenceScreen, SwitchPreference } from '../components/PreferenceComponents'
 import RootView from '../components/RootView'
-import { IconButton } from '../components/ThemedComponents'
 import { Biometrics, BiometricsEnrolledResult } from '../utils/BiometryUtils'
 import { PINChangeModes } from '../utils/Constants'
 import { UserSettings } from '../utils/UserSettings'
@@ -18,8 +17,8 @@ export default function SettingsScreen({ navigation }: Props) {
 
     const [appLockChecked, setAppLockChecked] = useState<boolean>(UserSettings.isAppLockEnabled())
     const [biometricsChecked, setBiometricsChecked] = useState<boolean>(UserSettings.isBiometricsEnabled())
+    const [promptBiometricsOnStart, setPromptBiometricsOnStart] = useState(UserSettings.isPromptBiometricsOnStartEnabled())
 
-    const [pinChangeDisabled, setPinChangeDisabled] = useState(false)
     const [biometricsDisabled, setBiometricsDisabled] = useState(false)
 
     useEffect(() => {
@@ -40,8 +39,6 @@ export default function SettingsScreen({ navigation }: Props) {
     )
 
     useEffect(() => {
-        setPinChangeDisabled(!appLockChecked)
-
         if (!appLockChecked) {
             setBiometricsChecked(false)
             setBiometricsDisabled(true)
@@ -62,6 +59,11 @@ export default function SettingsScreen({ navigation }: Props) {
         setBiometricsChecked(enabled => !enabled)
     }
 
+    function handlePromptBiometricsOnStartChange() {
+        UserSettings.setPromptBiometricsOnStartEmabled(!promptBiometricsOnStart)
+        setPromptBiometricsOnStart(enabled => !enabled)
+    }
+
     function getBiometricsPreferenceTitle() {
         if (biometrics?.biometryType == 'FaceID') return 'Face ID'
         if (biometrics?.biometryType == 'TouchID') return 'Touch ID'
@@ -74,12 +76,20 @@ export default function SettingsScreen({ navigation }: Props) {
                 <PreferenceCategory footer={appLockChecked ? 'Please turn off and turn on the app lock in order to change the pin.' : ''}>
                     <SwitchPreference title="Enable App Lock" value={appLockChecked} onValueChange={handleAppLockChange} />
                 </PreferenceCategory>
-                <PreferenceCategory>
+                <PreferenceCategory
+                    title="Biometrics"
+                    footer={'Enable this to prompt for ' + getBiometricsPreferenceTitle() + ' as soon as you open the app.'}>
                     <SwitchPreference
                         title={'Unlock with ' + getBiometricsPreferenceTitle()}
                         value={biometricsChecked}
                         onValueChange={handleBiometricsChange}
                         disabled={biometricsDisabled}
+                    />
+                    <SwitchPreference
+                        title={getBiometricsPreferenceTitle() + ' prompt on startup'}
+                        value={promptBiometricsOnStart}
+                        onValueChange={handlePromptBiometricsOnStartChange}
+                        disabled={!biometricsChecked || biometricsDisabled}
                     />
                 </PreferenceCategory>
             </PreferenceScreen>
