@@ -1,18 +1,21 @@
 import { useFocusEffect } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import React, { useCallback, useEffect, useState } from 'react'
-import { RootStackParamList } from '../../App'
-import { PreferenceCategory, PreferenceScreen, SwitchPreference } from '../components/PreferenceComponents'
-import RootView from '../components/RootView'
-import { Biometrics, BiometricsEnrolledResult } from '../utils/BiometryUtils'
-import { PINChangeModes } from '../utils/Constants'
-import { UserSettings } from '../utils/UserSettings'
+import { RootStackParamList } from '../../../App'
+import useTheme from '../../Theming'
+import { PreferenceCategory, PreferenceScreen, SwitchPreference } from '../../components/PreferenceComponents'
+import RootView from '../../components/RootView'
+import { Biometrics, BiometricsEnrolledResult } from '../../utils/BiometryUtils'
+import { PINChangeModes } from '../../utils/Constants'
+import { UserSettings } from '../../utils/UserSettings'
+import UISettings from './UISettings'
 
 type Props = {
     navigation: NativeStackNavigationProp<RootStackParamList, 'SettingsScreen'>
 }
 
 export default function SettingsScreen({ navigation }: Props) {
+    const theme = useTheme()
     const [biometrics, setBiometrics] = useState<BiometricsEnrolledResult>()
 
     const [appLockChecked, setAppLockChecked] = useState<boolean>(UserSettings.isAppLockEnabled())
@@ -92,6 +95,8 @@ export default function SettingsScreen({ navigation }: Props) {
                         disabled={!biometricsChecked || biometricsDisabled}
                     />
                 </PreferenceCategory>
+
+                <UISettings />
             </PreferenceScreen>
         </RootView>
     )

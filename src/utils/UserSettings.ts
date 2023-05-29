@@ -1,5 +1,11 @@
 import { Settings } from 'react-native'
-import { KEY_APP_INTRO_DONE, KEY_SETTINGS_APP_LOCK, KEY_SETTINGS_BIOMETRICS, KEY_SETTINGS_PROMPT_BIOMETRICS_ON_START } from './Constants'
+import {
+    KEY_APP_INTRO_DONE,
+    KEY_SETTINGS_APP_LOCK,
+    KEY_SETTINGS_BIOMETRICS,
+    KEY_SETTINGS_PROMPT_BIOMETRICS_ON_START,
+    KEY_SETTINGS_TIMER_INDICATOR,
+} from './Constants'
 
 export class UserSettings {
     static get(key: string, defaultValue: any) {
@@ -44,5 +50,13 @@ export class UserSettings {
 
     static setAppIntroDone(value: boolean) {
         this.set(KEY_APP_INTRO_DONE, value)
+    }
+
+    static getTimerIndicator(): number {
+        return this.get(KEY_SETTINGS_TIMER_INDICATOR, 1)
+    }
+
+    static setTimerIndicator(value: number) {
+        this.set(KEY_SETTINGS_TIMER_INDICATOR, value)
     }
 }

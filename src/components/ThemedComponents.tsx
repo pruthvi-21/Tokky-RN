@@ -25,7 +25,7 @@ interface ThemedButtonProps extends ButtonProps {
 }
 
 interface IconButtonProps extends TouchableOpacityProps {
-    icon: 'add' | 'edit' | 'delete' | 'down-arrow' | 'overflow-menu' | 'close' | 'chevron-right' | 'keypad-delete'
+    icon: 'add' | 'edit' | 'delete' | 'down-arrow' | 'overflow-menu' | 'close' | 'chevron-right' | 'keypad-delete' | 'chevron-up-down'
     style?: StyleProp<TextStyle> | undefined
 }
 
@@ -171,6 +171,23 @@ export const IconButton = ({ icon, ...props }: IconButtonProps) => {
         )
     }
 
+    const IconChevronUpDown = () => {
+        return (
+            <Svg
+                width={width}
+                height={height}
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke={color}
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round">
+                <Path d="M7 15l5 5 5-5" />
+                <Path d="M7 9l5-5 5 5" />
+            </Svg>
+        )
+    }
+
     const Wrapper = (props: any) => {
         if (props.onPress) return <TouchableOpacity {...props}>{props.children}</TouchableOpacity>
         else return <View {...props}>{props.children}</View>
@@ -186,6 +203,7 @@ export const IconButton = ({ icon, ...props }: IconButtonProps) => {
             {icon == 'close' && <IconClose />}
             {icon == 'chevron-right' && <IconChevronRight />}
             {icon == 'keypad-delete' && <IconKeypadDelete />}
+            {icon == 'chevron-up-down' && <IconChevronUpDown />}
         </Wrapper>
     )
 }

@@ -15,6 +15,7 @@ type PreferenceCategoryProps = {
 
 interface PreferenceProps extends TouchableOpacityProps {
     title: string
+    value?: string
     widget?: ReactNode
 }
 
@@ -61,13 +62,14 @@ export function PreferenceDivider() {
 }
 
 export function Preference(props: PreferenceProps) {
-    const { title, widget, ...viewProps } = props
+    const { title, value, widget, ...viewProps } = props
     const theme = useTheme()
     const styles = preferenceStyles(theme)
 
     return (
         <TouchableOpacity style={[styles.preferenceStyle, viewProps.disabled && styles.disabled]} {...viewProps}>
             <ThemedText style={[styles.preferenceTitleStyle]}>{title}</ThemedText>
+            <ThemedText style={styles.preferenceValueStyle}>{value}</ThemedText>
             <View>{widget}</View>
         </TouchableOpacity>
     )
@@ -122,6 +124,11 @@ const preferenceStyles = (theme: typeof appTheme) => {
             fontSize: 17,
             color: theme.color.text_color_primary,
             flex: 1,
+        },
+        preferenceValueStyle: {
+            color: theme.color.text_color_secondary,
+            fontSize: 15.5,
+            marginEnd: 5,
         },
         disabled: {
             opacity: 0.4,
