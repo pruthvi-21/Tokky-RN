@@ -1,5 +1,5 @@
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { ActionSheetIOS, Alert, ScrollView, StyleSheet, Text, View } from 'react-native'
 import { ContextMenuButton } from 'react-native-ios-context-menu'
 import { useDispatch, useSelector } from 'react-redux'
@@ -22,10 +22,10 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
     const theme = useTheme()
     const styles = homeStyles(theme)
 
+    const [isDataLoaded, setIsDataLoaded] = useState(false)
+
     const dispatch = useDispatch()
     const content = useSelector((state: RootState) => state.accounts)
-
-    const fabActions = ['Scan QR code', 'Enter Manually', 'Cancel']
 
     useEffect(() => {
         navigation.setOptions({
@@ -39,6 +39,7 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
         DB.getAll()
             .then(data => {
                 dispatch(loadAccounts(data))
+                setIsDataLoaded(true)
             })
             .catch(err => {
                 console.log('Error fetching data ' + err)
@@ -77,7 +78,7 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
     const handleFabClick = () => {
         ActionSheetIOS.showActionSheetWithOptions(
             {
-                options: [...fabActions],
+                options: ['Scan QR code', 'Enter Manually', 'Cancel'],
                 cancelButtonIndex: 2,
                 tintColor: theme.color.primary_color,
             },
@@ -121,13 +122,13 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
 
     return (
         <RootView>
-            {content.length != 0 && (
+            {isDataLoaded && content.length != 0 && (
                 <ScrollView contentInsetAdjustmentBehavior="automatic">
                     <AccountsContainer list={content} editAccountCallback={handleEditItem} deleteAccountCallback={handleDeleteItem} />
                 </ScrollView>
             )}
 
-            {content.length == 0 && (
+            {isDataLoaded && content.length == 0 && (
                 <View style={[styles.emptyLayoutContainer]}>
                     <ThemedText>No accounts added</ThemedText>
                     <ThemedText style={{ marginTop: 5 }}>
