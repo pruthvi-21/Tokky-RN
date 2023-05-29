@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import useTheme, { appTheme } from '../../Theming'
 import BottomSheet from '../../components/BottomSheet'
-import { Preference, PreferenceCategory } from '../../components/PreferenceComponents'
+import { Preference, PreferenceCategory, SwitchPreference } from '../../components/PreferenceComponents'
 import { IconButton, ThemedText } from '../../components/ThemedComponents'
 import Timer from '../../components/Timer'
 import { TimerIndicatorType } from '../../utils/Constants'
@@ -20,6 +20,8 @@ function UISettings() {
 
     const [isVisible, setIsVisible] = useState(false)
     const [activeIndex, setActiveIndex] = useState(UserSettings.getTimerIndicator())
+
+    const [isThumbnailsDisplayed, setIsThumbnailsDisplayed] = useState(UserSettings.isThumbnailDisplayed())
 
     useEffect(() => {
         UserSettings.setTimerIndicator(activeIndex)
@@ -52,6 +54,14 @@ function UISettings() {
                 </View>
             </BottomSheet>
 
+            <SwitchPreference
+                title="Display Thumbnails"
+                value={isThumbnailsDisplayed}
+                onValueChange={val => {
+                    setIsThumbnailsDisplayed(val)
+                    UserSettings.setDisplayThumbnail(val)
+                }}
+            />
             <Preference
                 title="Timer indicator"
                 value={timerIndicatorValues[activeIndex].name}

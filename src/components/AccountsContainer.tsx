@@ -7,6 +7,7 @@ import Account from '../models/Account'
 import OTPView from './OTPView'
 import { IconButton, ThemedText } from './ThemedComponents'
 import { useFocusEffect } from '@react-navigation/native'
+import { UserSettings } from '../utils/UserSettings'
 
 type Props = {
     list: Account[]
@@ -68,7 +69,7 @@ export default function AccountsContainer({ list, editAccountCallback, deleteAcc
                 }}>
                 <View style={[styles.listItemWrapper, { borderTopWidth: isContextMenuVisible ? 0 : index == 0 ? 0 : 1 }]}>
                     <View style={[styles.listItemContainer]}>
-                        <View style={styles.preview} />
+                        {UserSettings.isThumbnailDisplayed() && <View style={styles.preview} />}
                         <View style={styles.titleContainer}>
                             <ThemedText style={styles.issuerTextStyle}>{content?.issuer}</ThemedText>
                             {content.label.length !== 0 && (

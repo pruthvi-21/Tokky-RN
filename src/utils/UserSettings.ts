@@ -3,6 +3,7 @@ import {
     KEY_APP_INTRO_DONE,
     KEY_SETTINGS_APP_LOCK,
     KEY_SETTINGS_BIOMETRICS,
+    KEY_SETTINGS_DISPLAY_THUMBNAIL,
     KEY_SETTINGS_PROMPT_BIOMETRICS_ON_START,
     KEY_SETTINGS_TIMER_INDICATOR,
 } from './Constants'
@@ -50,6 +51,14 @@ export class UserSettings {
 
     static setAppIntroDone(value: boolean) {
         this.set(KEY_APP_INTRO_DONE, value)
+    }
+
+    static isThumbnailDisplayed() {
+        return this.get(KEY_SETTINGS_DISPLAY_THUMBNAIL, true) == 1
+    }
+
+    static setDisplayThumbnail(value: boolean) {
+        this.set(KEY_SETTINGS_DISPLAY_THUMBNAIL, value)
     }
 
     static getTimerIndicator(): number {
