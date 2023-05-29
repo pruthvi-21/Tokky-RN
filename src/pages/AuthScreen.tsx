@@ -1,6 +1,6 @@
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import React, { useEffect, useState } from 'react'
-import { ActivityIndicator, Alert, Modal, StyleSheet } from 'react-native'
+import { ActivityIndicator, Alert, Modal, StyleSheet, View, useColorScheme } from 'react-native'
 import { RootStackParamList } from '../../App'
 import useTheme, { appTheme } from '../Theming'
 import Dialpad from '../components/Dialpad'
@@ -32,7 +32,7 @@ export const AuthScreen = ({ navigation }: Props) => {
         } else {
             Biometrics.enrolled().then((result: BiometricsEnrolledResult) => {
                 setBiometrics(result)
-                if (result.isAvailable && UserSettings.isPromptBiometricsOnStartEnabled()) {
+                if (result.isAvailable && UserSettings.isBiometricsEnabled() && UserSettings.isPromptBiometricsOnStartEnabled()) {
                     Biometrics.authenticate('Authenticate to access Tokky').then(result => {
                         if (result.success) gotoHome()
                     })
@@ -90,7 +90,13 @@ export const AuthScreen = ({ navigation }: Props) => {
         <RootView style={styles.rootContainer}>
             {isLoading && <Modal transparent={true} />}
             <ThemedText style={styles.title}>Enter your PIN</ThemedText>
-            <ThemedButton title={getBiometricsButtonTitle()} onPress={() => handleUseBiometrics()} />
+            <View style={{ opacity: UserSettings.isBiometricsEnabled() ? 1 : useColorScheme() == 'dark' ? 0.2 : 1 }}>
+                <ThemedButton
+                    title={getBiometricsButtonTitle()}
+                    onPress={() => handleUseBiometrics()}
+                    disabled={!UserSettings.isBiometricsEnabled()}
+                />
+            </View>
             <ActivityIndicator style={{ marginVertical: 5, opacity: isLoading ? 1 : 0 }} color={theme.color.text_color_primary} />
             <PINDotIndicator
                 style={{ marginBottom: 30, marginTop: 10 }}
