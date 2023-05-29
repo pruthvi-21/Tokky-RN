@@ -24,7 +24,7 @@ function FAB(props: TouchableOpacityProps) {
                 style={{
                     width: 30,
                     height: 30,
-                    color: theme.color.text_color_primary,
+                    color: '#ffffff',
                 }}
                 key={'key_add_fab'}
                 icon="add"
