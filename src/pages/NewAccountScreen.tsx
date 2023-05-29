@@ -1,6 +1,6 @@
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import React, { useState } from 'react'
-import { Alert, KeyboardAvoidingView, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { Alert, Button, KeyboardAvoidingView, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native'
 import { useDispatch } from 'react-redux'
 import { RootStackParamList } from '../../App'
 import useTheme, { appTheme } from '../Theming'
@@ -46,6 +46,12 @@ export default function NewAccountScreen({ navigation }: AddAccountScreenProps) 
         { label: '7 digits', value: 7, key: '4' },
         { label: '8 digits', value: 8, key: '5' },
     ]
+
+    useEffect(() => {
+        navigation.setOptions({
+            headerRight: () => <ThemedButton title={'Done'} onPress={createAccount} />,
+        })
+    }, [issuer, label, secretKey, algo, digits, period])
 
     async function createAccount() {
         if (issuer?.length == 0) {
@@ -158,7 +164,6 @@ export default function NewAccountScreen({ navigation }: AddAccountScreenProps) 
                     </View>
                 </ScrollView>
             </KeyboardAvoidingView>
-            <ThemedButton title="Done" filled={true} onPress={createAccount} />
         </RootView>
     )
 }

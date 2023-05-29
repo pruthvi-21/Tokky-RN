@@ -1,13 +1,13 @@
 import { RouteProp } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import React, { useEffect, useState } from 'react'
-import { StatusBar, StyleSheet, TouchableOpacity, View } from 'react-native'
+import { StatusBar, StyleSheet, View } from 'react-native'
 import { useDispatch } from 'react-redux'
 import { RootStackParamList } from '../../App'
 import useTheme, { appTheme } from '../Theming'
 import { FormField } from '../components/FormField'
 import RootView from '../components/RootView'
-import { IconButton, ThemedButton } from '../components/ThemedComponents'
+import { ThemedButton } from '../components/ThemedComponents'
 import { updateAccount } from '../data/action'
 import DB from '../database/AccountsDB'
 import Account from '../models/Account'
@@ -30,11 +30,8 @@ export default function UpdateAccountScreen({ navigation, route }: Props) {
 
     useEffect(() => {
         navigation.setOptions({
-            headerLeft: () => (
-                <TouchableOpacity style={{ padding: 7 }} onPress={() => navigation.goBack()}>
-                    <IconButton style={{ width: 19, height: 19, color: theme.color.text_color_primary }} icon="close" />
-                </TouchableOpacity>
-            ),
+            headerLeft: () => <ThemedButton title="Cancel" onPress={() => navigation.goBack()} />,
+            headerRight: () => <ThemedButton title="Done" onPress={handleSaveBtn} />,
         })
         StatusBar.setBarStyle('light-content', true)
         return () => {
@@ -85,9 +82,6 @@ export default function UpdateAccountScreen({ navigation, route }: Props) {
                 />
             </View>
             <View style={{ flex: 1 }} />
-            <View style={{ marginVertical: 20 }}>
-                <ThemedButton title="Update" filled={true} onPress={handleSaveBtn} />
-            </View>
         </RootView>
     )
 }
