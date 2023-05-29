@@ -1,19 +1,19 @@
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import React, { useEffect, useState } from 'react'
-import { Alert, Button, KeyboardAvoidingView, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native'
+import { Alert, Animated, Button, Easing, KeyboardAvoidingView, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native'
 import { useDispatch } from 'react-redux'
 import { RootStackParamList } from '../../App'
 import useTheme, { appTheme } from '../Theming'
 import { FormField } from '../components/FormField'
 import PickerDial from '../components/PickerDial'
 import RootView from '../components/RootView'
-import { ThemedButton, ThemedText } from '../components/ThemedComponents'
+import { IconButton, ThemedButton, ThemedText } from '../components/ThemedComponents'
 import { addAccount } from '../data/action'
 import DB from '../database/AccountsDB'
 import Account from '../models/Account'
 import { Base32 } from '../utils/Base32'
-import { DEFAULT_DIGITS, DEFAULT_PERIOD, isIOS } from '../utils/Utils'
 import { AlgorithmType } from '../utils/Constants'
+import { DEFAULT_ALGORITHM, DEFAULT_DIGITS, DEFAULT_PERIOD, isIOS } from '../utils/Utils'
 
 type AddAccountScreenProps = {
     navigation: NativeStackNavigationProp<RootStackParamList, 'NewAccountScreen'>
@@ -27,6 +27,9 @@ export default function NewAccountScreen({ navigation }: AddAccountScreenProps) 
     const [algo, setAlgo] = useState<string>('sha1')
     const [digits, setDigits] = useState<number>(DEFAULT_DIGITS)
     const [period, setPeriod] = useState<string>(DEFAULT_PERIOD + '')
+
+    const anim = useState(new Animated.Value(0))[0]
+    const [isAdvLayoutVisible, setIsAdvLayoutVisible] = useState(false)
 
     const theme = useTheme()
     const styles = pageStyles(theme)
@@ -53,6 +56,14 @@ export default function NewAccountScreen({ navigation }: AddAccountScreenProps) 
         })
     }, [issuer, label, secretKey, algo, digits, period])
 
+    useEffect(() => {
+        if (!isAdvLayoutVisible) {
+            setDigits(DEFAULT_DIGITS)
+            setPeriod(DEFAULT_PERIOD + '')
+            setAlgo('sha1')
+        }
+    }, [isAdvLayoutVisible])
+
     async function createAccount() {
         if (issuer?.length == 0) {
             Alert.alert('Error', 'Please enter a issuer name')
@@ -70,6 +81,7 @@ export default function NewAccountScreen({ navigation }: AddAccountScreenProps) 
             if (algo == 'sha256') algoType = 'SHA-256'
             if (algo == 'sha512') algoType = 'SHA-512'
 
+            console.log(issuer, algoType, period, digits)
             const newAccount = Account.createAccount(issuer, label, secretKeyHex, algoType, digits, parseInt(period))
 
             try {
@@ -95,6 +107,17 @@ export default function NewAccountScreen({ navigation }: AddAccountScreenProps) 
         setSecretKey(text)
     }
 
+    function toggleAdvLayout(visible: boolean) {
+        setIsAdvLayoutVisible(visible)
+
+        Animated.timing(anim, {
+            toValue: visible ? 1 : 0,
+            duration: 200,
+            easing: visible ? Easing.out(Easing.ease) : Easing.in(Easing.ease),
+            useNativeDriver: true,
+        }).start()
+    }
+
     function Divider() {
         return <View style={styles.divider} />
     }
@@ -103,65 +126,116 @@ export default function NewAccountScreen({ navigation }: AddAccountScreenProps) 
         <RootView style={[isIOS() && styles.root]}>
             <KeyboardAvoidingView style={{ flex: 1 }} behavior={isIOS() ? 'padding' : undefined}>
                 <ScrollView contentInsetAdjustmentBehavior="automatic">
-                    <View style={{ height: 25 }} />
-                    <View style={{ borderRadius: 11, overflow: 'hidden' }}>
-                        <FormField
-                            style={styles.textInputStyle}
-                            parentStyle={{ marginTop: 30 }}
-                            label="Issuer"
-                            placeholder="Company name"
-                            onChangeText={handleIssuerChange}
-                        />
-                        <Divider />
-                        <FormField
-                            style={styles.textInputStyle}
-                            label="Label"
-                            placeholder="Username or email (Optional)"
-                            onChangeText={handleLabelChange}
-                        />
-                    </View>
-                    <View style={{ borderRadius: 11, overflow: 'hidden', marginTop: 25 }}>
-                        <FormField
-                            style={styles.textInputStyle}
-                            label="Secret Key"
-                            placeholder="Secret Key"
-                            onChangeText={handleSecretKeyChange}
-                        />
+                    <View style={{ backgroundColor: theme.color.bg }}>
+                        <View style={{ height: 25 }} />
+                        <View style={{ borderRadius: 11, overflow: 'hidden' }}>
+                            <FormField
+                                style={styles.textInputStyle}
+                                parentStyle={{ marginTop: 30 }}
+                                label="Issuer"
+                                placeholder="Company name"
+                                onChangeText={handleIssuerChange}
+                            />
+                            <Divider />
+                            <FormField
+                                style={styles.textInputStyle}
+                                label="Label"
+                                placeholder="Username or email (Optional)"
+                                onChangeText={handleLabelChange}
+                            />
+                        </View>
+                        <View style={{ borderRadius: 11, overflow: 'hidden', marginTop: 25 }}>
+                            <FormField
+                                style={styles.textInputStyle}
+                                label="Secret Key"
+                                placeholder="Secret Key"
+                                onChangeText={handleSecretKeyChange}
+                            />
+                        </View>
+
+                        <TouchableOpacity
+                            style={{
+                                borderRadius: 11,
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                justifyContent: 'space-between',
+                                marginTop: 25,
+                                paddingVertical: 15,
+                                backgroundColor: isAdvLayoutVisible ? theme.color.bg_variant2 : theme.color.bg_variant,
+                                paddingHorizontal: 16,
+                                borderBottomRightRadius: isAdvLayoutVisible ? 0 : 11,
+                                borderBottomLeftRadius: isAdvLayoutVisible ? 0 : 11,
+                            }}
+                            activeOpacity={1}
+                            onPress={() => {
+                                toggleAdvLayout(!isAdvLayoutVisible)
+                            }}>
+                            <View style={{ flex: 1 }}>
+                                <ThemedText style={styles.advLayoutTitle}>Advanced Options</ThemedText>
+                                <ThemedText style={styles.advLayoutSummary}>Please do not change these if you are not sure.</ThemedText>
+                            </View>
+                            <Animated.View
+                                style={{
+                                    transform: [
+                                        {
+                                            rotateZ: anim.interpolate({
+                                                inputRange: [0, 1],
+                                                outputRange: ['0deg', '90deg'],
+                                            }),
+                                        },
+                                    ],
+                                }}>
+                                <IconButton style={styles.advLayoutArrow} icon={'chevron-right'} />
+                            </Animated.View>
+                        </TouchableOpacity>
                     </View>
 
-                    <View style={styles.adv_layout_container}>
-                        <ThemedText style={styles.adv_layout_title}>Advanced options</ThemedText>
-                        <ThemedText style={styles.adv_layout_summary}>
-                            Changing these options may cause unexpected consequences. Leave defaults if unsure.
-                        </ThemedText>
-                    </View>
-
-                    <View style={{ borderRadius: 11, overflow: 'hidden' }}>
-                        <PickerDial
-                            title={'Algorithm'}
-                            onValueChange={value => setAlgo(value)}
-                            items={algorithm_options}
-                            value={algo}
-                            fieldValue={algorithm_options.find(item => item.value === algo)!.inputLabel}
-                        />
-                        <Divider />
-                        <PickerDial
-                            title={'Length'}
-                            onValueChange={value => setDigits(value)}
-                            items={digits_options}
-                            value={digits}
-                            fieldValue={digits_options.find(item => item.value === digits)!.label}
-                        />
-                        <Divider />
-                        <FormField
-                            style={styles.textInputStyle}
-                            label="Period"
-                            placeholder="Period"
-                            value={period}
-                            inputMode="numeric"
-                            onChangeText={value => setPeriod(value)}
-                        />
-                    </View>
+                    <Animated.View
+                        style={{
+                            zIndex: -1,
+                            opacity: anim,
+                            transform: [
+                                {
+                                    translateY: anim.interpolate({
+                                        inputRange: [0, 1],
+                                        outputRange: [-170, 0],
+                                    }),
+                                },
+                            ],
+                        }}>
+                        <View
+                            style={{
+                                borderBottomRightRadius: 11,
+                                borderBottomLeftRadius: 11,
+                                overflow: 'hidden',
+                                marginTop: 1,
+                            }}>
+                            <PickerDial
+                                title={'Algorithm'}
+                                onValueChange={value => setAlgo(value)}
+                                items={algorithm_options}
+                                value={algo}
+                                fieldValue={algorithm_options.find(item => item.value === algo)!.inputLabel}
+                            />
+                            <Divider />
+                            <PickerDial
+                                title={'Length'}
+                                onValueChange={value => setDigits(value)}
+                                items={digits_options}
+                                value={digits}
+                                fieldValue={digits_options.find(item => item.value === digits)!.label}
+                            />
+                            <Divider />
+                            <FormField
+                                style={styles.textInputStyle}
+                                label="Period"
+                                placeholder="Period"
+                                value={period}
+                                inputMode="numeric"
+                                onChangeText={value => setPeriod(value)}
+                            />
+                        </View>
+                    </Animated.View>
                 </ScrollView>
             </KeyboardAvoidingView>
         </RootView>
@@ -181,18 +255,17 @@ const pageStyles = (theme: typeof appTheme) =>
             backgroundColor: theme.color.bg_variant,
             borderColor: theme.color.bg_variant2,
         },
-        adv_layout_container: {
-            marginTop: 40,
-            marginBottom: 25,
+        advLayoutTitle: {
+            fontSize: 16,
+            fontWeight: '400',
         },
-        adv_layout_title: {
-            fontSize: 17,
-            fontWeight: 'bold',
-            textAlign: 'center',
-        },
-        adv_layout_summary: {
+        advLayoutSummary: {
             color: theme.color.text_color_secondary,
-            marginTop: 10,
-            textAlign: 'center',
+            marginTop: 3,
+        },
+        advLayoutArrow: {
+            width: 20,
+            height: 20,
+            color: theme.color.text_color_secondary,
         },
     })
