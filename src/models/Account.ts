@@ -69,6 +69,10 @@ export default class Account {
         return this._period
     }
 
+    get name(): string {
+        return this._issuer + ' (' + this._label + ')'
+    }
+
     updateOTP(): Boolean {
         const time = Date.now() / 1000
         const count = Math.floor(time / this.period)

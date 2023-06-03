@@ -1,7 +1,7 @@
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import React, { useEffect, useState } from 'react'
 import { Alert, Animated, Button, Easing, KeyboardAvoidingView, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { RootStackParamList } from '../../App'
 import useTheme, { appTheme } from '../Theming'
 import { FormField } from '../components/FormField'
@@ -9,6 +9,7 @@ import PickerDial from '../components/PickerDial'
 import RootView from '../components/RootView'
 import { IconButton, ThemedButton, ThemedText } from '../components/ThemedComponents'
 import { addAccount } from '../data/action'
+import { RootState } from '../data/reducers'
 import DB from '../database/AccountsDB'
 import Account from '../models/Account'
 import { Base32 } from '../utils/Base32'
@@ -35,6 +36,7 @@ export default function NewAccountScreen({ navigation }: AddAccountScreenProps) 
     const styles = pageStyles(theme)
 
     const dispatch = useDispatch()
+    const accountsList = useSelector((state: RootState) => state.accounts)
 
     const algorithm_options = [
         { label: 'SHA-1 (Default)', value: 'sha1', key: '1', inputLabel: 'SHA-1' },
@@ -84,6 +86,12 @@ export default function NewAccountScreen({ navigation }: AddAccountScreenProps) 
             const newAccount = Account.createAccount(issuer, label, secretKeyHex, algoType, digits, parseInt(period))
 
             try {
+                const existingAccount = accountsList.find((account: Account) => account.name === newAccount.name)
+                if (existingAccount) {
+                    Alert.alert('Error', 'Account name already exists. Please choose a different name')
+                    return
+                }
+
                 const rowId = await DB.insert(newAccount)
                 if (typeof rowId === 'number' && rowId > 0) dispatch(addAccount(newAccount))
             } catch (err) {

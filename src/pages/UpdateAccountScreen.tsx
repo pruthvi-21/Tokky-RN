@@ -1,14 +1,15 @@
 import { RouteProp } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import React, { useEffect, useState } from 'react'
-import { StatusBar, StyleSheet, View } from 'react-native'
-import { useDispatch } from 'react-redux'
+import { Alert, StatusBar, StyleSheet, View } from 'react-native'
+import { useDispatch, useSelector } from 'react-redux'
 import { RootStackParamList } from '../../App'
 import useTheme, { appTheme } from '../Theming'
 import { FormField } from '../components/FormField'
 import RootView from '../components/RootView'
 import { ThemedButton } from '../components/ThemedComponents'
 import { updateAccount } from '../data/action'
+import { RootState } from '../data/reducers'
 import DB from '../database/AccountsDB'
 import Account from '../models/Account'
 
@@ -27,6 +28,7 @@ export default function UpdateAccountScreen({ navigation, route }: Props) {
     const styles = pageStyles(theme)
 
     const dispatch = useDispatch()
+    const accountsList = useSelector((state: RootState) => state.accounts)
 
     useEffect(() => {
         navigation.setOptions({
@@ -40,16 +42,20 @@ export default function UpdateAccountScreen({ navigation, route }: Props) {
     }, [navigation, issuer, label])
 
     async function handleSaveBtn() {
-        if (!(issuer == account.issuer && label == account.label)) {
-            account.issuer = issuer
-            account.label = label
+        const existingAccount = accountsList.find((acc: Account) => acc.issuer + acc.label === issuer + label && acc.id !== account.id)
+        if (existingAccount) {
+            Alert.alert('Error', 'Account name already exists. Please choose a different name')
+            return
+        }
 
-            try {
-                await DB.update(account)
-                dispatch(updateAccount(account))
-            } catch (err) {
-                console.log(err)
-            }
+        account.issuer = issuer
+        account.label = label
+
+        try {
+            await DB.update(account)
+            dispatch(updateAccount(account))
+        } catch (err) {
+            console.log(err)
         }
         navigation.goBack()
     }
