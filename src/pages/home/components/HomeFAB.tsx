@@ -1,7 +1,7 @@
 import React from 'react'
 import { TouchableOpacity, TouchableOpacityProps } from 'react-native'
-import useTheme from '../Theming'
-import { IconButton } from './ThemedComponents'
+import useTheme from '../../../Theming'
+import { IconButton } from '../../../components/ThemedComponents'
 
 function FAB(props: TouchableOpacityProps) {
     const theme = useTheme()

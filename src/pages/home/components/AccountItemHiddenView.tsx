@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
 import { StyleSheet, View, ViewProps } from 'react-native'
-import useTheme, { appTheme } from '../../Theming'
-import Account from '../../models/Account'
-import Timer from '../Timer'
-import { ThemedText } from '../ThemedComponents'
+import useTheme, { appTheme } from '../../../Theming'
+import Account from '../../../models/Account'
+import Timer from '../../../components/Timer'
+import { ThemedText } from '../../../components/ThemedComponents'
 
 interface Props extends ViewProps {
     account: Account

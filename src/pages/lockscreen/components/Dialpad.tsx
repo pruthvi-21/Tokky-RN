@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import useTheme, { appTheme } from '../Theming'
-import { IconButton } from './ThemedComponents'
+import useTheme, { appTheme } from '../../../Theming'
+import { IconButton } from '../../../components/ThemedComponents'
 
 interface DialpadProps {
     onDigitPress?: (digit: string) => void

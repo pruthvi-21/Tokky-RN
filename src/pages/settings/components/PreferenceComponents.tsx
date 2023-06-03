@@ -1,7 +1,7 @@
 import React, { ReactNode, useState } from 'react'
 import { ScrollView, StyleSheet, Switch, SwitchProps, TouchableOpacity, TouchableOpacityProps, View, ViewProps } from 'react-native'
-import useTheme, { appTheme } from '../Theming'
-import { ThemedText } from './ThemedComponents'
+import useTheme, { appTheme } from '../../../Theming'
+import { ThemedText } from '../../../components/ThemedComponents'
 
 type PreferenceScreenProps = {
     children?: ReactNode | undefined

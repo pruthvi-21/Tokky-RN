@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Animated, Easing, StyleSheet, View, ViewProps } from 'react-native'
-import useTheme, { appTheme } from '../Theming'
+import useTheme, { appTheme } from '../../../Theming'
 
 interface PasswordInputProps extends ViewProps {
     length: number

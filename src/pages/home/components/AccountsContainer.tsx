@@ -1,10 +1,10 @@
 import { useFocusEffect } from '@react-navigation/native'
 import { useCallback, useEffect, useState } from 'react'
 import { SectionList, StyleSheet, View } from 'react-native'
-import useTheme, { appTheme } from '../../Theming'
-import Account from '../../models/Account'
-import { ThemedText } from '../ThemedComponents'
-import HomeListItem from './HomeListItem'
+import useTheme, { appTheme } from '../../../Theming'
+import Account from '../../../models/Account'
+import { ThemedText } from '../../../components/ThemedComponents'
+import HomeListItem from './AccountItem'
 
 type Props = {
     list: Account[]

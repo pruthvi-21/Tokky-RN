@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
 import { LayoutAnimation, StyleSheet, TouchableWithoutFeedback, View, ViewProps } from 'react-native'
 import { ContextMenuView } from 'react-native-ios-context-menu'
-import useTheme, { appTheme } from '../../Theming'
-import Account from '../../models/Account'
-import { UserSettings } from '../../utils/UserSettings'
-import OTPView from './OTPView'
-import { IconButton, ThemedText } from '../ThemedComponents'
+import useTheme, { appTheme } from '../../../Theming'
+import Account from '../../../models/Account'
+import { UserSettings } from '../../../utils/UserSettings'
+import OTPView from './AccountItemHiddenView'
+import { IconButton, ThemedText } from '../../../components/ThemedComponents'
 
 interface Props extends ViewProps {
     accountItem: Account
