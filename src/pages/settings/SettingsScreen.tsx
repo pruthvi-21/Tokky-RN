@@ -77,20 +77,20 @@ export default function SettingsScreen({ navigation }: Props) {
         <RootView>
             <PreferenceScreen>
                 <PreferenceCategory footer={appLockChecked ? 'Please turn off and turn on the app lock in order to change the pin.' : ''}>
-                    <SwitchPreference title="Enable App Lock" value={appLockChecked} onValueChange={handleAppLockChange} />
+                    <SwitchPreference title="Enable App Lock" checked={appLockChecked} onValueChange={handleAppLockChange} />
                 </PreferenceCategory>
                 <PreferenceCategory
                     title="Biometrics"
                     footer={'Enable this to prompt for ' + getBiometricsPreferenceTitle() + ' as soon as you open the app.'}>
                     <SwitchPreference
                         title={'Unlock with ' + getBiometricsPreferenceTitle()}
-                        value={biometricsChecked}
+                        checked={biometricsChecked}
                         onValueChange={handleBiometricsChange}
                         disabled={biometricsDisabled}
                     />
                     <SwitchPreference
                         title={getBiometricsPreferenceTitle() + ' prompt on startup'}
-                        value={promptBiometricsOnStart}
+                        checked={promptBiometricsOnStart}
                         onValueChange={handlePromptBiometricsOnStartChange}
                         disabled={!biometricsChecked || biometricsDisabled}
                     />

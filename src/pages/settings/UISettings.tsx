@@ -56,7 +56,7 @@ function UISettings() {
 
             <SwitchPreference
                 title="Display Thumbnails"
-                value={isThumbnailsDisplayed}
+                checked={isThumbnailsDisplayed}
                 onValueChange={val => {
                     setIsThumbnailsDisplayed(val)
                     UserSettings.setDisplayThumbnail(val)

@@ -19,8 +19,9 @@ interface PreferenceProps extends TouchableOpacityProps {
     widget?: ReactNode
 }
 
-interface SwitchPreferenceProps extends SwitchProps {
-    title: string
+interface SwitchPreferenceProps extends PreferenceProps {
+    checked: boolean
+    onValueChange?: ((value: boolean) => Promise<void> | void) | null | undefined
 }
 
 export function PreferenceScreen(props: PreferenceScreenProps) {
@@ -76,16 +77,7 @@ export function Preference(props: PreferenceProps) {
 }
 
 export function SwitchPreference(props: SwitchPreferenceProps) {
-    const { title, ...switchProps } = props
-    const [isEnabled, setIsEnabled] = useState(false)
-
-    return (
-        <Preference
-            widget={<Switch onValueChange={() => setIsEnabled(previousState => !previousState)} value={isEnabled} {...switchProps} />}
-            {...props}
-            activeOpacity={1}
-        />
-    )
+    return <Preference widget={<Switch onValueChange={props.onValueChange} value={props.checked} />} {...props} activeOpacity={1} />
 }
 
 const preferenceStyles = (theme: typeof appTheme) => {
