@@ -29,7 +29,6 @@ const Timer = ({ radius, progress, maxValue, ...props }: TimerProps) => {
             width: radius * 2,
             height: radius * 2,
             borderRadius: radius,
-            backgroundColor: theme.color.primary_color,
             overflow: 'hidden',
             display: 'flex',
             alignItems: 'center',
@@ -45,10 +44,9 @@ const Timer = ({ radius, progress, maxValue, ...props }: TimerProps) => {
                     {
                         width: radius * 2,
                         height: radius * 2,
-                        backgroundColor: theme.color.bg_variant2,
                     },
                 ]}>
-                <ThemedText style={{ fontSize: radius }} color={theme.color.primary_color}>
+                <ThemedText style={{ fontSize: radius * 1.3 }} color={theme.color.primary_color}>
                     {progress}
                 </ThemedText>
             </View>
@@ -61,6 +59,7 @@ const Timer = ({ radius, progress, maxValue, ...props }: TimerProps) => {
                 style={[
                     styles.container,
                     {
+                        backgroundColor: theme.color.primary_color,
                         transform: [{ rotateZ: '-90deg' }],
                     },
                 ]}>
