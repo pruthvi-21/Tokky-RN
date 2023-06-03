@@ -18,6 +18,8 @@ export const KEY_SETTINGS_PROMPT_BIOMETRICS_ON_START = 'key_settings_prompt_biom
 export const KEY_SETTINGS_DISPLAY_THUMBNAIL = 'key_settings_display_thumbnail'
 export const KEY_SETTINGS_TIMER_INDICATOR = 'key_settings_timer_indicator'
 
+export const KEY_MENU_USE_GROUPS = 'key_menu_use_groups'
+
 export const PIN_HASH = 'lock_pin'
 export const ENC_KEY = 'tokky-enc-key'
 export const ENC_IV = 'tokky-enc-iv'

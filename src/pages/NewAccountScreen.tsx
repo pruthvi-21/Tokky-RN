@@ -81,7 +81,6 @@ export default function NewAccountScreen({ navigation }: AddAccountScreenProps) 
             if (algo == 'sha256') algoType = 'SHA-256'
             if (algo == 'sha512') algoType = 'SHA-512'
 
-            console.log(issuer, algoType, period, digits)
             const newAccount = Account.createAccount(issuer, label, secretKeyHex, algoType, digits, parseInt(period))
 
             try {

@@ -1,6 +1,7 @@
 import { Settings } from 'react-native'
 import {
     KEY_APP_INTRO_DONE,
+    KEY_MENU_USE_GROUPS,
     KEY_SETTINGS_APP_LOCK,
     KEY_SETTINGS_BIOMETRICS,
     KEY_SETTINGS_DISPLAY_THUMBNAIL,
@@ -67,5 +68,13 @@ export class UserSettings {
 
     static setTimerIndicator(value: number) {
         this.set(KEY_SETTINGS_TIMER_INDICATOR, value)
+    }
+
+    static setMenuUseGroups(value: boolean) {
+        this.set(KEY_MENU_USE_GROUPS, value)
+    }
+
+    static getMenuUseGroup(): boolean {
+        return this.get(KEY_MENU_USE_GROUPS, true) == 1
     }
 }

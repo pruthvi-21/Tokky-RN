@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
 import { StyleSheet, View, ViewProps } from 'react-native'
-import * as Animatable from 'react-native-animatable'
-import useTheme, { appTheme } from '../Theming'
-import Account from '../models/Account'
-import Timer from './Timer'
+import useTheme, { appTheme } from '../../Theming'
+import Account from '../../models/Account'
+import Timer from '../Timer'
+import { ThemedText } from '../ThemedComponents'
 
 interface Props extends ViewProps {
     account: Account
@@ -53,9 +53,7 @@ export default function HiddenView({ account, isActive, ...props }: Props) {
             <View style={styles.timerContainer}>
                 <Timer radius={12} maxValue={account.period} progress={progress} />
             </View>
-            <Animatable.Text style={styles.otpText} animation={isActive ? 'fadeIn' : undefined} duration={500}>
-                {otp}
-            </Animatable.Text>
+            <ThemedText style={styles.otpText}>{otp}</ThemedText>
         </View>
     )
 }
