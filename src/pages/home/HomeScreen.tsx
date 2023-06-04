@@ -5,14 +5,14 @@ import { ContextMenuButton } from 'react-native-ios-context-menu'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootStackParamList } from '../../../App'
 import useTheme from '../../Theming'
-import AccountsContainer from './components/AccountsContainer'
-import FAB from './components/HomeFAB'
 import SafeArea from '../../components/SafeArea'
-import { IconButton, ThemedText } from '../../components/ThemedComponents'
+import { IconButton } from '../../components/ThemedComponents'
 import { loadAccounts, removeAccount } from '../../data/action'
 import { RootState } from '../../data/reducers'
 import DB from '../../database/AccountsDB'
 import { UserSettings } from '../../utils/UserSettings'
+import AccountsContainer from './components/AccountsContainer'
+import FAB from './components/HomeFAB'
 
 type HomeScreenProps = {
     navigation: NativeStackNavigationProp<RootStackParamList, 'HomeScreen'>
@@ -147,7 +147,7 @@ function HomeScreen({ navigation }: HomeScreenProps) {
                 />
             )}
 
-            {isDataLoaded && <FAB onPress={handleFabClick} />}
+            {true && <FAB onPress={handleFabClick} />}
         </SafeArea>
     )
 }

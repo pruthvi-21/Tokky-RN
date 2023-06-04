@@ -1,6 +1,6 @@
 //From https://github.com/bellstrand/totp-generator
 import JsSHA from 'jssha'
-import { DEFAULT_ALGORITHM, DEFAULT_DIGITS, DEFAULT_PERIOD } from './Utils'
+import { DEFAULT_ALGORITHM, DEFAULT_DIGITS, DEFAULT_PERIOD } from './Constants'
 import { AlgorithmType } from './Constants'
 
 type Options = {

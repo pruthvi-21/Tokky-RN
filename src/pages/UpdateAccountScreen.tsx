@@ -2,13 +2,12 @@ import { RouteProp } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import React, { useEffect, useState } from 'react'
 import { Alert, StatusBar, StyleSheet, View } from 'react-native'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { RootStackParamList } from '../../App'
 import useTheme, { appTheme } from '../Theming'
 import { FormField } from '../components/FormField'
 import RootView from '../components/RootView'
 import { ThemedButton } from '../components/ThemedComponents'
-import { updateAccount } from '../data/action'
 import { RootState } from '../data/reducers'
 import DB from '../database/AccountsDB'
 import Account from '../models/Account'
@@ -27,7 +26,6 @@ export default function UpdateAccountScreen({ navigation, route }: Props) {
     const theme = useTheme()
     const styles = pageStyles(theme)
 
-    const dispatch = useDispatch()
     const accountsList = useSelector((state: RootState) => state.accounts)
 
     useEffect(() => {
@@ -48,12 +46,10 @@ export default function UpdateAccountScreen({ navigation, route }: Props) {
             return
         }
 
-        account.issuer = issuer
-        account.label = label
-
         try {
-            await DB.update(account)
-            dispatch(updateAccount(account))
+            await DB.update(account.id, issuer, label)
+            account.issuer = issuer
+            account.label = label
         } catch (err) {
             console.log(err)
         }

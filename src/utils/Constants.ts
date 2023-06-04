@@ -1,4 +1,18 @@
-export type AlgorithmType = 'SHA-1' | 'SHA-256' | 'SHA-512'
+export enum AlgorithmType {
+    SHA1 = 'SHA-1',
+    SHA256 = 'SHA-256',
+    SHA512 = 'SHA-512',
+}
+
+export enum AccountEntryMethod {
+    FORM = 'form',
+    QR_CODE = 'qr',
+}
+
+export enum OTPType {
+    TOTP = 'totp',
+    HOTP = 'hotp',
+}
 
 export enum PINChangeModes {
     SETUP_PIN,
@@ -10,6 +24,10 @@ export enum TimerIndicatorType {
     NUMBER,
     DISC,
 }
+
+export const DEFAULT_ALGORITHM = AlgorithmType.SHA1
+export const DEFAULT_DIGITS = 6
+export const DEFAULT_PERIOD = 30
 
 export const KEY_APP_INTRO_DONE = 'key_app_intro_done'
 export const KEY_SETTINGS_APP_LOCK = 'key_settings_app_lock'

@@ -1,6 +1,6 @@
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import React, { useEffect, useState } from 'react'
-import { Alert, Animated, Button, Easing, KeyboardAvoidingView, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native'
+import { Alert, Animated, Easing, KeyboardAvoidingView, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootStackParamList } from '../../App'
 import useTheme, { appTheme } from '../Theming'
@@ -11,10 +11,9 @@ import { IconButton, ThemedButton, ThemedText } from '../components/ThemedCompon
 import { addAccount } from '../data/action'
 import { RootState } from '../data/reducers'
 import DB from '../database/AccountsDB'
-import Account from '../models/Account'
+import Account, { AccountBuilder } from '../models/Account'
 import { Base32 } from '../utils/Base32'
-import { AlgorithmType } from '../utils/Constants'
-import { DEFAULT_ALGORITHM, DEFAULT_DIGITS, DEFAULT_PERIOD, isIOS } from '../utils/Utils'
+import { AccountEntryMethod, AlgorithmType, DEFAULT_ALGORITHM, DEFAULT_DIGITS, DEFAULT_PERIOD } from '../utils/Constants'
 
 type AddAccountScreenProps = {
     navigation: NativeStackNavigationProp<RootStackParamList, 'NewAccountScreen'>
@@ -25,7 +24,7 @@ export default function NewAccountScreen({ navigation }: AddAccountScreenProps) 
     const [label, setLabel] = useState<string>('')
     const [secretKey, setSecretKey] = useState<string>('')
 
-    const [algo, setAlgo] = useState<string>('sha1')
+    const [algo, setAlgo] = useState<AlgorithmType>(DEFAULT_ALGORITHM)
     const [digits, setDigits] = useState<number>(DEFAULT_DIGITS)
     const [period, setPeriod] = useState<string>(DEFAULT_PERIOD + '')
 
@@ -39,9 +38,9 @@ export default function NewAccountScreen({ navigation }: AddAccountScreenProps) 
     const accountsList = useSelector((state: RootState) => state.accounts)
 
     const algorithm_options = [
-        { label: 'SHA-1 (Default)', value: 'sha1', key: '1', inputLabel: 'SHA-1' },
-        { label: 'SHA-256', value: 'sha256', key: '2', inputLabel: 'SHA-256' },
-        { label: 'SHA-512', value: 'sha512', key: '3', inputLabel: 'SHA-512' },
+        { label: 'SHA-1 (Default)', value: AlgorithmType.SHA1, key: '1', inputLabel: 'SHA-1' },
+        { label: 'SHA-256', value: AlgorithmType.SHA256, key: '2', inputLabel: 'SHA-256' },
+        { label: 'SHA-512', value: AlgorithmType.SHA512, key: '3', inputLabel: 'SHA-512' },
     ]
 
     const digits_options = [
@@ -60,9 +59,9 @@ export default function NewAccountScreen({ navigation }: AddAccountScreenProps) 
 
     useEffect(() => {
         if (!isAdvLayoutVisible) {
+            setAlgo(DEFAULT_ALGORITHM)
             setDigits(DEFAULT_DIGITS)
             setPeriod(DEFAULT_PERIOD + '')
-            setAlgo('sha1')
         }
     }, [isAdvLayoutVisible])
 
@@ -79,11 +78,16 @@ export default function NewAccountScreen({ navigation }: AddAccountScreenProps) 
         try {
             const secretKeyHex = Base32.base32ToHex(secretKey)
 
-            let algoType: AlgorithmType = 'SHA-1'
-            if (algo == 'sha256') algoType = 'SHA-256'
-            if (algo == 'sha512') algoType = 'SHA-512'
+            const builder = new AccountBuilder()
+                .setAddedVia(AccountEntryMethod.FORM)
+                .setIssuer(issuer)
+                .setLabel(label)
+                .setSecretKey(secretKeyHex)
+                .setAlgorithm(algo)
+                .setDigits(digits)
+                .setPeriod(parseInt(period))
 
-            const newAccount = Account.createAccount(issuer, label, secretKeyHex, algoType, digits, parseInt(period))
+            const newAccount = builder.build()
 
             try {
                 const existingAccount = accountsList.find((account: Account) => account.name === newAccount.name)
@@ -130,8 +134,8 @@ export default function NewAccountScreen({ navigation }: AddAccountScreenProps) 
     }
 
     return (
-        <RootView style={[isIOS() && styles.root]}>
-            <KeyboardAvoidingView style={{ flex: 1 }} behavior={isIOS() ? 'padding' : undefined}>
+        <RootView style={[styles.root]}>
+            <KeyboardAvoidingView style={{ flex: 1 }} behavior={'padding'}>
                 <ScrollView contentInsetAdjustmentBehavior="automatic">
                     <View style={{ backgroundColor: theme.color.bg }}>
                         <View style={{ height: 25 }} />

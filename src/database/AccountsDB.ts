@@ -23,19 +23,35 @@ class AccountsDB {
 
     public async init(): Promise<void> {
         await this.executeSql(
-            `CREATE TABLE IF NOT EXISTS accounts (
-             id TEXT PRIMARY KEY,
-             data TEXT NOT NULL
+            `CREATE TABLE IF NOT EXISTS ACCOUNTS(
+                ID text PRIMARY KEY,
+                ISSUER text NOT NULL,
+                LABEL text,
+                KEY_INFO text NOT NULL,
+                TYPE text NOT NULL,
+                ADDED_FROM text NOT NULL,
+                CREATE_STP date NOT NULL,
+                UPDATE_STP date NOT NULL
             )`,
         )
     }
 
     public async insert(account: Account | undefined): Promise<number | undefined> {
         if (account == undefined) return -1
-        const result = await this.executeSql(`INSERT INTO accounts (id, data) VALUES (?, ?)`, [
-            account.json().id,
-            JSON.stringify(account.json().data),
-        ])
+        const result = await this.executeSql(
+            `INSERT INTO ACCOUNTS
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+            [
+                account.id,
+                account.issuer,
+                account.label,
+                account.secretInfo,
+                account.type,
+                account.addedFrom,
+                account.createdOn.toISOString(),
+                account.updatedOn.toISOString(),
+            ],
+        )
         return result.insertId
     }
 
@@ -45,13 +61,13 @@ class AccountsDB {
         return result.rowsAffected
     }
 
-    public async update(account: Account): Promise<number | undefined> {
+    public async update(id: string, issuer: string, label: string): Promise<number | undefined> {
         const result = await this.executeSql(
-            `UPDATE accounts 
-			 SET data=?
+            `UPDATE accounts
+			 SET issuer=?, label=?
 			 WHERE id=?
 			`,
-            [JSON.stringify(account.json().data), account.id],
+            [issuer, label, id],
         )
         return result.insertId
     }
@@ -62,8 +78,21 @@ class AccountsDB {
         const accounts: Account[] = []
         for (let i = 0; i < result.rows.length; i++) {
             const account = result.rows.item(i)
-            const data = JSON.parse(account.data)
-            accounts.push(new Account(account.id, data.issuer, data.label, data.secretKey, data.algorithm, data.digits, data.period))
+            const keyInfo = JSON.parse(account.KEY_INFO)
+            const accountObj = new Account(
+                account.ID,
+                account.ISSUER,
+                account.LABEL,
+                keyInfo.secretKey,
+                account.TYPE,
+                keyInfo.algorithm,
+                keyInfo.digits,
+                keyInfo.period,
+                account.CREATE_STP,
+                account.UPDATE_STP,
+                account.ADDED_FROM,
+            )
+            accounts.push(accountObj)
         }
 
         return accounts
