@@ -15,8 +15,8 @@ export default class Account {
 
     private _type: OTPType
 
-    private _createdOn: Date
-    private _updatedOn: Date
+    private _createdOn: string
+    private _updatedOn: string
     private _addedFrom: AccountEntryMethod
     private _thumbnailColor: ColorValue = 'grey'
 
@@ -33,8 +33,8 @@ export default class Account {
         algorithm: AlgorithmType = DEFAULT_ALGORITHM,
         digits: number = DEFAULT_DIGITS,
         period: number = DEFAULT_PERIOD,
-        createdOn: Date,
-        updatedOn: Date,
+        createdOn: string,
+        updatedOn: string,
         addedFrom: AccountEntryMethod = AccountEntryMethod.FORM,
     ) {
         this._id = id
@@ -53,12 +53,12 @@ export default class Account {
 
     set issuer(issuer: string) {
         this._issuer = issuer
-        this._updatedOn = new Date()
+        this._updatedOn = new Date().toISOString()
     }
 
     set label(label: string) {
         this._label = label
-        this._updatedOn = new Date()
+        this._updatedOn = new Date().toISOString()
     }
 
     get id(): string {
@@ -97,11 +97,11 @@ export default class Account {
         return this._addedFrom
     }
 
-    get createdOn(): Date {
+    get createdOn(): string {
         return this._createdOn
     }
 
-    get updatedOn(): Date {
+    get updatedOn(): string {
         return this._updatedOn
     }
 
@@ -218,8 +218,8 @@ export class AccountBuilder {
             this._algorithm,
             this._digits,
             this._period,
-            new Date(),
-            new Date(),
+            new Date().toISOString(),
+            new Date().toISOString(),
             this._addedVia,
         )
 

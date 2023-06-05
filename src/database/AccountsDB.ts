@@ -51,8 +51,8 @@ class AccountsDB {
                 account.type,
                 account.thumbnailColor,
                 account.addedFrom,
-                account.createdOn.toISOString(),
-                account.updatedOn.toISOString(),
+                account.createdOn,
+                account.updatedOn,
             ],
         )
         return result.insertId
