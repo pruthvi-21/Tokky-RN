@@ -6,6 +6,7 @@ import Account from '../../../models/Account'
 import { UserSettings } from '../../../utils/UserSettings'
 import OTPView from './AccountItemHiddenView'
 import { IconButton, ThemedText } from '../../../components/ThemedComponents'
+import { Thumbnail } from '../../../components/AccountThumbnailController'
 
 interface Props extends ViewProps {
     accountItem: Account
@@ -67,7 +68,18 @@ const HomeListItem = ({ accountItem, editAccountCallback, deleteAccountCallback,
                         ],
                     }}>
                     <View style={[styles.listItemContainer]}>
-                        {UserSettings.isThumbnailDisplayed() && <View style={styles.preview} />}
+                        {UserSettings.isThumbnailDisplayed() && (
+                            <View style={styles.preview}>
+                                {
+                                    <Thumbnail
+                                        size={44}
+                                        cornerRadius={44 * 0.25}
+                                        color={accountItem.thumbnailColor}
+                                        text={accountItem.issuer}
+                                    />
+                                }
+                            </View>
+                        )}
                         <View style={styles.titleContainer}>
                             <ThemedText style={styles.issuerTextStyle}>{accountItem?.issuer}</ThemedText>
                             {accountItem.label.length !== 0 && (
@@ -106,7 +118,6 @@ const cardStyles = (theme: typeof appTheme) =>
         preview: {
             width: 44,
             aspectRatio: 1,
-            backgroundColor: theme.color.bg_variant2,
             borderRadius: 10,
             marginRight: 20,
         },

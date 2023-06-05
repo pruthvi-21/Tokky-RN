@@ -1,3 +1,4 @@
+import { ColorValue } from 'react-native/types'
 import { AccountEntryMethod, AlgorithmType, DEFAULT_ALGORITHM, DEFAULT_DIGITS, DEFAULT_PERIOD, OTPType } from '../utils/Constants'
 import { getToken } from '../utils/RFC6238'
 import { generateUUID } from '../utils/Utils'
@@ -17,6 +18,7 @@ export default class Account {
     private _createdOn: Date
     private _updatedOn: Date
     private _addedFrom: AccountEntryMethod
+    private _thumbnailColor: ColorValue = 'grey'
 
     currentOTP: string = ''
     private _lastUpdatedCounter: number = 0
@@ -27,6 +29,7 @@ export default class Account {
         label: string = '',
         secretKey: string,
         type: OTPType = OTPType.TOTP,
+        thumbnailColor: ColorValue,
         algorithm: AlgorithmType = DEFAULT_ALGORITHM,
         digits: number = DEFAULT_DIGITS,
         period: number = DEFAULT_PERIOD,
@@ -39,6 +42,7 @@ export default class Account {
         this._label = label
         this._secretKey = secretKey
         this._type = type
+        this._thumbnailColor = thumbnailColor
         this._algorithm = algorithm
         this._digits = digits
         this._period = period
@@ -105,6 +109,14 @@ export default class Account {
         return this._issuer + ' (' + this._label + ')'
     }
 
+    set thumbnailColor(color: ColorValue) {
+        this._thumbnailColor = color
+    }
+
+    get thumbnailColor(): ColorValue {
+        return this._thumbnailColor
+    }
+
     get secretInfo(): string {
         const json: any = { secretKey: this._secretKey }
 
@@ -145,6 +157,7 @@ export class AccountBuilder {
     private _label: string = ''
     private _secretKey: string = ''
     private _type: OTPType = OTPType.TOTP
+    private _thumbnailColor: ColorValue = 'grey'
     private _algorithm: AlgorithmType = DEFAULT_ALGORITHM
     private _digits: number = DEFAULT_DIGITS
     private _period: number = DEFAULT_PERIOD
@@ -186,6 +199,11 @@ export class AccountBuilder {
         return this
     }
 
+    setThumbnailColor(color: ColorValue): AccountBuilder {
+        this._thumbnailColor = color
+        return this
+    }
+
     build(): Account {
         if (this._issuer == '') throw Error("Issuer can't be empty")
         if (this._secretKey == '') throw Error("Secret key can't be empty")
@@ -196,6 +214,7 @@ export class AccountBuilder {
             this._label,
             this._secretKey,
             this._type,
+            this._thumbnailColor,
             this._algorithm,
             this._digits,
             this._period,

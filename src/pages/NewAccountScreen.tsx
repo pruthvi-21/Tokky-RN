@@ -1,9 +1,10 @@
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import React, { useEffect, useState } from 'react'
-import { Alert, Animated, Easing, KeyboardAvoidingView, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native'
+import { Alert, Animated, ColorValue, Easing, KeyboardAvoidingView, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootStackParamList } from '../../App'
 import useTheme, { appTheme } from '../Theming'
+import AccountThumbnailController from '../components/AccountThumbnailController'
 import { FormField } from '../components/FormField'
 import PickerDial from '../components/PickerDial'
 import RootView from '../components/RootView'
@@ -27,6 +28,8 @@ export default function NewAccountScreen({ navigation }: AddAccountScreenProps) 
     const [algo, setAlgo] = useState<AlgorithmType>(DEFAULT_ALGORITHM)
     const [digits, setDigits] = useState<number>(DEFAULT_DIGITS)
     const [period, setPeriod] = useState<string>(DEFAULT_PERIOD + '')
+
+    const [thumbnailColor, setThumbnailColor] = useState<ColorValue>('grey')
 
     const anim = useState(new Animated.Value(0))[0]
     const [isAdvLayoutVisible, setIsAdvLayoutVisible] = useState(false)
@@ -55,7 +58,7 @@ export default function NewAccountScreen({ navigation }: AddAccountScreenProps) 
         navigation.setOptions({
             headerRight: () => <ThemedButton title={'Done'} onPress={createAccount} />,
         })
-    }, [issuer, label, secretKey, algo, digits, period])
+    }, [issuer, label, secretKey, algo, digits, period, thumbnailColor])
 
     useEffect(() => {
         if (!isAdvLayoutVisible) {
@@ -86,6 +89,7 @@ export default function NewAccountScreen({ navigation }: AddAccountScreenProps) 
                 .setAlgorithm(algo)
                 .setDigits(digits)
                 .setPeriod(parseInt(period))
+                .setThumbnailColor(thumbnailColor)
 
             const newAccount = builder.build()
 
@@ -138,7 +142,11 @@ export default function NewAccountScreen({ navigation }: AddAccountScreenProps) 
             <KeyboardAvoidingView style={{ flex: 1 }} behavior={'padding'}>
                 <ScrollView contentInsetAdjustmentBehavior="automatic">
                     <View style={{ backgroundColor: theme.color.bg }}>
-                        <View style={{ height: 25 }} />
+                        <AccountThumbnailController
+                            style={{ marginTop: 25 }}
+                            text={issuer}
+                            onChange={(newColor: ColorValue) => setThumbnailColor(newColor)}
+                        />
                         <View style={{ borderRadius: 11, overflow: 'hidden' }}>
                             <FormField
                                 style={styles.textInputStyle}

@@ -1,10 +1,11 @@
 import { RouteProp } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import React, { useEffect, useState } from 'react'
-import { Alert, StatusBar, StyleSheet, View } from 'react-native'
+import { Alert, ColorValue, StatusBar, StyleSheet, View } from 'react-native'
 import { useSelector } from 'react-redux'
 import { RootStackParamList } from '../../App'
 import useTheme, { appTheme } from '../Theming'
+import AccountThumbnailController from '../components/AccountThumbnailController'
 import { FormField } from '../components/FormField'
 import RootView from '../components/RootView'
 import { ThemedButton } from '../components/ThemedComponents'
@@ -20,6 +21,7 @@ type Props = {
 export default function UpdateAccountScreen({ navigation, route }: Props) {
     const account: Account = route.params.account
 
+    const [thumbnailColor, setThumbnailColor] = useState<ColorValue>(account.thumbnailColor)
     const [issuer, setIssuer] = useState<string>(account.issuer)
     const [label, setLabel] = useState<string>(account.label)
 
@@ -37,7 +39,7 @@ export default function UpdateAccountScreen({ navigation, route }: Props) {
         return () => {
             StatusBar.setBarStyle('default', true)
         }
-    }, [navigation, issuer, label])
+    }, [navigation, issuer, label, thumbnailColor])
 
     async function handleSaveBtn() {
         const existingAccount = accountsList.find((acc: Account) => acc.issuer + acc.label === issuer + label && acc.id !== account.id)
@@ -47,9 +49,10 @@ export default function UpdateAccountScreen({ navigation, route }: Props) {
         }
 
         try {
-            await DB.update(account.id, issuer, label)
+            await DB.update(account.id, issuer, label, thumbnailColor)
             account.issuer = issuer
             account.label = label
+            account.thumbnailColor = thumbnailColor
         } catch (err) {
             console.log(err)
         }
@@ -62,6 +65,14 @@ export default function UpdateAccountScreen({ navigation, route }: Props) {
 
     return (
         <RootView style={styles.root}>
+            <AccountThumbnailController
+                style={{ marginTop: 25 }}
+                text={issuer}
+                color={thumbnailColor}
+                onChange={(newColor: ColorValue) => {
+                    setThumbnailColor(newColor)
+                }}
+            />
             <View style={{ borderRadius: 11, overflow: 'hidden' }}>
                 <FormField
                     style={styles.textInputStyle}

@@ -1,5 +1,6 @@
 import SQLite from 'react-native-sqlite-storage'
 import Account from '../models/Account'
+import { ColorValue } from 'react-native/types'
 
 class AccountsDB {
     private static instance: AccountsDB
@@ -29,6 +30,7 @@ class AccountsDB {
                 LABEL text,
                 KEY_INFO text NOT NULL,
                 TYPE text NOT NULL,
+                THUMB_COLOR text NOT NULL,
                 ADDED_FROM text NOT NULL,
                 CREATE_STP date NOT NULL,
                 UPDATE_STP date NOT NULL
@@ -40,13 +42,14 @@ class AccountsDB {
         if (account == undefined) return -1
         const result = await this.executeSql(
             `INSERT INTO ACCOUNTS
-             VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
             [
                 account.id,
                 account.issuer,
                 account.label,
                 account.secretInfo,
                 account.type,
+                account.thumbnailColor,
                 account.addedFrom,
                 account.createdOn.toISOString(),
                 account.updatedOn.toISOString(),
@@ -61,13 +64,13 @@ class AccountsDB {
         return result.rowsAffected
     }
 
-    public async update(id: string, issuer: string, label: string): Promise<number | undefined> {
+    public async update(id: string, issuer: string, label: string, thumbnailColor: ColorValue): Promise<number | undefined> {
         const result = await this.executeSql(
-            `UPDATE accounts
-			 SET issuer=?, label=?
-			 WHERE id=?
+            `UPDATE ACCOUNTS
+			 SET ISSUER=?, LABEL=?, THUMB_COLOR=?
+			 WHERE ID=?
 			`,
-            [issuer, label, id],
+            [issuer, label, thumbnailColor, id],
         )
         return result.insertId
     }
@@ -85,6 +88,7 @@ class AccountsDB {
                 account.LABEL,
                 keyInfo.secretKey,
                 account.TYPE,
+                account.THUMB_COLOR,
                 keyInfo.algorithm,
                 keyInfo.digits,
                 keyInfo.period,
