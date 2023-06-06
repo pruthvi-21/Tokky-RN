@@ -1,18 +1,16 @@
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import React, { useEffect, useState } from 'react'
-import { ActionSheetIOS, Alert, View } from 'react-native'
+import React, { useContext, useEffect, useState } from 'react'
+import { ActionSheetIOS, Alert } from 'react-native'
 import { ContextMenuButton } from 'react-native-ios-context-menu'
-import { useDispatch, useSelector } from 'react-redux'
 import { RootStackParamList } from '../../../App'
 import useTheme from '../../Theming'
 import SafeArea from '../../components/SafeArea'
 import { IconButton } from '../../components/ThemedComponents'
-import { loadAccounts, removeAccount } from '../../data/action'
-import { RootState } from '../../data/reducers'
-import DB from '../../database/AccountsDB'
+import DB from '../../data/AccountsDB'
 import { UserSettings } from '../../utils/UserSettings'
 import AccountsContainer from './components/AccountsContainer'
 import FAB from './components/HomeFAB'
+import { AccountContext } from '../../data/AccountContext'
 
 type HomeScreenProps = {
     navigation: NativeStackNavigationProp<RootStackParamList, 'HomeScreen'>
@@ -24,8 +22,7 @@ function HomeScreen({ navigation }: HomeScreenProps) {
     const [isDataLoaded, setIsDataLoaded] = useState(false)
     const [useGroups, setUseGroups] = useState(UserSettings.getMenuUseGroup())
 
-    const dispatch = useDispatch()
-    const content = useSelector((state: RootState) => state.accounts)
+    const { accounts, loadAccounts, removeAccount } = useContext(AccountContext)
 
     useEffect(() => {
         if (!UserSettings.isAppIntroDone()) {
@@ -33,11 +30,11 @@ function HomeScreen({ navigation }: HomeScreenProps) {
         }
         DB.getAll()
             .then(data => {
-                dispatch(loadAccounts(data))
+                loadAccounts(data)
                 setIsDataLoaded(true)
             })
             .catch(err => {
-                console.log('Error fetching data ' + err)
+                console.log('Error fetching data: ' + err)
             })
     }, [])
 
@@ -113,7 +110,7 @@ function HomeScreen({ navigation }: HomeScreenProps) {
     }
 
     const handleEditItem = (id: string) => {
-        const account = content.find(item => item?.id === id)
+        const account = accounts.find(item => item?.id === id)
         if (account != undefined) navigation.navigate('UpdateAccountScreen', { account: account })
     }
 
@@ -126,10 +123,12 @@ function HomeScreen({ navigation }: HomeScreenProps) {
                 {
                     text: 'Delete',
                     style: 'destructive',
-                    onPress: () => {
-                        DB.remove(id).then(() => {
-                            dispatch(removeAccount(id))
-                        })
+                    onPress: async () => {
+                        try {
+                            await removeAccount(id)
+                        } catch (err) {
+                            Alert.alert('Unable to delete. Please try later.')
+                        }
                     },
                 },
             ],
@@ -140,7 +139,7 @@ function HomeScreen({ navigation }: HomeScreenProps) {
         <SafeArea>
             {isDataLoaded && (
                 <AccountsContainer
-                    list={content}
+                    list={accounts}
                     editAccountCallback={handleEditItem}
                     deleteAccountCallback={handleDeleteItem}
                     useGroups={useGroups}

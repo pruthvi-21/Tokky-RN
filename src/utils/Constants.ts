@@ -25,6 +25,11 @@ export enum TimerIndicatorType {
     DISC,
 }
 
+export enum Sorting {
+    ASC = 'ASC',
+    DESC = 'DESC',
+}
+
 export const DEFAULT_ALGORITHM = AlgorithmType.SHA1
 export const DEFAULT_DIGITS = 6
 export const DEFAULT_PERIOD = 30

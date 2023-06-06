@@ -1,7 +1,6 @@
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Alert, Animated, ColorValue, Easing, KeyboardAvoidingView, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native'
-import { useDispatch, useSelector } from 'react-redux'
 import { RootStackParamList } from '../../App'
 import useTheme, { appTheme } from '../Theming'
 import AccountThumbnailController from '../components/AccountThumbnailController'
@@ -9,9 +8,7 @@ import { FormField } from '../components/FormField'
 import PickerDial from '../components/PickerDial'
 import RootView from '../components/RootView'
 import { IconButton, ThemedButton, ThemedText } from '../components/ThemedComponents'
-import { addAccount } from '../data/action'
-import { RootState } from '../data/reducers'
-import DB from '../database/AccountsDB'
+import { AccountContext } from '../data/AccountContext'
 import Account, { AccountBuilder } from '../models/Account'
 import { Base32 } from '../utils/Base32'
 import { AccountEntryMethod, AlgorithmType, DEFAULT_ALGORITHM, DEFAULT_DIGITS, DEFAULT_PERIOD } from '../utils/Constants'
@@ -37,8 +34,7 @@ export default function NewAccountScreen({ navigation }: AddAccountScreenProps) 
     const theme = useTheme()
     const styles = pageStyles(theme)
 
-    const dispatch = useDispatch()
-    const accountsList = useSelector((state: RootState) => state.accounts)
+    const { accounts, addAccount } = useContext(AccountContext)
 
     const algorithm_options = [
         { label: 'SHA-1 (Default)', value: AlgorithmType.SHA1, key: '1', inputLabel: 'SHA-1' },
@@ -94,14 +90,13 @@ export default function NewAccountScreen({ navigation }: AddAccountScreenProps) 
             const newAccount = builder.build()
 
             try {
-                const existingAccount = accountsList.find((account: Account) => account.name === newAccount.name)
+                const existingAccount = accounts.find((account: Account) => account.name === newAccount.name)
                 if (existingAccount) {
                     Alert.alert('Error', 'Account name already exists. Please choose a different name')
                     return
                 }
 
-                const rowId = await DB.insert(newAccount)
-                if (typeof rowId === 'number' && rowId > 0) dispatch(addAccount(newAccount))
+                addAccount(newAccount)
             } catch (err) {
                 console.log(err)
                 Alert.alert('Error adding item to DB')

@@ -1,6 +1,6 @@
 import SQLite from 'react-native-sqlite-storage'
-import Account from '../models/Account'
 import { ColorValue } from 'react-native/types'
+import Account from '../models/Account'
 
 class AccountsDB {
     private static instance: AccountsDB

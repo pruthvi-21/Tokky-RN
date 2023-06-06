@@ -1,10 +1,8 @@
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { StatusBar, StyleSheet } from 'react-native'
-import { Provider } from 'react-redux'
 import useTheme, { appTheme } from './src/Theming'
 import SafeArea from './src/components/SafeArea'
-import { store } from './src/data/store'
 import Account from './src/models/Account'
 import { AuthScreen } from './src/pages/lockscreen/AuthScreen'
 import { ChangePinScreen } from './src/pages/lockscreen/ChangePinScreen'
@@ -14,6 +12,7 @@ import SettingsScreen from './src/pages/settings/SettingsScreen'
 import UpdateAccountScreen from './src/pages/UpdateAccountScreen'
 import { IntroScreen } from './src/pages/intro/IntroScreen'
 import { PINChangeModes } from './src/utils/Constants'
+import { AccountProvider } from './src/data/AccountContext'
 
 export type RootStackParamList = {
     AuthScreen: undefined
@@ -32,7 +31,7 @@ export default function App() {
     const styles = appStyles(theme)
 
     return (
-        <Provider store={store}>
+        <AccountProvider>
             <SafeArea>
                 <StatusBar />
                 <NavigationContainer>
@@ -112,7 +111,7 @@ export default function App() {
                     </Stack.Navigator>
                 </NavigationContainer>
             </SafeArea>
-        </Provider>
+        </AccountProvider>
     )
 }
 
