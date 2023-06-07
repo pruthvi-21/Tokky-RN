@@ -1,7 +1,7 @@
 import React, { ReactNode, createContext, useEffect, useState } from 'react'
 import { ColorValue } from 'react-native/types'
-import DB from './AccountsDB'
 import Account from '../models/Account'
+import DB from './AccountsDB'
 
 interface AccountContextType {
     accounts: Account[]
@@ -34,8 +34,8 @@ export const AccountProvider = ({ children }: { children: ReactNode | undefined 
     }
 
     const removeAccount = async (id: string) => {
-        await DB.remove(id)
-        setAccounts(accounts.filter(item => item.id !== id))
+        const rowsEffected = await DB.remove(id)
+        rowsEffected > 0 && setAccounts(accounts.filter(item => item.id !== id))
     }
 
     const updateAccount = async (account: Account, data: { issuer: string; label: string; thumbnailColor: ColorValue }) => {

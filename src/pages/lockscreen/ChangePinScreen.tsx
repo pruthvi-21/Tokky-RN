@@ -5,14 +5,14 @@ import { ActivityIndicator, Alert, StyleSheet, View } from 'react-native'
 import AES from 'react-native-aes-crypto'
 import { RootStackParamList } from '../../../App'
 import useTheme, { appTheme } from '../../Theming'
-import Dialpad from './components/Dialpad'
-import PINDotIndicator from './components/PINDotIndicator'
 import RootView from '../../components/RootView'
 import { ThemedButton, ThemedText } from '../../components/ThemedComponents'
 import { PINChangeModes, PIN_HASH } from '../../utils/Constants'
-import { hashPasscode } from '../../utils/CryptoUtils'
+import { CryptoUtils } from '../../utils/CryptoUtils'
 import { KeychainManager } from '../../utils/KeychainManager'
 import { UserSettings } from '../../utils/UserSettings'
+import Dialpad from './components/Dialpad'
+import PINDotIndicator from './components/PINDotIndicator'
 
 type ChangePinScreenProps = {
     navigation: NativeStackNavigationProp<RootStackParamList, 'ChangePinScreen'>
@@ -95,7 +95,7 @@ export const ChangePinScreen = ({ navigation, route }: ChangePinScreenProps) => 
                     return
                 }
 
-                const hashedPass = await hashPasscode(passcode)
+                const hashedPass = await CryptoUtils.hashPasscode(passcode)
                 if (hashedPass == null) {
                     setIsVerifying(false)
                     Alert.alert('Unable to verify passcode')
@@ -112,7 +112,7 @@ export const ChangePinScreen = ({ navigation, route }: ChangePinScreenProps) => 
             case PINChangeModes.REMOVE_PIN:
                 setIsVerifying(true)
                 const storedHash = await KeychainManager.fetchKey(PIN_HASH)
-                const currentHash = await hashPasscode(passcode)
+                const currentHash = await CryptoUtils.hashPasscode(passcode)
 
                 if (currentHash == storedHash) {
                     UserSettings.setAppLockEnabled(false)

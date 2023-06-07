@@ -3,15 +3,15 @@ import React, { useEffect, useState } from 'react'
 import { ActivityIndicator, Alert, Modal, StyleSheet, View, useColorScheme } from 'react-native'
 import { RootStackParamList } from '../../../App'
 import useTheme, { appTheme } from '../../Theming'
-import Dialpad from './components/Dialpad'
-import PINDotIndicator from './components/PINDotIndicator'
 import RootView from '../../components/RootView'
 import { ThemedButton, ThemedText } from '../../components/ThemedComponents'
 import { Biometrics, BiometricsEnrolledResult } from '../../utils/BiometryUtils'
 import { PIN_HASH } from '../../utils/Constants'
-import { hashPasscode } from '../../utils/CryptoUtils'
+import { CryptoUtils } from '../../utils/CryptoUtils'
 import { KeychainManager } from '../../utils/KeychainManager'
 import { UserSettings } from '../../utils/UserSettings'
+import Dialpad from './components/Dialpad'
+import PINDotIndicator from './components/PINDotIndicator'
 
 type Props = {
     navigation: NativeStackNavigationProp<RootStackParamList, 'AuthScreen'>
@@ -58,7 +58,7 @@ export const AuthScreen = ({ navigation }: Props) => {
             setIsLoading(true)
             const storedHash = await KeychainManager.fetchKey(PIN_HASH)
 
-            const currentHash = await hashPasscode(pass)
+            const currentHash = await CryptoUtils.hashPasscode(pass)
             if (currentHash == null) {
                 Alert.alert('Error validating the pin')
                 return
