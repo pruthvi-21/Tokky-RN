@@ -5,12 +5,12 @@ import useTheme, { appTheme } from '../../../Theming'
 import Account from '../../../models/Account'
 import { ThemedText } from '../../../components/ThemedComponents'
 import HomeListItem from './AccountItem'
+import { UserSettings } from '../../../utils/UserSettings'
 
 type Props = {
     list: Account[]
     editAccountCallback?: (id: string) => void
     deleteAccountCallback?: (id: string) => void
-    useGroups?: boolean
 }
 
 function getGroupedAccounts(list: Account[], useGroups: boolean) {
@@ -36,7 +36,7 @@ function getGroupedAccounts(list: Account[], useGroups: boolean) {
 }
 
 function AccountsContainer({ list, ...props }: Props) {
-    const useGroups = props.useGroups == undefined ? true : props.useGroups
+    const useGroups = UserSettings.getMenuUseGroup()
 
     const theme = useTheme()
     const styles = cardStyles(theme)

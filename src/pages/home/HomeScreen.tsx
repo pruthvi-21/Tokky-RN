@@ -20,7 +20,6 @@ function HomeScreen({ navigation }: HomeScreenProps) {
     const theme = useTheme()
 
     const [isDataLoaded, setIsDataLoaded] = useState(false)
-    const [useGroups, setUseGroups] = useState(UserSettings.getMenuUseGroup())
 
     const { accounts, loadAccounts, removeAccount } = useContext(AccountContext)
 
@@ -43,7 +42,7 @@ function HomeScreen({ navigation }: HomeScreenProps) {
             headerRight: () => <ContextMenu />,
             headerTitle: 'Tokky',
         })
-    }, [useGroups])
+    }, [])
 
     function ContextMenu() {
         return (
@@ -54,10 +53,6 @@ function HomeScreen({ navigation }: HomeScreenProps) {
                         case 'key-menu-settings':
                             navigation.navigate('SettingsScreen')
                             return
-                        case 'key-menu-use-groups':
-                            UserSettings.setMenuUseGroups(!UserSettings.getMenuUseGroup())
-                            setUseGroups(prev => !prev)
-                            break
                     }
                 }}
                 menuConfig={{
@@ -70,17 +65,6 @@ function HomeScreen({ navigation }: HomeScreenProps) {
                                 iconType: 'SYSTEM',
                                 iconValue: 'gear',
                             },
-                        },
-                        {
-                            menuTitle: '',
-                            menuOptions: ['displayInline'],
-                            menuItems: [
-                                {
-                                    actionTitle: 'Use Groups',
-                                    actionKey: 'key-menu-use-groups',
-                                    menuState: useGroups ? 'on' : 'off',
-                                },
-                            ],
                         },
                     ],
                 }}>
@@ -142,7 +126,6 @@ function HomeScreen({ navigation }: HomeScreenProps) {
                     list={accounts}
                     editAccountCallback={handleEditItem}
                     deleteAccountCallback={handleDeleteItem}
-                    useGroups={useGroups}
                 />
             )}
 

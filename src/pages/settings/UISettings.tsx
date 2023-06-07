@@ -22,6 +22,7 @@ function UISettings() {
     const [activeIndex, setActiveIndex] = useState(UserSettings.getTimerIndicator())
 
     const [isThumbnailsDisplayed, setIsThumbnailsDisplayed] = useState(UserSettings.isThumbnailDisplayed())
+    const [isUseGroups, setIsUseGroups] = useState(UserSettings.getMenuUseGroup())
 
     useEffect(() => {
         UserSettings.setTimerIndicator(activeIndex)
@@ -54,6 +55,14 @@ function UISettings() {
                 </View>
             </BottomSheet>
 
+            <SwitchPreference
+                title="Group Alphabetically"
+                checked={isUseGroups}
+                onValueChange={val => {
+                    setIsUseGroups(val)
+                    UserSettings.setMenuUseGroups(val)
+                }}
+            />
             <SwitchPreference
                 title="Display Thumbnails"
                 checked={isThumbnailsDisplayed}
