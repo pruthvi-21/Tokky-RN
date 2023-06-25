@@ -9,25 +9,26 @@ interface Props extends ViewProps {
 }
 
 interface ThumbnailProps {
-    size: number
-    cornerRadius?: number
+    size: 'small' | 'large'
     color: ColorValue
     text: string
 }
 
 export function Thumbnail(props: ThumbnailProps) {
+    const thumbRatio = 220 / 150
+
     const styles = StyleSheet.create({
         thumbnail: {
-            width: props.size,
+            width: props.size == 'small' ? 60 : 100,
+            height: props.size == 'small' ? 60 / thumbRatio : 100 / thumbRatio,
             backgroundColor: props.color,
-            borderRadius: props.cornerRadius,
-            aspectRatio: 1,
+            borderRadius: props.size == 'small' ? 11 : 11 * thumbRatio,
             alignItems: 'center',
             justifyContent: 'center',
         },
         textStyle: {
             color: 'white',
-            fontSize: 0.4 * props.size,
+            fontSize: props.size == 'small' ? 20 : 20 * thumbRatio,
         },
     })
     return (
@@ -61,7 +62,7 @@ function AccountThumbnailController({ color, style, onChange, ...props }: Props)
 
     return (
         <View style={[styles.container, style]} {...props}>
-            <Thumbnail color={selectedColor} text={props.text} size={100} cornerRadius={25} />
+            <Thumbnail color={selectedColor} text={props.text} size="large" />
             <View style={styles.tilesContainer}>
                 {colors.map((item, idx) => {
                     return (

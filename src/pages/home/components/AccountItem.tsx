@@ -72,8 +72,7 @@ const HomeListItem = ({ accountItem, editAccountCallback, deleteAccountCallback,
                             <View style={styles.preview}>
                                 {
                                     <Thumbnail
-                                        size={44}
-                                        cornerRadius={44 * 0.25}
+                                        size="small"
                                         color={accountItem.thumbnailColor}
                                         text={accountItem.issuer}
                                     />
@@ -116,8 +115,8 @@ const cardStyles = (theme: typeof appTheme) =>
             paddingVertical: 10,
         },
         preview: {
-            width: 44,
-            aspectRatio: 1,
+            width: 55,
+            height: 37.5,
             borderRadius: 10,
             marginRight: 20,
         },
