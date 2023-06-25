@@ -6,11 +6,11 @@ import { RootStackParamList } from '../../../App'
 import useTheme from '../../Theming'
 import SafeArea from '../../components/SafeArea'
 import { IconButton } from '../../components/ThemedComponents'
+import { AccountContext } from '../../data/AccountContext'
 import DB from '../../data/AccountsDB'
 import { UserSettings } from '../../utils/UserSettings'
 import AccountsContainer from './components/AccountsContainer'
 import FAB from './components/HomeFAB'
-import { AccountContext } from '../../data/AccountContext'
 
 type HomeScreenProps = {
     navigation: NativeStackNavigationProp<RootStackParamList, 'HomeScreen'>
@@ -50,6 +50,12 @@ function HomeScreen({ navigation }: HomeScreenProps) {
                 isMenuPrimaryAction={true}
                 onPressMenuItem={event => {
                     switch (event.nativeEvent.actionKey) {
+                        case 'key-menu-import':
+                            navigation.navigate('ImportAccountsScreen')
+                            return
+                        case 'key-menu-export':
+                            navigation.navigate('ExportAccountsScreen')
+                            return
                         case 'key-menu-settings':
                             navigation.navigate('SettingsScreen')
                             return
@@ -58,6 +64,27 @@ function HomeScreen({ navigation }: HomeScreenProps) {
                 menuConfig={{
                     menuTitle: '',
                     menuItems: [
+                        {
+                            menuTitle: 'Transfer Accounts',
+                            menuItems: [
+                                {
+                                    actionTitle: 'Import Accounts',
+                                    actionKey: 'key-menu-import',
+                                    icon: {
+                                        iconType: 'SYSTEM',
+                                        iconValue: 'square.and.arrow.down',
+                                    },
+                                },
+                                {
+                                    actionTitle: 'Export Accounts',
+                                    actionKey: 'key-menu-export',
+                                    icon: {
+                                        iconType: 'SYSTEM',
+                                        iconValue: 'square.and.arrow.up',
+                                    },
+                                },
+                            ],
+                        },
                         {
                             actionKey: 'key-menu-settings',
                             actionTitle: 'Settings',
@@ -122,11 +149,7 @@ function HomeScreen({ navigation }: HomeScreenProps) {
     return (
         <SafeArea>
             {isDataLoaded && (
-                <AccountsContainer
-                    list={accounts}
-                    editAccountCallback={handleEditItem}
-                    deleteAccountCallback={handleDeleteItem}
-                />
+                <AccountsContainer list={accounts} editAccountCallback={handleEditItem} deleteAccountCallback={handleDeleteItem} />
             )}
 
             {true && <FAB onPress={handleFabClick} />}

@@ -3,16 +3,18 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { StatusBar, StyleSheet } from 'react-native'
 import useTheme, { appTheme } from './src/Theming'
 import SafeArea from './src/components/SafeArea'
+import { AccountProvider } from './src/data/AccountContext'
 import Account from './src/models/Account'
+import NewAccountScreen from './src/pages/NewAccountScreen'
+import UpdateAccountScreen from './src/pages/UpdateAccountScreen'
+import HomeScreen from './src/pages/home/HomeScreen'
+import { IntroScreen } from './src/pages/intro/IntroScreen'
 import { AuthScreen } from './src/pages/lockscreen/AuthScreen'
 import { ChangePinScreen } from './src/pages/lockscreen/ChangePinScreen'
-import HomeScreen from './src/pages/home/HomeScreen'
-import NewAccountScreen from './src/pages/NewAccountScreen'
 import SettingsScreen from './src/pages/settings/SettingsScreen'
-import UpdateAccountScreen from './src/pages/UpdateAccountScreen'
-import { IntroScreen } from './src/pages/intro/IntroScreen'
+import ImportAccountsScreen from './src/pages/transfer/ImportAccountsScreen'
+import ExportAccountsScreen from './src/pages/transfer/export/ExportAccountsScreen'
 import { PINChangeModes } from './src/utils/Constants'
-import { AccountProvider } from './src/data/AccountContext'
 
 export type RootStackParamList = {
     AuthScreen: undefined
@@ -22,6 +24,8 @@ export type RootStackParamList = {
     UpdateAccountScreen: { account: Account }
     SettingsScreen: undefined
     ChangePinScreen: { mode: PINChangeModes; hash?: string }
+    ImportAccountsScreen: undefined
+    ExportAccountsScreen: undefined
 }
 
 export default function App() {
@@ -106,6 +110,26 @@ export default function App() {
                                 headerTitleStyle: styles.headerTitleStyle,
                                 headerTintColor: theme.color.primary_color,
                                 headerShadowVisible: false,
+                            }}
+                        />
+                        <Stack.Screen
+                            name="ImportAccountsScreen"
+                            component={ImportAccountsScreen}
+                            options={{
+                                headerTitle: 'Import Accounts',
+                                headerStyle: styles.headerStyleModal,
+                                headerTitleStyle: styles.headerTitleStyle,
+                                headerTintColor: theme.color.primary_color,
+                                presentation: 'modal',
+                            }}
+                        />
+                        <Stack.Screen
+                            name="ExportAccountsScreen"
+                            component={ExportAccountsScreen}
+                            options={{
+                                headerShown: false,
+                                presentation: 'modal',
+                                gestureEnabled: false,
                             }}
                         />
                     </Stack.Navigator>
