@@ -1,6 +1,6 @@
-import React, { ReactNode, createContext, useEffect, useState } from 'react'
-import { ColorValue } from 'react-native/types'
+import React, { ReactNode, createContext, useState } from 'react'
 import Account from '../models/Account'
+import { Thumbnail } from '../utils/Constants'
 import DB from './AccountsDB'
 
 interface AccountContextType {
@@ -8,7 +8,7 @@ interface AccountContextType {
     loadAccounts: (accounts: Account[]) => void
     addAccount: (account: Account) => Promise<void>
     removeAccount: (id: string) => Promise<void>
-    updateAccount: (account: Account, data: { issuer: string; label: string; thumbnailColor: ColorValue }) => Promise<void>
+    updateAccount: (account: Account, data: { issuer: string; label: string; thumbnail: Thumbnail }) => Promise<void>
 }
 
 const defaultState = {
@@ -38,11 +38,11 @@ export const AccountProvider = ({ children }: { children: ReactNode | undefined 
         rowsEffected > 0 && setAccounts(accounts.filter(item => item.id !== id))
     }
 
-    const updateAccount = async (account: Account, data: { issuer: string; label: string; thumbnailColor: ColorValue }) => {
-        await DB.update(account.id, data.issuer, data.label, data.thumbnailColor)
+    const updateAccount = async (account: Account, data: { issuer: string; label: string; thumbnail: Thumbnail }) => {
+        await DB.update(account.id, data.issuer, data.label, data.thumbnail)
         account.issuer = data.issuer
         account.label = data.label
-        account.thumbnailColor = data.thumbnailColor
+        account.thumbnail = data.thumbnail
         setAccounts([...accounts].sort((a, b) => a.name.localeCompare(b.name)))
     }
 

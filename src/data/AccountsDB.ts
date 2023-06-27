@@ -1,7 +1,6 @@
 import SQLite from 'react-native-sqlite-storage'
-import { ColorValue } from 'react-native/types'
 import Account from '../models/Account'
-import { AccountEntryMethod, AlgorithmType, ENC_IV, ENC_KEY, OTPType } from '../utils/Constants'
+import { AccountEntryMethod, ENC_IV, ENC_KEY, OTPType, Thumbnail, ThumbnailIconType } from '../utils/Constants'
 import { CryptoUtils } from '../utils/CryptoUtils'
 import { KeychainManager } from '../utils/KeychainManager'
 
@@ -33,7 +32,8 @@ class AccountsDB {
                 LABEL text,
                 KEY_INFO text NOT NULL,
                 TYPE text NOT NULL,
-                THUMB_COLOR text NOT NULL,
+                THUMB_TYPE text NOT NULL,
+                THUMB_VALUE text NOT NULL,
                 ADDED_FROM text NOT NULL,
                 CREATE_STP date NOT NULL,
                 UPDATE_STP date NOT NULL
@@ -53,7 +53,8 @@ class AccountsDB {
             await CryptoUtils.encryptData(account.label, key, iv),
             await CryptoUtils.encryptData(account.secretInfo, key, iv),
             await CryptoUtils.encryptData(account.type, key, iv),
-            await CryptoUtils.encryptData(account.thumbnailColor.toString(), key, iv),
+            await CryptoUtils.encryptData(account.thumbnail.type, key, iv),
+            await CryptoUtils.encryptData(account.thumbnail.value, key, iv),
             await CryptoUtils.encryptData(account.addedFrom, key, iv),
             await CryptoUtils.encryptData(account.createdOn, key, iv),
             await CryptoUtils.encryptData(account.updatedOn, key, iv),
@@ -61,7 +62,7 @@ class AccountsDB {
 
         const result = await this.executeSql(
             `INSERT INTO ACCOUNTS
-             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
             encryptedEntries,
         )
         return result.insertId
@@ -79,21 +80,22 @@ class AccountsDB {
         return result.rowsAffected
     }
 
-    public async update(id: string, issuer: string, label: string, thumbnailColor: ColorValue): Promise<number | undefined> {
+    public async update(id: string, issuer: string, label: string, thumbnail: Thumbnail): Promise<number | undefined> {
         const key = await KeychainManager.fetchKey(ENC_KEY)
         const iv = await KeychainManager.fetchKey(ENC_IV)
 
         const encId = await CryptoUtils.encryptData(id, key, iv)
         const encIssuer = await CryptoUtils.encryptData(issuer, key, iv)
         const encLabel = await CryptoUtils.encryptData(label, key, iv)
-        const encThumbnailColor = await CryptoUtils.encryptData(thumbnailColor.toString(), key, iv)
+        const encThumbnailType = await CryptoUtils.encryptData(thumbnail.type, key, iv)
+        const encThumbnailValue = await CryptoUtils.encryptData(thumbnail.value, key, iv)
 
         const result = await this.executeSql(
             `UPDATE ACCOUNTS
-			 SET ISSUER=?, LABEL=?, THUMB_COLOR=?
+			 SET ISSUER=?, LABEL=?, THUMB_TYPE=?, THUMB_VALUE=?
 			 WHERE ID=?
 			`,
-            [encIssuer, encLabel, encThumbnailColor, encId],
+            [encIssuer, encLabel, encThumbnailType, encThumbnailValue, encId],
         )
         return result.insertId
     }
@@ -113,7 +115,8 @@ class AccountsDB {
             const label = await CryptoUtils.decryptData(account.LABEL, key, iv)
             const keyInfo = await CryptoUtils.decryptData(account.KEY_INFO, key, iv)
             const type = await CryptoUtils.decryptData(account.TYPE, key, iv)
-            const thumbnailColor = await CryptoUtils.decryptData(account.THUMB_COLOR, key, iv)
+            const thumbnailType = (await CryptoUtils.decryptData(account.THUMB_TYPE, key, iv)) as ThumbnailIconType
+            const thumbnailValue = await CryptoUtils.decryptData(account.THUMB_VALUE, key, iv)
             const addedFrom = await CryptoUtils.decryptData(account.ADDED_FROM, key, iv)
             const createdOn = await CryptoUtils.decryptData(account.CREATE_STP, key, iv)
             const updatedOn = await CryptoUtils.decryptData(account.UPDATE_STP, key, iv)
@@ -126,7 +129,7 @@ class AccountsDB {
                 label,
                 keyInfoJson.secretKey,
                 type as OTPType,
-                thumbnailColor,
+                { type: thumbnailType, value: thumbnailValue },
                 keyInfoJson.algorithm,
                 keyInfoJson.digits,
                 keyInfoJson.period,

@@ -10,6 +10,7 @@ import RootView from '../components/RootView'
 import { ThemedButton } from '../components/ThemedComponents'
 import { AccountContext } from '../data/AccountContext'
 import Account from '../models/Account'
+import { Thumbnail } from '../utils/Constants'
 
 type Props = {
     navigation: NativeStackNavigationProp<RootStackParamList, 'UpdateAccountScreen'>
@@ -19,7 +20,7 @@ type Props = {
 export default function UpdateAccountScreen({ navigation, route }: Props) {
     const account: Account = route.params.account
 
-    const [thumbnailColor, setThumbnailColor] = useState<ColorValue>(account.thumbnailColor)
+    const [thumbnail, setThumbnail] = useState<Thumbnail>(account.thumbnail)
     const [issuer, setIssuer] = useState<string>(account.issuer)
     const [label, setLabel] = useState<string>(account.label)
 
@@ -37,7 +38,7 @@ export default function UpdateAccountScreen({ navigation, route }: Props) {
         return () => {
             StatusBar.setBarStyle('default', true)
         }
-    }, [navigation, issuer, label, thumbnailColor])
+    }, [navigation, issuer, label, thumbnail])
 
     async function handleSaveBtn() {
         const existingAccount = accounts.find((acc: Account) => acc.issuer + acc.label === issuer + label && acc.id !== account.id)
@@ -47,7 +48,7 @@ export default function UpdateAccountScreen({ navigation, route }: Props) {
         }
 
         try {
-            updateAccount(account, { issuer, label, thumbnailColor })
+            updateAccount(account, { issuer, label, thumbnail })
         } catch (err) {
             console.log(err)
         }
@@ -63,9 +64,9 @@ export default function UpdateAccountScreen({ navigation, route }: Props) {
             <AccountThumbnailController
                 style={{ marginTop: 25 }}
                 text={issuer}
-                color={thumbnailColor}
-                onChange={(newColor: ColorValue) => {
-                    setThumbnailColor(newColor)
+                thumb={thumbnail}
+                onChange={(thumb: Thumbnail) => {
+                    setThumbnail(thumb)
                 }}
             />
             <View style={{ borderRadius: 11, overflow: 'hidden' }}>

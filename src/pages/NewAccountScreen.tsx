@@ -1,6 +1,6 @@
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import React, { useContext, useEffect, useState } from 'react'
-import { Alert, Animated, ColorValue, Easing, KeyboardAvoidingView, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native'
+import { Alert, Animated, Easing, KeyboardAvoidingView, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native'
 import { RootStackParamList } from '../../App'
 import useTheme, { appTheme } from '../Theming'
 import AccountThumbnailController from '../components/AccountThumbnailController'
@@ -11,7 +11,15 @@ import { IconButton, ThemedButton, ThemedText } from '../components/ThemedCompon
 import { AccountContext } from '../data/AccountContext'
 import Account, { AccountBuilder } from '../models/Account'
 import { Base32 } from '../utils/Base32'
-import { AccountEntryMethod, AlgorithmType, DEFAULT_ALGORITHM, DEFAULT_DIGITS, DEFAULT_PERIOD } from '../utils/Constants'
+import {
+    AccountEntryMethod,
+    AlgorithmType,
+    DEFAULT_ALGORITHM,
+    DEFAULT_DIGITS,
+    DEFAULT_PERIOD,
+    Thumbnail,
+    ThumbnailIconType,
+} from '../utils/Constants'
 
 type AddAccountScreenProps = {
     navigation: NativeStackNavigationProp<RootStackParamList, 'NewAccountScreen'>
@@ -26,7 +34,7 @@ export default function NewAccountScreen({ navigation }: AddAccountScreenProps) 
     const [digits, setDigits] = useState<number>(DEFAULT_DIGITS)
     const [period, setPeriod] = useState<string>(DEFAULT_PERIOD + '')
 
-    const [thumbnailColor, setThumbnailColor] = useState<ColorValue>('grey')
+    const [thumbnail, setThumbnail] = useState<Thumbnail>({ type: ThumbnailIconType.COLOR, value: 'grey' })
 
     const anim = useState(new Animated.Value(0))[0]
     const [isAdvLayoutVisible, setIsAdvLayoutVisible] = useState(false)
@@ -54,7 +62,7 @@ export default function NewAccountScreen({ navigation }: AddAccountScreenProps) 
         navigation.setOptions({
             headerRight: () => <ThemedButton title={'Done'} onPress={createAccount} />,
         })
-    }, [issuer, label, secretKey, algo, digits, period, thumbnailColor])
+    }, [issuer, label, secretKey, algo, digits, period, thumbnail])
 
     useEffect(() => {
         if (!isAdvLayoutVisible) {
@@ -85,7 +93,7 @@ export default function NewAccountScreen({ navigation }: AddAccountScreenProps) 
                 .setAlgorithm(algo)
                 .setDigits(digits)
                 .setPeriod(parseInt(period))
-                .setThumbnailColor(thumbnailColor)
+                .setThumbnail(thumbnail)
 
             const newAccount = builder.build()
 
@@ -140,7 +148,7 @@ export default function NewAccountScreen({ navigation }: AddAccountScreenProps) 
                         <AccountThumbnailController
                             style={{ marginTop: 25 }}
                             text={issuer}
-                            onChange={(newColor: ColorValue) => setThumbnailColor(newColor)}
+                            onChange={(newColor: Thumbnail) => setThumbnail(newColor)}
                         />
                         <View style={{ borderRadius: 11, overflow: 'hidden' }}>
                             <FormField

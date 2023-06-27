@@ -1,5 +1,13 @@
-import { ColorValue } from 'react-native/types'
-import { AccountEntryMethod, AlgorithmType, DEFAULT_ALGORITHM, DEFAULT_DIGITS, DEFAULT_PERIOD, OTPType } from '../utils/Constants'
+import {
+    AccountEntryMethod,
+    AlgorithmType,
+    DEFAULT_ALGORITHM,
+    DEFAULT_DIGITS,
+    DEFAULT_PERIOD,
+    OTPType,
+    ThumbnailIconType,
+    Thumbnail,
+} from '../utils/Constants'
 import { getToken } from '../utils/RFC6238'
 import { generateUUID } from '../utils/Utils'
 
@@ -18,7 +26,7 @@ export default class Account {
     private _createdOn: string
     private _updatedOn: string
     private _addedFrom: AccountEntryMethod
-    private _thumbnailColor: ColorValue = 'grey'
+    private _thumbnail: Thumbnail
 
     currentOTP: string = ''
     private _lastUpdatedCounter: number = 0
@@ -29,7 +37,7 @@ export default class Account {
         label: string = '',
         secretKey: string,
         type: OTPType = OTPType.TOTP,
-        thumbnailColor: ColorValue,
+        thumbnail: Thumbnail,
         algorithm: AlgorithmType = DEFAULT_ALGORITHM,
         digits: number = DEFAULT_DIGITS,
         period: number = DEFAULT_PERIOD,
@@ -42,7 +50,7 @@ export default class Account {
         this._label = label
         this._secretKey = secretKey
         this._type = type
-        this._thumbnailColor = thumbnailColor
+        this._thumbnail = thumbnail
         this._algorithm = algorithm
         this._digits = digits
         this._period = period
@@ -109,12 +117,12 @@ export default class Account {
         return this._issuer + ' (' + this._label + ')'
     }
 
-    set thumbnailColor(color: ColorValue) {
-        this._thumbnailColor = color
+    set thumbnail(item: Thumbnail) {
+        this._thumbnail = item
     }
 
-    get thumbnailColor(): ColorValue {
-        return this._thumbnailColor
+    get thumbnail(): Thumbnail {
+        return this._thumbnail
     }
 
     get secretInfo(): string {
@@ -157,7 +165,7 @@ export class AccountBuilder {
     private _label: string = ''
     private _secretKey: string = ''
     private _type: OTPType = OTPType.TOTP
-    private _thumbnailColor: ColorValue = 'grey'
+    private _thumbnail: Thumbnail = { type: ThumbnailIconType.COLOR, value: 'grey' }
     private _algorithm: AlgorithmType = DEFAULT_ALGORITHM
     private _digits: number = DEFAULT_DIGITS
     private _period: number = DEFAULT_PERIOD
@@ -199,8 +207,8 @@ export class AccountBuilder {
         return this
     }
 
-    setThumbnailColor(color: ColorValue): AccountBuilder {
-        this._thumbnailColor = color
+    setThumbnail(item: Thumbnail): AccountBuilder {
+        this._thumbnail = item
         return this
     }
 
@@ -214,7 +222,7 @@ export class AccountBuilder {
             this._label,
             this._secretKey,
             this._type,
-            this._thumbnailColor,
+            this._thumbnail,
             this._algorithm,
             this._digits,
             this._period,

@@ -6,7 +6,7 @@ import Account from '../../../models/Account'
 import { UserSettings } from '../../../utils/UserSettings'
 import OTPView from './AccountItemHiddenView'
 import { IconButton, ThemedText } from '../../../components/ThemedComponents'
-import { Thumbnail } from '../../../components/AccountThumbnailController'
+import { ThumbnailPreview } from '../../../components/AccountThumbnailController'
 
 interface Props extends ViewProps {
     accountItem: Account
@@ -70,13 +70,7 @@ const HomeListItem = ({ accountItem, editAccountCallback, deleteAccountCallback,
                     <View style={[styles.listItemContainer]}>
                         {UserSettings.isThumbnailDisplayed() && (
                             <View style={styles.preview}>
-                                {
-                                    <Thumbnail
-                                        size="small"
-                                        color={accountItem.thumbnailColor}
-                                        text={accountItem.issuer}
-                                    />
-                                }
+                                {<ThumbnailPreview size="small" thumb={accountItem.thumbnail} text={accountItem.issuer} />}
                             </View>
                         )}
                         <View style={styles.titleContainer}>
