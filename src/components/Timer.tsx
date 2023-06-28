@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet, View, useColorScheme } from 'react-native'
 import { Circle, Svg } from 'react-native-svg'
 import useTheme from '../Theming'
 import { TimerIndicatorType } from '../utils/Constants'
@@ -69,7 +69,7 @@ const Timer = ({ radius, progress, maxValue, ...props }: TimerProps) => {
                         cy={radius}
                         r={radius}
                         fill={'#0000'}
-                        stroke={theme.color.bg_variant2}
+                        stroke={useColorScheme() == 'dark' ? '#333333' : '#e5e5e5'}
                         strokeWidth={radius * 2}
                         strokeDashoffset={(progress * circumference) / maxValue}
                         strokeDasharray={circumference}
