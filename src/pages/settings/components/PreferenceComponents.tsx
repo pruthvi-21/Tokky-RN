@@ -1,5 +1,5 @@
 import React, { ReactNode, useState } from 'react'
-import { ScrollView, StyleSheet, Switch, SwitchProps, TouchableOpacity, TouchableOpacityProps, View, ViewProps } from 'react-native'
+import { ScrollView, StyleSheet, Switch, TouchableOpacity, TouchableOpacityProps, View } from 'react-native'
 import useTheme, { appTheme } from '../../../Theming'
 import { ThemedText } from '../../../components/ThemedComponents'
 
@@ -68,11 +68,14 @@ export function Preference(props: PreferenceProps) {
     const styles = preferenceStyles(theme)
 
     return (
-        <TouchableOpacity style={[styles.preferenceStyle, viewProps.disabled && styles.disabled]} {...viewProps}>
-            <ThemedText style={[styles.preferenceTitleStyle]}>{title}</ThemedText>
-            <ThemedText style={styles.preferenceValueStyle}>{value}</ThemedText>
-            <View>{widget}</View>
-        </TouchableOpacity>
+        <View>
+            <TouchableOpacity style={[styles.preferenceStyle, viewProps.disabled && styles.disabled]} {...viewProps}>
+                <ThemedText style={[styles.preferenceTitleStyle]}>{title}</ThemedText>
+                <ThemedText style={styles.preferenceValueStyle}>{value}</ThemedText>
+                <View>{widget}</View>
+            </TouchableOpacity>
+            {viewProps.disabled && <View style={{ ...StyleSheet.absoluteFillObject }} />}
+        </View>
     )
 }
 
