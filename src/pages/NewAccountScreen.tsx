@@ -183,7 +183,7 @@ export default function NewAccountScreen({ navigation }: AddAccountScreenProps) 
                                 justifyContent: 'space-between',
                                 marginTop: 25,
                                 paddingVertical: 15,
-                                backgroundColor: isAdvLayoutVisible ? theme.color.bg_variant2 : theme.color.bg_variant,
+                                backgroundColor: isAdvLayoutVisible ? (theme.isDark ? theme.color.bg_variant2 : '#e5e5e5') : theme.color.bg_variant,
                                 paddingHorizontal: 16,
                                 borderBottomRightRadius: isAdvLayoutVisible ? 0 : 11,
                                 borderBottomLeftRadius: isAdvLayoutVisible ? 0 : 11,
