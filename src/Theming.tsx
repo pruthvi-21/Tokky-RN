@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Appearance, useColorScheme } from 'react-native'
 
 export const appTheme = {
+    isDark: false,
     dimen: { cornerRadius: 20 },
     color: {
         primary_color: '#228811',
@@ -29,6 +30,7 @@ export const appTheme = {
 
 export const appThemeDark = {
     ...appTheme,
+    isDark: true,
     color: {
         ...appTheme.color,
         primary_color: '#228811',
