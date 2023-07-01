@@ -2,10 +2,10 @@ import { useFocusEffect } from '@react-navigation/native'
 import { useCallback, useEffect, useState } from 'react'
 import { SectionList, StyleSheet, View } from 'react-native'
 import useTheme, { appTheme } from '../../../Theming'
-import Account from '../../../models/Account'
 import { ThemedText } from '../../../components/ThemedComponents'
-import HomeListItem from './AccountItem'
+import Account from '../../../models/Account'
 import { UserSettings } from '../../../utils/UserSettings'
+import HomeListItem from './AccountItem'
 
 type Props = {
     list: Account[]
@@ -40,15 +40,15 @@ function AccountsContainer({ list, ...props }: Props) {
 
     const theme = useTheme()
     const styles = cardStyles(theme)
-    const [activeSections, setActiveSections] = useState<number[]>([])
+    const [activeAccountIds, setActiveAccountIds] = useState<string[]>([])
 
     const [groupedList, setGroupedList] = useState(getGroupedAccounts(list, useGroups))
 
     useFocusEffect(
         useCallback(() => {
-            setActiveSections([])
+            setActiveAccountIds([])
             return () => {
-                setActiveSections([])
+                setActiveAccountIds([])
             }
         }, []),
     )
@@ -72,6 +72,8 @@ function AccountsContainer({ list, ...props }: Props) {
     }
 
     function renderItem({ item, index, section }: { item: Account; index: number; section: any }) {
+        const isActive = activeAccountIds.includes(item.id)
+
         const isFirstItem = index === 0
         const isLastItem = index === section.data.length - 1
 
@@ -80,7 +82,15 @@ function AccountsContainer({ list, ...props }: Props) {
         return (
             <View style={itemStyles}>
                 <HomeListItem
-                    accountItem={item}
+                    account={item}
+                    isActive={isActive}
+                    onExpand={(accountId: string) => {
+                        if (activeAccountIds.includes(accountId)) {
+                            setActiveAccountIds(activeAccountIds.filter(it => it !== item.id))
+                        } else {
+                            setActiveAccountIds([...activeAccountIds, item.id])
+                        }
+                    }}
                     editAccountCallback={props.editAccountCallback}
                     deleteAccountCallback={props.deleteAccountCallback}
                 />
@@ -113,7 +123,6 @@ function AccountsContainer({ list, ...props }: Props) {
 
     return (
         <View style={[styles.listWrapper]}>
-            {useGroups}
             <SectionList
                 sections={groupedList}
                 keyExtractor={(item, index) => item.issuer + index}

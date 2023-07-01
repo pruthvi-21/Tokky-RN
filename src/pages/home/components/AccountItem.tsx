@@ -9,16 +9,17 @@ import { IconButton, ThemedText } from '../../../components/ThemedComponents'
 import { ThumbnailPreview } from '../../../components/AccountThumbnailController'
 
 interface Props extends ViewProps {
-    accountItem: Account
+    account: Account
+    isActive: boolean
+    onExpand: (accountId: string) => void
     editAccountCallback?: (id: string) => void
     deleteAccountCallback?: (id: string) => void
 }
 
-const HomeListItem = ({ accountItem, editAccountCallback, deleteAccountCallback, ...props }: Props) => {
+const HomeListItem = ({ account, isActive, editAccountCallback, deleteAccountCallback, ...props }: Props) => {
     const theme = useTheme()
     const styles = cardStyles(theme)
 
-    const [isExpanded, setIsExpanded] = useState(false)
     const [isContextMenuVisible, setIsContextMenuVisible] = useState<boolean>(false)
 
     const handleToggle = () => {
@@ -26,7 +27,7 @@ const HomeListItem = ({ accountItem, editAccountCallback, deleteAccountCallback,
             ...LayoutAnimation.Presets.easeInEaseOut,
             duration: 200,
         })
-        setIsExpanded(!isExpanded)
+        props.onExpand(account.id)
     }
 
     return (
@@ -37,10 +38,10 @@ const HomeListItem = ({ accountItem, editAccountCallback, deleteAccountCallback,
                     onPressMenuItem={event => {
                         switch (event.nativeEvent.actionKey) {
                             case 'key-menu-edit':
-                                editAccountCallback?.(accountItem.id)
+                                editAccountCallback?.(account.id)
                                 return
                             case 'key-menu-delete':
-                                deleteAccountCallback?.(accountItem.id)
+                                deleteAccountCallback?.(account.id)
                         }
                     }}
                     onMenuWillShow={() => {
@@ -70,20 +71,20 @@ const HomeListItem = ({ accountItem, editAccountCallback, deleteAccountCallback,
                     <View style={[styles.listItemContainer]}>
                         {UserSettings.isThumbnailDisplayed() && (
                             <View style={styles.preview}>
-                                {<ThumbnailPreview size="small" thumb={accountItem.thumbnail} text={accountItem.issuer} />}
+                                {<ThumbnailPreview size="small" thumb={account.thumbnail} text={account.issuer} />}
                             </View>
                         )}
                         <View style={styles.titleContainer}>
-                            <ThemedText style={styles.issuerTextStyle}>{accountItem?.issuer}</ThemedText>
-                            {accountItem.label.length !== 0 && (
+                            <ThemedText style={styles.issuerTextStyle}>{account?.issuer}</ThemedText>
+                            {account.label.length !== 0 && (
                                 <ThemedText style={styles.labelTextStyle} type="secondary">
-                                    {accountItem.label}
+                                    {account.label}
                                 </ThemedText>
                             )}
                         </View>
                         {!isContextMenuVisible && (
                             <IconButton
-                                style={[styles.iconArrow, { transform: [{ rotateX: isExpanded ? '180deg' : '0deg' }] }]}
+                                style={[styles.iconArrow, { transform: [{ rotateX: isActive ? '180deg' : '0deg' }] }]}
                                 icon="down-arrow"
                             />
                         )}
@@ -91,9 +92,9 @@ const HomeListItem = ({ accountItem, editAccountCallback, deleteAccountCallback,
                 </ContextMenuView>
             </TouchableWithoutFeedback>
 
-            {isExpanded && (
+            {isActive && (
                 <View style={{ overflow: 'hidden' }}>
-                    <OTPView style={[styles.listItemContainer]} account={accountItem} isActive={isExpanded} />
+                    <OTPView style={[styles.listItemContainer]} account={account} isActive={isActive} />
                 </View>
             )}
         </View>
