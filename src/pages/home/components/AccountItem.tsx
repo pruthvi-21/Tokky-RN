@@ -1,26 +1,61 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { LayoutAnimation, StyleSheet, TouchableWithoutFeedback, View, ViewProps } from 'react-native'
 import { ContextMenuView } from 'react-native-ios-context-menu'
 import useTheme, { appTheme } from '../../../Theming'
+import { ThumbnailPreview } from '../../../components/AccountThumbnailController'
+import { IconButton, ThemedText } from '../../../components/ThemedComponents'
+import Timer from '../../../components/Timer'
 import Account from '../../../models/Account'
 import { UserSettings } from '../../../utils/UserSettings'
-import OTPView from './AccountItemHiddenView'
-import { IconButton, ThemedText } from '../../../components/ThemedComponents'
-import { ThumbnailPreview } from '../../../components/AccountThumbnailController'
 
 interface Props extends ViewProps {
     account: Account
     isActive: boolean
+    currentTime: number
     onExpand: (accountId: string) => void
     editAccountCallback?: (id: string) => void
     deleteAccountCallback?: (id: string) => void
 }
 
-const HomeListItem = ({ account, isActive, editAccountCallback, deleteAccountCallback, ...props }: Props) => {
+const HomeListItem = ({ account, isActive, currentTime, editAccountCallback, deleteAccountCallback, ...props }: Props) => {
     const theme = useTheme()
     const styles = cardStyles(theme)
 
     const [isContextMenuVisible, setIsContextMenuVisible] = useState<boolean>(false)
+
+    function HiddenView() {
+        const [otp, setOTP] = useState('')
+        const [progress, setProgress] = useState(account.period - (currentTime % account.period))
+
+        function updateOTP() {
+            account.updateOTP()
+            setOTP(account.currentOTP)
+        }
+
+        useEffect(() => {
+            if (isActive) {
+                updateOTP()
+            }
+        }, [isActive])
+
+        useEffect(() => {
+            if (isActive) {
+                const timeSinceEpoch = Math.floor(currentTime / 1000) % account.period
+                const newRemainingTime = account.period - timeSinceEpoch
+                if (newRemainingTime == account.period) updateOTP()
+                setProgress(newRemainingTime)
+            }
+        }, [isActive, currentTime])
+
+        return (
+            <View style={styles.listItemContainer}>
+                <View style={styles.timerContainer}>
+                    <Timer radius={12} maxValue={account.period} progress={progress} />
+                </View>
+                <ThemedText style={styles.otpText}>{otp}</ThemedText>
+            </View>
+        )
+    }
 
     const handleToggle = () => {
         LayoutAnimation.configureNext({
@@ -92,11 +127,7 @@ const HomeListItem = ({ account, isActive, editAccountCallback, deleteAccountCal
                 </ContextMenuView>
             </TouchableWithoutFeedback>
 
-            {isActive && (
-                <View style={{ overflow: 'hidden' }}>
-                    <OTPView style={[styles.listItemContainer]} account={account} isActive={isActive} />
-                </View>
-            )}
+            {isActive && <HiddenView />}
         </View>
     )
 }
@@ -130,6 +161,17 @@ const cardStyles = (theme: typeof appTheme) =>
             width: 20,
             height: 20,
             color: theme.color.text_color_secondary,
+        },
+        timerContainer: {
+            width: 44,
+            marginRight: 20,
+            display: 'flex',
+            alignItems: 'center',
+        },
+        otpText: {
+            color: theme.color.text_color_primary,
+            fontSize: 30,
+            marginLeft: 2,
         },
     })
 

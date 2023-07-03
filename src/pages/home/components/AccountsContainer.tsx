@@ -41,6 +41,7 @@ function AccountsContainer({ list, ...props }: Props) {
     const theme = useTheme()
     const styles = cardStyles(theme)
     const [activeAccountIds, setActiveAccountIds] = useState<string[]>([])
+    const [currentTime, setCurrentTime] = useState(Date.now())
 
     const [groupedList, setGroupedList] = useState(getGroupedAccounts(list, useGroups))
 
@@ -56,6 +57,16 @@ function AccountsContainer({ list, ...props }: Props) {
     useEffect(() => {
         setGroupedList(getGroupedAccounts(list, useGroups))
     }, [useGroups, list])
+
+    useEffect(() => {
+        const id = setInterval(() => {
+            setCurrentTime(Date.now())
+        }, 1000)
+
+        return () => {
+            clearInterval(id)
+        }
+    }, [setCurrentTime])
 
     function renderSectionHeader({ section }: { section: { title: string } }) {
         return <ThemedText style={styles.header}>{section.title}</ThemedText>
@@ -84,6 +95,7 @@ function AccountsContainer({ list, ...props }: Props) {
                 <HomeListItem
                     account={item}
                     isActive={isActive}
+                    currentTime={currentTime}
                     onExpand={(accountId: string) => {
                         if (activeAccountIds.includes(accountId)) {
                             setActiveAccountIds(activeAccountIds.filter(it => it !== item.id))
