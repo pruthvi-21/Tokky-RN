@@ -10,17 +10,16 @@ import { UserSettings } from '../../../utils/UserSettings'
 
 interface Props extends ViewProps {
     account: Account
-    isActive: boolean
     currentTime: number
-    onExpand: (accountId: string) => void
     editAccountCallback?: (id: string) => void
     deleteAccountCallback?: (id: string) => void
 }
 
-const HomeListItem = ({ account, isActive, currentTime, editAccountCallback, deleteAccountCallback, ...props }: Props) => {
+const HomeListItem = ({ account, currentTime, editAccountCallback, deleteAccountCallback, ...props }: Props) => {
     const theme = useTheme()
     const styles = cardStyles(theme)
 
+    const [isExpanded, setIsExpanded] = useState(false)
     const [isContextMenuVisible, setIsContextMenuVisible] = useState<boolean>(false)
 
     function HiddenView() {
@@ -33,19 +32,19 @@ const HomeListItem = ({ account, isActive, currentTime, editAccountCallback, del
         }
 
         useEffect(() => {
-            if (isActive) {
+            if (isExpanded) {
                 updateOTP()
             }
-        }, [isActive])
+        }, [isExpanded])
 
         useEffect(() => {
-            if (isActive) {
+            if (isExpanded) {
                 const timeSinceEpoch = Math.floor(currentTime / 1000) % account.period
                 const newRemainingTime = account.period - timeSinceEpoch
                 if (newRemainingTime == account.period) updateOTP()
                 setProgress(newRemainingTime)
             }
-        }, [isActive, currentTime])
+        }, [isExpanded, currentTime])
 
         return (
             <View style={styles.listItemContainer}>
@@ -62,7 +61,7 @@ const HomeListItem = ({ account, isActive, currentTime, editAccountCallback, del
             ...LayoutAnimation.Presets.easeInEaseOut,
             duration: 200,
         })
-        props.onExpand(account.id)
+        setIsExpanded(!isExpanded)
     }
 
     return (
@@ -119,7 +118,7 @@ const HomeListItem = ({ account, isActive, currentTime, editAccountCallback, del
                         </View>
                         {!isContextMenuVisible && (
                             <IconButton
-                                style={[styles.iconArrow, { transform: [{ rotateX: isActive ? '180deg' : '0deg' }] }]}
+                                style={[styles.iconArrow, { transform: [{ rotateX: isExpanded ? '180deg' : '0deg' }] }]}
                                 icon="down-arrow"
                             />
                         )}
@@ -127,7 +126,7 @@ const HomeListItem = ({ account, isActive, currentTime, editAccountCallback, del
                 </ContextMenuView>
             </TouchableWithoutFeedback>
 
-            {isActive && <HiddenView />}
+            {isExpanded && <HiddenView />}
         </View>
     )
 }
