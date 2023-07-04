@@ -64,7 +64,7 @@ export function ThumbnailPreview(props: ThumbnailProps) {
             )}
             {props.thumb.type == ThumbnailIconType.ICON && (
                 <Image
-                    source={ICONS.filter(item => item.id == props.thumb.value)[0].src}
+                    source={ICONS.filter(item => item.id == props.thumb.value)[0]?.src}
                     style={[
                         styles.thumbnailFrame,
                         {
@@ -160,7 +160,7 @@ function AccountThumbnailController({ thumb, style, onChange, ...props }: Props)
                     <View style={{ alignItems: 'flex-end', marginHorizontal: 16 }}>
                         <ThemedButton title="Cancel" onPress={() => setIsVisible(false)} />
                     </View>
-                    <ThumbnailIconPicker list={ICONS} />
+                    <ThumbnailIconPicker list={ICONS.sort((a, b) => a.label.localeCompare(b.label))} />
                 </View>
             </BottomSheet>
 
