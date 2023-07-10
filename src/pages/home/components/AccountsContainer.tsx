@@ -41,18 +41,8 @@ function AccountsContainer({ list, ...props }: Props) {
     const theme = useTheme()
     const styles = cardStyles(theme)
     const [currentTime, setCurrentTime] = useState(Date.now())
-    const [activeSections, setActiveSections] = useState<number[]>([])
 
     const [groupedList, setGroupedList] = useState(getGroupedAccounts(list, useGroups))
-
-    useFocusEffect(
-        useCallback(() => {
-            setActiveSections([])
-            return () => {
-                setActiveSections([])
-            }
-        }, []),
-    )
 
     useEffect(() => {
         setGroupedList(getGroupedAccounts(list, useGroups))
@@ -93,6 +83,8 @@ function AccountsContainer({ list, ...props }: Props) {
                 <HomeListItem
                     account={item}
                     currentTime={currentTime}
+                    editAccountCallback={props.editAccountCallback}
+                    deleteAccountCallback={props.deleteAccountCallback}
                 />
             </View>
         )
