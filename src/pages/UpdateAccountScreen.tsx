@@ -1,12 +1,13 @@
 import { RouteProp } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import React, { useContext, useEffect, useState } from 'react'
-import { Alert, ColorValue, StatusBar, StyleSheet, View } from 'react-native'
+import { Alert, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { RootStackParamList } from '../../App'
 import useTheme, { appTheme } from '../Theming'
 import AccountThumbnailController from '../components/AccountThumbnailController'
 import { FormField } from '../components/FormField'
 import RootView from '../components/RootView'
+import SafeArea from '../components/SafeArea'
 import { ThemedButton } from '../components/ThemedComponents'
 import { AccountContext } from '../data/AccountContext'
 import Account from '../models/Account'
@@ -27,7 +28,7 @@ export default function UpdateAccountScreen({ navigation, route }: Props) {
     const theme = useTheme()
     const styles = pageStyles(theme)
 
-    const { accounts, updateAccount } = useContext(AccountContext)
+    const { accounts, updateAccount, removeAccount } = useContext(AccountContext)
 
     useEffect(() => {
         navigation.setOptions({
@@ -55,42 +56,73 @@ export default function UpdateAccountScreen({ navigation, route }: Props) {
         navigation.goBack()
     }
 
-    function Divider() {
-        return <View style={styles.divider} />
+    function handleDelete() {
+        Alert.alert(
+            'Warning',
+            'Before removing please ensure that you turn off 2FA for this account.\n\n This operation cannot be undone.',
+            [
+                { text: 'Cancel', style: 'cancel', onPress: () => {} },
+                {
+                    text: 'Delete',
+                    style: 'destructive',
+                    onPress: async () => {
+                        try {
+                            await removeAccount(account.id)
+                            navigation.goBack()
+                        } catch (err) {
+                            Alert.alert('Unable to delete. Please try later.')
+                        }
+                    },
+                },
+            ],
+        )
+    }
+
+    function DeleteCTA() {
+        return (
+            <TouchableOpacity
+                style={{ backgroundColor: theme.color.danger_color + 22, padding: 13, borderRadius: 11 }}
+                onPress={handleDelete}>
+                <Text style={{ color: theme.color.danger_color, fontSize: 16, paddingStart: 10, textAlign: 'center' }}>Delete Account</Text>
+            </TouchableOpacity>
+        )
     }
 
     return (
         <RootView style={styles.root}>
-            <AccountThumbnailController
-                style={{ marginTop: 25 }}
-                text={issuer}
-                thumb={thumbnail}
-                onChange={(thumb: Thumbnail) => {
-                    setThumbnail(thumb)
-                }}
-            />
-            <View style={{ borderRadius: 11, overflow: 'hidden' }}>
-                <FormField
-                    style={styles.textInputStyle}
-                    label="Issuer"
-                    value={issuer}
-                    placeholder="Company name"
-                    onChangeText={text => {
-                        setIssuer(text)
+            <SafeArea style={{ backgroundColor: 'transparent' }}>
+                <AccountThumbnailController
+                    style={{ marginTop: 25 }}
+                    text={issuer}
+                    thumb={thumbnail}
+                    onChange={(thumb: Thumbnail) => {
+                        setThumbnail(thumb)
                     }}
                 />
-                <Divider />
-                <FormField
-                    style={styles.textInputStyle}
-                    label="Label"
-                    value={label}
-                    placeholder="Username or email (Optional)"
-                    onChangeText={text => {
-                        setLabel(text)
-                    }}
-                />
-            </View>
-            <View style={{ flex: 1 }} />
+                <View style={{ borderRadius: 11, overflow: 'hidden' }}>
+                    <FormField
+                        style={styles.textInputStyle}
+                        label="Issuer"
+                        value={issuer}
+                        placeholder="Company name"
+                        onChangeText={text => {
+                            setIssuer(text)
+                        }}
+                    />
+                    <View style={styles.divider} />
+                    <FormField
+                        style={styles.textInputStyle}
+                        label="Label"
+                        value={label}
+                        placeholder="Username or email (Optional)"
+                        onChangeText={text => {
+                            setLabel(text)
+                        }}
+                    />
+                </View>
+                <View style={{ flex: 1 }} />
+                <DeleteCTA />
+            </SafeArea>
         </RootView>
     )
 }

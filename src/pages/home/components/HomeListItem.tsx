@@ -13,10 +13,9 @@ interface Props extends ViewProps {
     currentTime: number
     inEdit: boolean
     editAccountCallback?: (id: string) => void
-    deleteAccountCallback?: (id: string) => void
 }
 
-const HomeListItem = ({ account, currentTime, inEdit, editAccountCallback, deleteAccountCallback, ...props }: Props) => {
+const HomeListItem = ({ account, currentTime, inEdit, editAccountCallback, ...props }: Props) => {
     const theme = useTheme()
     const styles = cardStyles(theme)
 
@@ -102,15 +101,6 @@ const HomeListItem = ({ account, currentTime, inEdit, editAccountCallback, delet
                             <View style={{ alignItems: 'center', flexDirection: 'row' }}>
                                 <TouchableOpacity onPress={() => editAccountCallback?.(account.id)}>
                                     <IconButton style={styles.iconEdit} icon={'edit'} />
-                                </TouchableOpacity>
-
-                                <TouchableOpacity onPress={() => deleteAccountCallback?.(account.id)}>
-                                    <SFSymbol
-                                        name="trash"
-                                        color={theme.color.danger_color}
-                                        size={19}
-                                        style={{ width: 20, height: 20, marginStart: 25 }}
-                                    />
                                 </TouchableOpacity>
                             </View>
                         )}

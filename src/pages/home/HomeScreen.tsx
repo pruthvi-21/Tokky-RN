@@ -22,7 +22,7 @@ function HomeScreen({ navigation }: HomeScreenProps) {
     const [isDataLoaded, setIsDataLoaded] = useState(false)
     const [inEdit, setInEdit] = useState(false)
 
-    const { accounts, loadAccounts, removeAccount } = useContext(AccountContext)
+    const { accounts, loadAccounts } = useContext(AccountContext)
 
     useEffect(() => {
         if (!UserSettings.isAppIntroDone()) {
@@ -154,27 +154,6 @@ function HomeScreen({ navigation }: HomeScreenProps) {
         if (account != undefined) navigation.navigate('UpdateAccountScreen', { account: account })
     }
 
-    const handleDeleteItem = (id: string) => {
-        Alert.alert(
-            'Warning',
-            'Before removing please ensure that you turn off 2FA for this account.\n\n This operation cannot be undone.',
-            [
-                { text: 'Cancel', style: 'cancel', onPress: () => {} },
-                {
-                    text: 'Delete',
-                    style: 'destructive',
-                    onPress: async () => {
-                        try {
-                            await removeAccount(id)
-                        } catch (err) {
-                            Alert.alert('Unable to delete. Please try later.')
-                        }
-                    },
-                },
-            ],
-        )
-    }
-
     return (
         <SafeArea>
             {isDataLoaded && (
@@ -182,7 +161,6 @@ function HomeScreen({ navigation }: HomeScreenProps) {
                     list={accounts}
                     inEdit={inEdit}
                     editAccountCallback={handleEditItem}
-                    deleteAccountCallback={handleDeleteItem}
                 />
             )}
 

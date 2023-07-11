@@ -11,7 +11,6 @@ type Props = {
     list: Account[]
     inEdit: boolean
     editAccountCallback?: (id: string) => void
-    deleteAccountCallback?: (id: string) => void
 }
 
 function getGroupedAccounts(list: Account[], useGroups: boolean) {
@@ -86,7 +85,6 @@ function AccountsContainer({ list, ...props }: Props) {
                     currentTime={currentTime}
                     inEdit={props.inEdit}
                     editAccountCallback={props.editAccountCallback}
-                    deleteAccountCallback={props.deleteAccountCallback}
                 />
             </View>
         )
