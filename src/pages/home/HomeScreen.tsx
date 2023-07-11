@@ -1,16 +1,17 @@
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import React, { useContext, useEffect, useState } from 'react'
-import { ActionSheetIOS, Alert, LayoutAnimation, View } from 'react-native'
+import { ActionSheetIOS, LayoutAnimation, View } from 'react-native'
 import { ContextMenuButton } from 'react-native-ios-context-menu'
+import { SFSymbol } from 'react-native-sfsymbols'
 import { RootStackParamList } from '../../../App'
 import useTheme from '../../Theming'
 import SafeArea from '../../components/SafeArea'
-import { IconButton, ThemedButton } from '../../components/ThemedComponents'
+import { ThemedButton } from '../../components/ThemedComponents'
 import { AccountContext } from '../../data/AccountContext'
 import DB from '../../data/AccountsDB'
 import { UserSettings } from '../../utils/UserSettings'
-import AccountsContainer from './components/HomeListContainer'
 import FAB from './components/HomeFAB'
+import AccountsContainer from './components/HomeListContainer'
 
 type HomeScreenProps = {
     navigation: NativeStackNavigationProp<RootStackParamList, 'HomeScreen'>
@@ -124,13 +125,13 @@ function HomeScreen({ navigation }: HomeScreenProps) {
                         },
                     ],
                 }}>
-                <IconButton
-                    icon="overflow-menu"
+                <SFSymbol
                     style={{
-                        width: 22.5,
-                        height: 22.5,
-                        color: theme.color.primary_color,
+                        width: 27,
+                        height: 27,
                     }}
+                    name="ellipsis.circle"
+                    color={theme.color.primary_color}
                 />
             </ContextMenuButton>
         )
@@ -156,13 +157,7 @@ function HomeScreen({ navigation }: HomeScreenProps) {
 
     return (
         <SafeArea>
-            {isDataLoaded && (
-                <AccountsContainer
-                    list={accounts}
-                    inEdit={inEdit}
-                    editAccountCallback={handleEditItem}
-                />
-            )}
+            {isDataLoaded && <AccountsContainer list={accounts} inEdit={inEdit} editAccountCallback={handleEditItem} />}
 
             {!inEdit && <FAB onPress={handleFabClick} />}
         </SafeArea>

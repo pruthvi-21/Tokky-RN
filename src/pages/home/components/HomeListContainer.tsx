@@ -1,5 +1,4 @@
-import { useFocusEffect } from '@react-navigation/native'
-import { useCallback, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { SectionList, StyleSheet, View } from 'react-native'
 import useTheme, { appTheme } from '../../../Theming'
 import Account from '../../../models/Account'

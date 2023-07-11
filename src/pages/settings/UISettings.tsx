@@ -3,10 +3,11 @@ import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import useTheme, { appTheme } from '../../Theming'
 import BottomSheet from '../../components/BottomSheet'
 import { Preference, PreferenceCategory, SwitchPreference } from './components/PreferenceComponents'
-import { IconButton, ThemedText } from '../../components/ThemedComponents'
+import { ThemedText } from '../../components/ThemedComponents'
 import Timer from '../../components/Timer'
 import { TimerIndicatorType } from '../../utils/Constants'
 import { UserSettings } from '../../utils/UserSettings'
+import { SFSymbol } from 'react-native-sfsymbols'
 
 function UISettings() {
     const theme = useTheme()
@@ -75,7 +76,9 @@ function UISettings() {
                 title="Timer indicator"
                 value={timerIndicatorValues[activeIndex].name}
                 activeOpacity={1}
-                widget={<IconButton icon="chevron-up-down" style={{ width: 19, height: 19, color: theme.color.text_color_secondary }} />}
+                widget={
+                    <SFSymbol style={{ width: 16 }} size={16} name="chevron.up.chevron.down" color={theme.color.text_color_secondary} />
+                }
                 onPress={() => {
                     setIsVisible(true)
                 }}

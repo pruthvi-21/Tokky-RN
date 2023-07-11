@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { SFSymbol } from 'react-native-sfsymbols'
 import useTheme, { appTheme } from '../../../Theming'
-import { IconButton } from '../../../components/ThemedComponents'
 
 interface DialpadProps {
     onDigitPress?: (digit: string) => void
@@ -27,7 +27,7 @@ const Dialpad: React.FC<DialpadProps> = ({ onDigitPress }) => {
         return (
             <View key={'del'} style={[styles.dummy, { alignItems: 'center', justifyContent: 'center' }]}>
                 <TouchableOpacity style={{ padding: 10 }} onPress={() => onDigitPress?.('del')}>
-                    <IconButton icon="keypad-delete" style={{ color: theme.color.text_color_primary, width: 32, height: 32 }} />
+                    <SFSymbol name="delete.left" color={theme.color.text_color_primary} style={{ width: 30, height: 30 }} />
                 </TouchableOpacity>
             </View>
         )

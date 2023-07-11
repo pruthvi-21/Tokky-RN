@@ -3,8 +3,9 @@ import { LayoutAnimation, StyleSheet, TouchableOpacity, TouchableWithoutFeedback
 import { SFSymbol } from 'react-native-sfsymbols'
 import useTheme, { appTheme } from '../../../Theming'
 import { ThumbnailPreview } from '../../../components/AccountThumbnailController'
-import { IconButton, ThemedText } from '../../../components/ThemedComponents'
+import { ThemedText } from '../../../components/ThemedComponents'
 import Timer from '../../../components/Timer'
+import IconEdit from '../../../components/svg/IconEdit'
 import Account from '../../../models/Account'
 import { UserSettings } from '../../../utils/UserSettings'
 
@@ -100,7 +101,7 @@ const HomeListItem = ({ account, currentTime, inEdit, editAccountCallback, ...pr
                         {inEdit && (
                             <View style={{ alignItems: 'center', flexDirection: 'row' }}>
                                 <TouchableOpacity onPress={() => editAccountCallback?.(account.id)}>
-                                    <IconButton style={styles.iconEdit} icon={'edit'} />
+                                    <IconEdit size={23} color={theme.color.text_color_secondary} />
                                 </TouchableOpacity>
                             </View>
                         )}
@@ -137,11 +138,6 @@ const cardStyles = (theme: typeof appTheme) =>
         },
         labelTextStyle: {
             marginTop: 3,
-        },
-        iconEdit: {
-            width: 23,
-            height: 23,
-            color: theme.color.text_color_secondary,
         },
         timerContainer: {
             width: 44,

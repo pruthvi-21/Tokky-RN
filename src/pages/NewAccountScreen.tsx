@@ -7,7 +7,7 @@ import AccountThumbnailController from '../components/AccountThumbnailController
 import { FormField } from '../components/FormField'
 import PickerDial from '../components/PickerDial'
 import RootView from '../components/RootView'
-import { IconButton, ThemedButton, ThemedText } from '../components/ThemedComponents'
+import { ThemedButton, ThemedText } from '../components/ThemedComponents'
 import { AccountContext } from '../data/AccountContext'
 import Account, { AccountBuilder } from '../models/Account'
 import { Base32 } from '../utils/Base32'
@@ -20,6 +20,7 @@ import {
     Thumbnail,
     ThumbnailIconType,
 } from '../utils/Constants'
+import { SFSymbol } from 'react-native-sfsymbols'
 
 type AddAccountScreenProps = {
     navigation: NativeStackNavigationProp<RootStackParamList, 'NewAccountScreen'>
@@ -183,7 +184,11 @@ export default function NewAccountScreen({ navigation }: AddAccountScreenProps) 
                                 justifyContent: 'space-between',
                                 marginTop: 25,
                                 paddingVertical: 15,
-                                backgroundColor: isAdvLayoutVisible ? (theme.isDark ? theme.color.bg_variant2 : '#e5e5e5') : theme.color.bg_variant,
+                                backgroundColor: isAdvLayoutVisible
+                                    ? theme.isDark
+                                        ? theme.color.bg_variant2
+                                        : '#e5e5e5'
+                                    : theme.color.bg_variant,
                                 paddingHorizontal: 16,
                                 borderBottomRightRadius: isAdvLayoutVisible ? 0 : 11,
                                 borderBottomLeftRadius: isAdvLayoutVisible ? 0 : 11,
@@ -207,7 +212,7 @@ export default function NewAccountScreen({ navigation }: AddAccountScreenProps) 
                                         },
                                     ],
                                 }}>
-                                <IconButton style={styles.advLayoutArrow} icon={'chevron-right'} />
+                                <SFSymbol style={{ width: 16 }} size={16} name="chevron.right" color={theme.color.text_color_secondary} />
                             </Animated.View>
                         </TouchableOpacity>
                     </View>
@@ -284,10 +289,5 @@ const pageStyles = (theme: typeof appTheme) =>
         advLayoutSummary: {
             color: theme.color.text_color_secondary,
             marginTop: 3,
-        },
-        advLayoutArrow: {
-            width: 20,
-            height: 20,
-            color: theme.color.text_color_secondary,
         },
     })
