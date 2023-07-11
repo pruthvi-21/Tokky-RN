@@ -4,11 +4,12 @@ import { SectionList, StyleSheet, View } from 'react-native'
 import useTheme, { appTheme } from '../../../Theming'
 import Account from '../../../models/Account'
 import { ThemedText } from '../../../components/ThemedComponents'
-import HomeListItem from './AccountItem'
+import HomeListItem from './HomeListItem'
 import { UserSettings } from '../../../utils/UserSettings'
 
 type Props = {
     list: Account[]
+    inEdit: boolean
     editAccountCallback?: (id: string) => void
     deleteAccountCallback?: (id: string) => void
 }
@@ -83,6 +84,7 @@ function AccountsContainer({ list, ...props }: Props) {
                 <HomeListItem
                     account={item}
                     currentTime={currentTime}
+                    inEdit={props.inEdit}
                     editAccountCallback={props.editAccountCallback}
                     deleteAccountCallback={props.deleteAccountCallback}
                 />

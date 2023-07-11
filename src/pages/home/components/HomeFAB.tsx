@@ -1,7 +1,7 @@
 import React from 'react'
 import { TouchableOpacity, TouchableOpacityProps } from 'react-native'
+import { SFSymbol } from 'react-native-sfsymbols'
 import useTheme from '../../../Theming'
-import { IconButton } from '../../../components/ThemedComponents'
 
 function FAB(props: TouchableOpacityProps) {
     const theme = useTheme()
@@ -20,14 +20,14 @@ function FAB(props: TouchableOpacityProps) {
                 elevation: 3,
             }}
             {...props}>
-            <IconButton
+            <SFSymbol
                 style={{
                     width: 30,
                     height: 30,
-                    color: '#ffffff',
                 }}
-                key={'key_add_fab'}
-                icon="add"
+                size={20}
+                name="plus"
+                color="white"
             />
         </TouchableOpacity>
     )

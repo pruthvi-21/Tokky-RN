@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { LayoutAnimation, StyleSheet, TouchableWithoutFeedback, View, ViewProps } from 'react-native'
-import { ContextMenuView } from 'react-native-ios-context-menu'
+import { LayoutAnimation, StyleSheet, TouchableOpacity, TouchableWithoutFeedback, View, ViewProps } from 'react-native'
+import { SFSymbol } from 'react-native-sfsymbols'
 import useTheme, { appTheme } from '../../../Theming'
 import { ThumbnailPreview } from '../../../components/AccountThumbnailController'
 import { IconButton, ThemedText } from '../../../components/ThemedComponents'
@@ -11,16 +11,16 @@ import { UserSettings } from '../../../utils/UserSettings'
 interface Props extends ViewProps {
     account: Account
     currentTime: number
+    inEdit: boolean
     editAccountCallback?: (id: string) => void
     deleteAccountCallback?: (id: string) => void
 }
 
-const HomeListItem = ({ account, currentTime, editAccountCallback, deleteAccountCallback, ...props }: Props) => {
+const HomeListItem = ({ account, currentTime, inEdit, editAccountCallback, deleteAccountCallback, ...props }: Props) => {
     const theme = useTheme()
     const styles = cardStyles(theme)
 
     const [isExpanded, setIsExpanded] = useState(false)
-    const [isContextMenuVisible, setIsContextMenuVisible] = useState<boolean>(false)
 
     function HiddenView() {
         const [otp, setOTP] = useState('')
@@ -36,6 +36,10 @@ const HomeListItem = ({ account, currentTime, editAccountCallback, deleteAccount
                 updateOTP()
             }
         }, [isExpanded])
+
+        useEffect(() => {
+            if (inEdit) toggleExpandState(false)
+        }, [inEdit])
 
         useEffect(() => {
             if (isExpanded) {
@@ -56,74 +60,62 @@ const HomeListItem = ({ account, currentTime, editAccountCallback, deleteAccount
         )
     }
 
-    const handleToggle = () => {
+    const toggleExpandState = (state: boolean) => {
         LayoutAnimation.configureNext({
             ...LayoutAnimation.Presets.easeInEaseOut,
             duration: 200,
         })
-        setIsExpanded(!isExpanded)
+        setIsExpanded(state)
     }
 
     return (
         <View>
-            <TouchableWithoutFeedback onPress={handleToggle}>
-                <ContextMenuView
-                    shouldWaitForMenuToHideBeforeFiringOnPressMenuItem={false}
-                    onPressMenuItem={event => {
-                        switch (event.nativeEvent.actionKey) {
-                            case 'key-menu-edit':
-                                editAccountCallback?.(account.id)
-                                return
-                            case 'key-menu-delete':
-                                deleteAccountCallback?.(account.id)
-                        }
-                    }}
-                    onMenuWillShow={() => {
-                        setIsContextMenuVisible(true)
-                    }}
-                    onMenuWillHide={() => {
-                        setIsContextMenuVisible(false)
-                    }}
-                    menuConfig={{
-                        menuTitle: '',
-                        menuItems: [
-                            {
-                                actionKey: 'key-menu-edit',
-                                actionTitle: 'Edit',
-                            },
-                            {
-                                actionKey: 'key-menu-delete',
-                                actionTitle: 'Delete Account',
-                                menuAttributes: ['destructive'],
-                                icon: {
-                                    iconType: 'SYSTEM',
-                                    iconValue: 'trash',
-                                },
-                            },
-                        ],
-                    }}>
-                    <View style={[styles.listItemContainer]}>
-                        {UserSettings.isThumbnailDisplayed() && (
-                            <View style={styles.preview}>
-                                {<ThumbnailPreview size="small" thumb={account.thumbnail} text={account.issuer} />}
-                            </View>
-                        )}
-                        <View style={styles.titleContainer}>
-                            <ThemedText style={styles.issuerTextStyle}>{account?.issuer}</ThemedText>
-                            {account.label.length !== 0 && (
-                                <ThemedText style={styles.labelTextStyle} type="secondary">
-                                    {account.label}
-                                </ThemedText>
-                            )}
+            <TouchableWithoutFeedback
+                onPress={() => {
+                    if (inEdit) return
+                    toggleExpandState(!isExpanded)
+                }}>
+                <View style={[styles.listItemContainer]}>
+                    {UserSettings.isThumbnailDisplayed() && (
+                        <View style={styles.preview}>
+                            {<ThumbnailPreview size="small" thumb={account.thumbnail} text={account.issuer} />}
                         </View>
-                        {!isContextMenuVisible && (
-                            <IconButton
-                                style={[styles.iconArrow, { transform: [{ rotateX: isExpanded ? '180deg' : '0deg' }] }]}
-                                icon="down-arrow"
-                            />
+                    )}
+                    <View style={styles.titleContainer}>
+                        <ThemedText style={styles.issuerTextStyle}>{account?.issuer}</ThemedText>
+                        {account.label.length !== 0 && (
+                            <ThemedText style={styles.labelTextStyle} type="secondary">
+                                {account.label}
+                            </ThemedText>
                         )}
                     </View>
-                </ContextMenuView>
+                    <View style={{ flexDirection: 'row' }}>
+                        {!inEdit && (
+                            <SFSymbol
+                                style={{ width: 18, padding: 5, transform: [{ rotateX: isExpanded ? '180deg' : '0deg' }] }}
+                                size={18}
+                                name="chevron.down"
+                                color={theme.color.text_color_secondary}
+                            />
+                        )}
+                        {inEdit && (
+                            <View style={{ alignItems: 'center', flexDirection: 'row' }}>
+                                <TouchableOpacity onPress={() => editAccountCallback?.(account.id)}>
+                                    <IconButton style={styles.iconEdit} icon={'edit'} />
+                                </TouchableOpacity>
+
+                                <TouchableOpacity onPress={() => deleteAccountCallback?.(account.id)}>
+                                    <SFSymbol
+                                        name="trash"
+                                        color={theme.color.danger_color}
+                                        size={19}
+                                        style={{ width: 20, height: 20, marginStart: 25 }}
+                                    />
+                                </TouchableOpacity>
+                            </View>
+                        )}
+                    </View>
+                </View>
             </TouchableWithoutFeedback>
 
             {isExpanded && <HiddenView />}
@@ -156,9 +148,9 @@ const cardStyles = (theme: typeof appTheme) =>
         labelTextStyle: {
             marginTop: 3,
         },
-        iconArrow: {
-            width: 20,
-            height: 20,
+        iconEdit: {
+            width: 23,
+            height: 23,
             color: theme.color.text_color_secondary,
         },
         timerContainer: {

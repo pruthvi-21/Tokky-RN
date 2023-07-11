@@ -1,15 +1,15 @@
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import React, { useContext, useEffect, useState } from 'react'
-import { ActionSheetIOS, Alert } from 'react-native'
+import { ActionSheetIOS, Alert, LayoutAnimation, View } from 'react-native'
 import { ContextMenuButton } from 'react-native-ios-context-menu'
 import { RootStackParamList } from '../../../App'
 import useTheme from '../../Theming'
 import SafeArea from '../../components/SafeArea'
-import { IconButton } from '../../components/ThemedComponents'
+import { IconButton, ThemedButton } from '../../components/ThemedComponents'
 import { AccountContext } from '../../data/AccountContext'
 import DB from '../../data/AccountsDB'
 import { UserSettings } from '../../utils/UserSettings'
-import AccountsContainer from './components/AccountsContainer'
+import AccountsContainer from './components/HomeListContainer'
 import FAB from './components/HomeFAB'
 
 type HomeScreenProps = {
@@ -20,6 +20,7 @@ function HomeScreen({ navigation }: HomeScreenProps) {
     const theme = useTheme()
 
     const [isDataLoaded, setIsDataLoaded] = useState(false)
+    const [inEdit, setInEdit] = useState(false)
 
     const { accounts, loadAccounts, removeAccount } = useContext(AccountContext)
 
@@ -39,10 +40,30 @@ function HomeScreen({ navigation }: HomeScreenProps) {
 
     useEffect(() => {
         navigation.setOptions({
-            headerRight: () => <ContextMenu />,
-            headerTitle: 'Tokky',
+            headerRight: () => (
+                <View style={{ flexDirection: 'row', alignItems: 'center', width: 100, justifyContent: 'flex-end' }}>
+                    {inEdit && (
+                        <ThemedButton
+                            title="Done"
+                            onPress={() => {
+                                startLayoutAnimation()
+                                setInEdit(false)
+                            }}
+                        />
+                    )}
+                    {!inEdit && <ContextMenu />}
+                </View>
+            ),
+            headerTitle: inEdit ? 'Edit accounts' : 'Tokky',
         })
-    }, [])
+    }, [inEdit])
+
+    function startLayoutAnimation() {
+        LayoutAnimation.configureNext({
+            ...LayoutAnimation.Presets.easeInEaseOut,
+            duration: 200,
+        })
+    }
 
     function ContextMenu() {
         return (
@@ -50,6 +71,10 @@ function HomeScreen({ navigation }: HomeScreenProps) {
                 isMenuPrimaryAction={true}
                 onPressMenuItem={event => {
                     switch (event.nativeEvent.actionKey) {
+                        case 'key-menu-edit':
+                            startLayoutAnimation()
+                            setInEdit(true)
+                            return
                         case 'key-menu-import':
                             navigation.navigate('ImportAccountsScreen')
                             return
@@ -64,6 +89,10 @@ function HomeScreen({ navigation }: HomeScreenProps) {
                 menuConfig={{
                     menuTitle: '',
                     menuItems: [
+                        {
+                            actionKey: 'key-menu-edit',
+                            actionTitle: 'Edit',
+                        },
                         {
                             menuTitle: 'Transfer Accounts',
                             menuItems: [
@@ -149,10 +178,15 @@ function HomeScreen({ navigation }: HomeScreenProps) {
     return (
         <SafeArea>
             {isDataLoaded && (
-                <AccountsContainer list={accounts} editAccountCallback={handleEditItem} deleteAccountCallback={handleDeleteItem} />
+                <AccountsContainer
+                    list={accounts}
+                    inEdit={inEdit}
+                    editAccountCallback={handleEditItem}
+                    deleteAccountCallback={handleDeleteItem}
+                />
             )}
 
-            {true && <FAB onPress={handleFabClick} />}
+            {!inEdit && <FAB onPress={handleFabClick} />}
         </SafeArea>
     )
 }
