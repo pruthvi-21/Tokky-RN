@@ -44,6 +44,7 @@ export function ThumbnailPreview(props: ThumbnailProps) {
             height: DIMENS.height,
             borderRadius: DIMENS.radius,
             backgroundColor: props.thumb.type == ThumbnailIconType.COLOR ? props.thumb.value! : undefined,
+            opacity: props.thumb.value == null ? 0 : 1,
         },
         thumbnail: {
             flex: 1,
@@ -63,19 +64,7 @@ export function ThumbnailPreview(props: ThumbnailProps) {
                 </View>
             )}
             {props.thumb.type == ThumbnailIconType.ICON && (
-                <Image
-                    source={ICONS.filter(item => item.id == props.thumb.value)[0]?.src}
-                    style={[
-                        styles.thumbnailFrame,
-                        {
-                            opacity: props.thumb.value == null ? 0 : 1,
-                            position: 'absolute',
-
-                            // borderWidth: props.size == 'small' ? 1 : 0,
-                            // borderColor: theme.color.bg_variant2,
-                        },
-                    ]}
-                />
+                <Image style={styles.thumbnailFrame} source={ICONS.filter(item => item.id == props.thumb.value)[0]?.src} />
             )}
         </View>
     )
@@ -91,6 +80,7 @@ function AccountThumbnailController({ thumb, style, onChange, ...props }: Props)
         '#B18F96', //Dusty Rose
         '#C8AA4B', //Gold
     ]
+
     const [currentThumbnail, setCurrentThumbnail] = useState<Thumbnail>({
         type: thumb?.type || ThumbnailIconType.COLOR,
         value: thumb?.value || colors[Math.floor(Math.random() * (colors.length - 1))],
@@ -111,18 +101,27 @@ function AccountThumbnailController({ thumb, style, onChange, ...props }: Props)
         )
     }
 
-    const ThumbnailIconPicker = ({ list }: { list: ThumbnailIconAssetType[] }) => {
+    const ThumbnailIconPicker = () => {
         const width = 75
         const height = width / THUMB_RATIO
         const columnCount = 3
 
-        while (list.length % 3 !== 0) {
-            list.push({ id: 'dummy', label: '', src: null })
+        let allThumbIcons = ICONS
+
+        while (allThumbIcons.length % 3 !== 0) {
+            allThumbIcons.push({ id: 'dummy', label: 'zzzzzzzzzzzz', src: null })
         }
+        allThumbIcons = allThumbIcons.sort((a, b) => a.label.localeCompare(b.label))
 
         const renderItem = ({ item }: { item: ThumbnailIconAssetType }) => (
             <TouchableOpacity
-                style={{ margin: 10, padding: 10, width: 97, flex: 1 }}
+                style={{
+                    paddingVertical: 20,
+                    paddingHorizontal: 10,
+                    width: (Dimensions.get('window').width - 40) / 3,
+                    opacity: item.id == 'dummy' ? 0 : 1,
+                }}
+                activeOpacity={item.id == 'dummy' ? 0 : 0.5}
                 onPress={() => {
                     if (!item.src) return
                     setIsVisible(false)
@@ -144,9 +143,7 @@ function AccountThumbnailController({ thumb, style, onChange, ...props }: Props)
             </TouchableOpacity>
         )
 
-        return (
-            <FlatList data={list} renderItem={renderItem} numColumns={columnCount} contentContainerStyle={{ justifyContent: 'center' }} />
-        )
+        return <FlatList data={allThumbIcons} renderItem={renderItem} numColumns={columnCount} />
     }
 
     return (
@@ -157,10 +154,10 @@ function AccountThumbnailController({ thumb, style, onChange, ...props }: Props)
                     setIsVisible(false)
                 }}>
                 <View style={{ maxHeight: Dimensions.get('window').height - 150 }}>
-                    <View style={{ alignItems: 'flex-end', marginHorizontal: 16 }}>
+                    <View style={{ alignItems: 'flex-end', marginBottom: 10 }}>
                         <ThemedButton title="Cancel" onPress={() => setIsVisible(false)} />
                     </View>
-                    <ThumbnailIconPicker list={ICONS.sort((a, b) => a.label.localeCompare(b.label))} />
+                    <ThumbnailIconPicker />
                 </View>
             </BottomSheet>
 
