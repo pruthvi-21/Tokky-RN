@@ -68,6 +68,10 @@ class AccountsDB {
         return result.insertId
     }
 
+    public async insertAll(accounts: Account[]) {
+        accounts.forEach(item => this.insert(item))
+    }
+
     public async remove(id: string | null | undefined): Promise<number> {
         if (id == null || id == undefined) return 0
 

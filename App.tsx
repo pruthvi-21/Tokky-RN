@@ -12,8 +12,8 @@ import { IntroScreen } from './src/pages/intro/IntroScreen'
 import { AuthScreen } from './src/pages/lockscreen/AuthScreen'
 import { ChangePinScreen } from './src/pages/lockscreen/ChangePinScreen'
 import SettingsScreen from './src/pages/settings/SettingsScreen'
+import ExportAccountsScreen from './src/pages/transfer/ExportAccountsScreen'
 import ImportAccountsScreen from './src/pages/transfer/ImportAccountsScreen'
-import ExportAccountsScreen from './src/pages/transfer/export/ExportAccountsScreen'
 import { PINChangeModes } from './src/utils/Constants'
 
 export type RootStackParamList = {
@@ -121,15 +121,17 @@ export default function App() {
                                 headerTitleStyle: styles.headerTitleStyle,
                                 headerTintColor: theme.color.primary_color,
                                 presentation: 'modal',
+                                gestureEnabled: false,
                             }}
                         />
                         <Stack.Screen
                             name="ExportAccountsScreen"
                             component={ExportAccountsScreen}
                             options={{
-                                headerShown: false,
+                                headerTitle: 'Export Accounts',
+                                headerStyle: styles.headerStyleModal,
+                                headerTitleStyle: styles.headerTitleStyle,
                                 presentation: 'modal',
-                                gestureEnabled: false,
                             }}
                         />
                     </Stack.Navigator>

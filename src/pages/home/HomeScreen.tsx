@@ -95,25 +95,12 @@ function HomeScreen({ navigation }: HomeScreenProps) {
                             actionTitle: 'Edit',
                         },
                         {
-                            menuTitle: 'Transfer Accounts',
-                            menuItems: [
-                                {
-                                    actionTitle: 'Import Accounts',
-                                    actionKey: 'key-menu-import',
-                                    icon: {
-                                        iconType: 'SYSTEM',
-                                        iconValue: 'square.and.arrow.down',
-                                    },
-                                },
-                                {
-                                    actionTitle: 'Export Accounts',
-                                    actionKey: 'key-menu-export',
-                                    icon: {
-                                        iconType: 'SYSTEM',
-                                        iconValue: 'square.and.arrow.up',
-                                    },
-                                },
-                            ],
+                            actionTitle: 'Export Accounts',
+                            actionKey: 'key-menu-export',
+                            icon: {
+                                iconType: 'SYSTEM',
+                                iconValue: 'square.and.arrow.up',
+                            },
                         },
                         {
                             actionKey: 'key-menu-settings',
@@ -140,12 +127,12 @@ function HomeScreen({ navigation }: HomeScreenProps) {
     const handleFabClick = () => {
         ActionSheetIOS.showActionSheetWithOptions(
             {
-                options: ['Scan QR code', 'Enter Manually', 'Cancel'],
-                cancelButtonIndex: 2,
+                options: ['Cancel', 'Scan QR code', 'Enter Manually', 'Import From File'],
+                cancelButtonIndex: 0,
                 tintColor: theme.color.primary_color,
             },
             (idx: number) => {
-                if (idx == 1) navigation.navigate('NewAccountScreen')
+                if (idx == 2) navigation.navigate('NewAccountScreen')
             },
         )
     }

@@ -5,8 +5,8 @@ import {
     DEFAULT_DIGITS,
     DEFAULT_PERIOD,
     OTPType,
-    ThumbnailIconType,
     Thumbnail,
+    ThumbnailIconType,
 } from '../utils/Constants'
 import { getToken } from '../utils/RFC6238'
 import { generateUUID } from '../utils/Utils'
@@ -158,6 +158,83 @@ export default class Account {
         }
         return false
     }
+
+    getCSV(): string {
+        function getStr(str: any) {
+            if (typeof str === 'string' && str.includes(',')) {
+                return `"${str}"`
+            }
+            return str
+        }
+
+        let csvRow = getStr(this.issuer) + ','
+
+        if (this.label !== '') {
+            csvRow += getStr(this.label)
+        }
+        csvRow += ','
+
+        csvRow += this.secretKey + ','
+
+        if (this.type !== OTPType.TOTP) {
+            csvRow += getStr(this.type)
+        }
+        csvRow += ','
+
+        if (this.algorithm !== DEFAULT_ALGORITHM) {
+            csvRow += getStr(this.algorithm)
+        }
+        csvRow += ','
+
+        if (this.digits !== DEFAULT_DIGITS) {
+            csvRow += getStr(this.digits)
+        }
+        csvRow += ','
+
+        if (this.period !== DEFAULT_PERIOD) {
+            csvRow += getStr(this.period)
+        }
+        csvRow += '&.&'
+
+        return csvRow
+    }
+
+    getJSON() {
+        const json: {
+            issuer: string
+            label?: string
+            secretKey: string
+            type?: OTPType
+            algorithm?: string
+            digits?: number
+            period?: number
+        } = {
+            issuer: this.issuer,
+            secretKey: this.secretKey,
+        }
+
+        if (this.label !== '') {
+            json['label'] = this.label
+        }
+
+        if (this.type !== OTPType.TOTP) {
+            json['type'] = this.type
+        }
+
+        if (this.algorithm !== DEFAULT_ALGORITHM) {
+            json['algorithm'] = this.algorithm
+        }
+
+        if (this.digits !== DEFAULT_DIGITS) {
+            json['digits'] = this.digits
+        }
+
+        if (this.period !== DEFAULT_PERIOD) {
+            json['period'] = this.period
+        }
+
+        return json
+    }
 }
 
 export class AccountBuilder {
@@ -184,6 +261,11 @@ export class AccountBuilder {
 
     setSecretKey(secretKey: string): AccountBuilder {
         this._secretKey = secretKey
+        return this
+    }
+
+    setType(type: OTPType): AccountBuilder {
+        this._type = type
         return this
     }
 
@@ -232,5 +314,64 @@ export class AccountBuilder {
         )
 
         return account
+    }
+
+    buildFromCSV(csvRow: string): Account[] {
+        const accounts: Account[] = []
+        const rows = csvRow.split('&.&')
+
+        for (const row of rows) {
+            if (row.trim() === '') continue
+            const values: any[] = []
+            let currentValue = ''
+            let withinQuotes = false
+
+            for (let i = 0; i < row.length; i++) {
+                const char = row[i]
+
+                if (char === ',' && !withinQuotes) {
+                    values.push(currentValue.trim())
+                    currentValue = ''
+                } else if (char === '"') {
+                    withinQuotes = !withinQuotes
+                } else {
+                    currentValue += char
+                }
+            }
+
+            values.push(currentValue.trim())
+
+            const issuer = values[0]
+            const label = values[1]
+            const secretKey = values[2]
+            const type = values[3]
+
+            const algorithm = values[4]
+            const digits = parseInt(values[5])
+            const period = parseInt(values[6])
+
+            const acc = new AccountBuilder()
+                .setIssuer(issuer)
+                .setLabel(label)
+                .setSecretKey(secretKey)
+                .setAddedVia(AccountEntryMethod.IMPORTED)
+
+            if (type !== '') {
+                acc.setType(type)
+            }
+            if (algorithm !== '') {
+                acc.setAlgorithm(algorithm)
+            }
+            if (!isNaN(digits)) {
+                acc.setDigits(digits)
+            }
+            if (!isNaN(period)) {
+                acc.setPeriod(period)
+            }
+
+            accounts.push(acc.build())
+        }
+
+        return accounts
     }
 }

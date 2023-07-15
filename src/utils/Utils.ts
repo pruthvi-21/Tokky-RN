@@ -24,3 +24,7 @@ export function getThumbnailInitials(str: String) {
 
     return initials.toUpperCase()
 }
+
+export function getExportFileName() {
+    return 'tokky-export-' + new Date().toISOString().split('T')[0] + '.txt'
+}

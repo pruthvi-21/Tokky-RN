@@ -9,6 +9,7 @@ interface AccountContextType {
     addAccount: (account: Account) => Promise<void>
     removeAccount: (id: string) => Promise<void>
     updateAccount: (account: Account, data: { issuer: string; label: string; thumbnail: Thumbnail }) => Promise<void>
+    importAccounts: (accounts: Account[]) => Promise<void>
 }
 
 const defaultState = {
@@ -17,6 +18,7 @@ const defaultState = {
     addAccount: async () => {},
     removeAccount: async () => {},
     updateAccount: async () => {},
+    importAccounts: async () => {},
 } as AccountContextType
 
 export const AccountContext = createContext(defaultState)
@@ -46,6 +48,11 @@ export const AccountProvider = ({ children }: { children: ReactNode | undefined 
         setAccounts([...accounts].sort((a, b) => a.name.localeCompare(b.name)))
     }
 
+    const importAccounts = async (newAccounts: Account[]) => {
+        await DB.insertAll(newAccounts)
+        setAccounts([...accounts, ...newAccounts].sort((a, b) => a.name.localeCompare(b.name)))
+    }
+
     return (
         <AccountContext.Provider
             value={{
@@ -54,6 +61,7 @@ export const AccountProvider = ({ children }: { children: ReactNode | undefined 
                 addAccount,
                 removeAccount,
                 updateAccount,
+                importAccounts
             }}>
             {children}
         </AccountContext.Provider>

@@ -9,6 +9,7 @@ export enum AlgorithmType {
 export enum AccountEntryMethod {
     FORM = 'form',
     QR_CODE = 'qr',
+    IMPORTED = 'imported',
 }
 
 export enum OTPType {
