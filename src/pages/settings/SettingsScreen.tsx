@@ -9,6 +9,7 @@ import { Biometrics, BiometricsEnrolledResult } from '../../utils/BiometryUtils'
 import { PINChangeModes } from '../../utils/Constants'
 import { UserSettings } from '../../utils/UserSettings'
 import UISettings from './UISettings'
+import TransferSettings from './TransferSettings'
 
 type Props = {
     navigation: NativeStackNavigationProp<RootStackParamList, 'SettingsScreen'>
@@ -97,6 +98,8 @@ export default function SettingsScreen({ navigation }: Props) {
                 </PreferenceCategory>
 
                 <UISettings />
+
+                <TransferSettings navigation={navigation} />
             </PreferenceScreen>
         </RootView>
     )

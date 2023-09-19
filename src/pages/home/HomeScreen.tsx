@@ -76,12 +76,6 @@ function HomeScreen({ navigation }: HomeScreenProps) {
                             startLayoutAnimation()
                             setInEdit(true)
                             return
-                        case 'key-menu-import':
-                            navigation.navigate('ImportAccountsScreen')
-                            return
-                        case 'key-menu-export':
-                            navigation.navigate('ExportAccountsScreen')
-                            return
                         case 'key-menu-settings':
                             navigation.navigate('SettingsScreen')
                             return
@@ -93,14 +87,6 @@ function HomeScreen({ navigation }: HomeScreenProps) {
                         {
                             actionKey: 'key-menu-edit',
                             actionTitle: 'Edit',
-                        },
-                        {
-                            actionTitle: 'Export Accounts',
-                            actionKey: 'key-menu-export',
-                            icon: {
-                                iconType: 'SYSTEM',
-                                iconValue: 'square.and.arrow.up',
-                            },
                         },
                         {
                             actionKey: 'key-menu-settings',
@@ -127,7 +113,7 @@ function HomeScreen({ navigation }: HomeScreenProps) {
     const handleFabClick = () => {
         ActionSheetIOS.showActionSheetWithOptions(
             {
-                options: ['Cancel', 'Scan QR code', 'Enter Manually', 'Import From File'],
+                options: ['Cancel', 'Scan QR code', 'Enter Manually'],
                 cancelButtonIndex: 0,
                 tintColor: theme.color.primary_color,
             },
