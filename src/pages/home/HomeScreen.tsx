@@ -1,6 +1,6 @@
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import React, { useContext, useEffect, useState } from 'react'
-import { ActionSheetIOS, LayoutAnimation, TouchableOpacity, View } from 'react-native'
+import { ActionSheetIOS, LayoutAnimation, View } from 'react-native'
 import { ContextMenuButton } from 'react-native-ios-context-menu'
 import { SFSymbol } from 'react-native-sfsymbols'
 import { RootStackParamList } from '../../../App'
@@ -10,6 +10,7 @@ import { ThemedButton } from '../../components/ThemedComponents'
 import { AccountContext } from '../../data/AccountContext'
 import DB from '../../data/AccountsDB'
 import { UserSettings } from '../../utils/UserSettings'
+import FAB from './components/HomeFAB'
 import AccountsContainer from './components/HomeListContainer'
 
 type HomeScreenProps = {
@@ -51,21 +52,7 @@ function HomeScreen({ navigation }: HomeScreenProps) {
                             }}
                         />
                     )}
-                    {!inEdit && (
-                        <View style={{ flexDirection: 'row' }}>
-                            <ContextMenu />
-                            <TouchableOpacity onPress={handleFabClick} style={{ marginStart: 8, paddingVertical: 5, paddingStart: 5 }}>
-                                <SFSymbol
-                                    style={{
-                                        width: 24,
-                                        height: 24,
-                                    }}
-                                    name="plus"
-                                    color={theme.color.primary_color}
-                                />
-                            </TouchableOpacity>
-                        </View>
-                    )}
+                    {!inEdit && <ContextMenu />}
                 </View>
             ),
             headerTitle: inEdit ? 'Edit accounts' : 'Tokky',
@@ -111,16 +98,14 @@ function HomeScreen({ navigation }: HomeScreenProps) {
                         },
                     ],
                 }}>
-                <View style={{ padding: 5 }}>
-                    <SFSymbol
-                        style={{
-                            width: 25.5,
-                            height: 25.5,
-                        }}
-                        name="ellipsis.circle"
-                        color={theme.color.primary_color}
-                    />
-                </View>
+                <SFSymbol
+                    style={{
+                        width: 27,
+                        height: 27,
+                    }}
+                    name="ellipsis.circle"
+                    color={theme.color.primary_color}
+                />
             </ContextMenuButton>
         )
     }
@@ -146,6 +131,8 @@ function HomeScreen({ navigation }: HomeScreenProps) {
     return (
         <SafeArea>
             {isDataLoaded && <AccountsContainer list={accounts} inEdit={inEdit} editAccountCallback={handleEditItem} />}
+
+            {!inEdit && <FAB onPress={handleFabClick} />}
         </SafeArea>
     )
 }
